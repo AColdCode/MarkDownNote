@@ -9,33 +9,15 @@ ApplicationWindow {
     visible: true
     title: "Markdown Note"
 
-    ColumnLayout {
-        anchors.fill: parent
+    header:NoteManager {
+        id: note_manager
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+    }
 
-        // 笔记管理
-        NoteManager {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 40
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            TextArea {
-                id: editor
-                text: "# Hello Markdown\n\nThis is **bold** and *italic* text."
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                font.pixelSize: 18
-            }
-
-            PreviewPage {
-                id: preview
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                markdownText: editor.text
-            }
-        }
+    NoteContent{
+        id: note_content
+        Layout.fillWidth: true
+        Layout.fillHeight: true
     }
 }

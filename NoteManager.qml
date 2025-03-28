@@ -1,23 +1,34 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 Rectangle {
-    height: 40
+    height: 28
     width: parent.width
+    color: "grey"
 
     Row {
+        id: menuLayout
         anchors.fill: parent
-        Button {
-            text: "新建"
-            onClicked: editor.text = ""
+        spacing: 5
+        MenuButton {
+            text: qsTr("notebook")
+            onClicked: console.log("功能待实现")
+            icon.source: "qrc:/icons/navigation_dock.svg"
         }
-        Button {
-            text: "保存"
-            onClicked: console.log("保存功能待实现")
+
+        MenuButton {
+            text: qsTr("new notes")
+            onClicked: console.log("功能待实现")
+            icon.source: "qrc:/icons/new_note.svg"
         }
-        Button {
-            text: "打开"
-            onClicked: console.log("打开功能待实现")
+
+        MenuButton {
+            icon.source: "qrc:/icons/import_menu.svg"
+        }
+
+        MenuButton {
+            icon.source: "qrc:/icons/export_menu.svg"
         }
     }
 }

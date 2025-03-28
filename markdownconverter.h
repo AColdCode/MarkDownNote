@@ -4,7 +4,8 @@
 
 #include <QObject>
 
-class MarkdownConverter : public QObject {
+class MarkdownConverter : public QObject
+{
     Q_OBJECT
 public:
     explicit MarkdownConverter(QObject *parent = nullptr);

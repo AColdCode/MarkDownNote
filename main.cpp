@@ -4,7 +4,8 @@
 #include <QtWebEngineQuick>
 #include "markdownconverter.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     QtWebEngineQuick::initialize();
 
     QGuiApplication app(argc, argv);

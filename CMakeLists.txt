@@ -14,10 +14,13 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES Main.qml
     SOURCES main.cpp
     SOURCES markdownconverter.h markdownconverter.cpp
-    SOURCES markdownhighlighter.h markdownhighlighter.cpp
+    SOURCES
     QML_FILES EditorPage.qml
     QML_FILES NoteManager.qml
     QML_FILES PreviewPage.qml
+    QML_FILES NoteContent.qml
+    RESOURCES src.qrc
+    QML_FILES Buttons/MenuButton.qml
 )
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
