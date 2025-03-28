@@ -10,7 +10,10 @@ Rectangle {
     Row {
         id: menuLayout
         anchors.fill: parent
+        height: parent.height
+        width: parent.width
         spacing: 5
+
         MenuButton {
             text: qsTr("notebook")
             onClicked: console.log("功能待实现")
@@ -29,6 +32,10 @@ Rectangle {
 
         MenuButton {
             icon.source: "qrc:/icons/export_menu.svg"
+        }
+
+        MenuButton {
+            icon.source: "qrc:/icons/expand.svg"
         }
     }
 }
