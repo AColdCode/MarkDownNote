@@ -88,5 +88,6 @@
         <file>icons/view.svg</file>
         <file>icons/windows_dock.svg</file>
         <file>icons/word_count_editor.svg</file>
+        <file>icons/drop_down.svg</file>
     </qresource>
 </RCC>

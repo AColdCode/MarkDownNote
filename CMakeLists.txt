@@ -14,13 +14,20 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES Main.qml
     SOURCES main.cpp
     SOURCES markdownconverter.h markdownconverter.cpp
-    SOURCES
     QML_FILES EditorPage.qml
     QML_FILES NoteManager.qml
     QML_FILES PreviewPage.qml
     QML_FILES NoteContent.qml
     RESOURCES src.qrc
-    QML_FILES Buttons/MenuButton.qml
+    QML_FILES buttons/MenuButton.qml
+    QML_FILES menuManagers/NoteBookMenu.qml
+    QML_FILES menuManagers/NewNoteMenu.qml
+    QML_FILES menuManagers/ImportMenu.qml
+    QML_FILES menuManagers/ExportMenu.qml
+    QML_FILES menuManagers/ExpandMenu.qml
+    QML_FILES menuManagers/MenuMenu.qml
+    QML_FILES buttons/SubMenuButton.qml
+    QML_FILES buttons/SplitButton.qml
 )
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)

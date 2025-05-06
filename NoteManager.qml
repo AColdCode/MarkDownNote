@@ -2,40 +2,47 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "buttons"
+import "menuManagers"
+
 Rectangle {
     height: 28
     width: parent.width
     color: "grey"
 
-    Row {
+    RowLayout {
         id: menuLayout
         anchors.fill: parent
         height: parent.height
         width: parent.width
         spacing: 5
 
-        MenuButton {
-            text: qsTr("notebook")
-            onClicked: console.log("功能待实现")
-            icon.source: "qrc:/icons/navigation_dock.svg"
+        NoteBookMenu{
+            id: noteBook_menu
         }
 
-        MenuButton {
-            text: qsTr("new notes")
-            onClicked: console.log("功能待实现")
-            icon.source: "qrc:/icons/new_note.svg"
+        NewNoteMenu{
+            id: newNote_menu
         }
 
-        MenuButton {
-            icon.source: "qrc:/icons/import_menu.svg"
+        ImportMenu{
+            id: import_menu
         }
 
-        MenuButton {
-            icon.source: "qrc:/icons/export_menu.svg"
+        ExportMenu{
+            id: export_menu
         }
 
-        MenuButton {
-            icon.source: "qrc:/icons/expand.svg"
+        Item {
+            Layout.fillWidth: true
+        }
+
+        ExpandMenu{
+            id: expand_menu
+        }
+
+        MenuMenu{
+            id: menu_menu
         }
     }
 }
