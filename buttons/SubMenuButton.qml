@@ -6,7 +6,7 @@ MenuItem {
     property alias sequence: menuItemShortcut.sequence
     property string label: ""
     property string spaces: ""
-    property string iconSpaces: icon.source === "" ? "     " : ""
+    property string iconSpaces: icon.source.toString() !== "" ? "" : "     "
     text: iconSpaces + label + spaces + sequence
 
     Shortcut {
@@ -15,8 +15,5 @@ MenuItem {
         onActivated: {
             subMenu_item.triggered()
         }
-    }
-    Component.onCompleted: {
-        console.log(subMenu_item.iconChanged())
     }
 }

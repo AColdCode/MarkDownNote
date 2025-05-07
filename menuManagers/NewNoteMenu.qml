@@ -37,7 +37,7 @@ SplitButton{
         MenuSeparator {}
 
         SubMenuButton{
-            text: "     " + qsTr("Open File")
+            label: qsTr("Open File")
         }
     }
 }

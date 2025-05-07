@@ -28,6 +28,7 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES menuManagers/MenuMenu.qml
     QML_FILES buttons/SubMenuButton.qml
     QML_FILES buttons/SplitButton.qml
+    QML_FILES menuManagers/menuMenu/HelpMenuButton.qml
 )
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
