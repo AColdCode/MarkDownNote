@@ -5,8 +5,8 @@ import QtQuick.Layouts
 import "../buttons"
 
 MenuButton {
-    text: qsTr("notebook")
-    hoverText: qsTr("notebook")
+    text: qsTr("Notebook")
+    hoverText: qsTr("Notebook")
     onClicked: popMenu.open()
     icon.source: "qrc:/icons/navigation_dock.svg"
 

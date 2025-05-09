@@ -5,7 +5,7 @@ import "../buttons"
 import "./menuMenu"
 
 MenuButton {
-    hoverText: qsTr("menu")
+    hoverText: qsTr("Menu")
     icon.source: "qrc:/icons/menu.svg"
     onClicked: popMenu.open()
 

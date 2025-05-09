@@ -6,9 +6,9 @@ import "../buttons"
 
 SplitButton{
     id: newNote_menu
-    text: qsTr("new notes")
+    text: qsTr("New notes")
     sequence: "Ctrl+Alt+N"
-    hoverText: qsTr("new notes")
+    hoverText: qsTr("New notes")
     onClicked: console.log("功能待实现")
     icon.source: "qrc:/icons/new_note.svg"
 

@@ -1,12 +1,15 @@
 import QtQuick
 import QtQuick.Controls
 import "../buttons"
+import "./expandMenu"
 
 SplitButton {
     id: expand_menu
-    hoverText: qsTr("expand content")
+    hoverText: qsTr("Expand Content Area")
     sequence: "Ctrl+E"
     icon.source: "qrc:/icons/expand.svg"
+    property bool selected: false
+    icon.color: selected ? "red" : "black"
 
     popMenu: Menu {
         y: expand_menu.height
@@ -16,10 +19,10 @@ SplitButton {
             sequence: "Ctrl+E"
             spaces: "   "
             icon.source: "qrc:/icons/expand.svg"
-            icon.color: select ? "red" : "black"
+            icon.color: expand_menu.selected ? "red" : "black"
 
             onClicked: {
-                select = !select
+                expand_menu.selected = !expand_menu.selected
             }
         }
 
@@ -49,8 +52,12 @@ SplitButton {
             }
         }
 
-        SubMenuButton{
-            label: qsTr("window")
+        WindowMenuButton {
+            id: windowMenu_btn
         }
+    }
+
+    onClicked: {
+        selected = !selected
     }
 }
