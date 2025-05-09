@@ -8,5 +8,4 @@ Button {
     font.pixelSize: 14
     spacing: 1
 
-
 }
