@@ -8,12 +8,5 @@ Button {
     font.pixelSize: 14
     spacing: 1
 
-    background: Rectangle {
-        color: menuHover.ishovered ? "white" : "grey"
-        radius: 5
-    }
 
-    HoverHandler{
-        id: menuHover
-    }
 }

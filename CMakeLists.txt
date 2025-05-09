@@ -21,6 +21,9 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES NoteContent.qml
     RESOURCES src.qrc
     QML_FILES Buttons/MenuButton.qml
+    QML_FILES Sidebar.qml
+    QML_FILES Topbar.qml
+    QML_FILES WorkspaceMenu.qml
 )
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
