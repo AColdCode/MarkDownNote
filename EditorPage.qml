@@ -14,5 +14,6 @@ Rectangle {
         wrapMode: TextEdit.Wrap
         text: "##Hello Markdown"
         onTextChanged: preview.markdownText = text
+        color: "black"
     }
 }
