@@ -22,7 +22,7 @@ Button {
     Menu {
         id: menu
         y: button.height + button.y
-        width: 200
+        width: 230
 
         height: listView.contentHeight // 设置Popup的高度等于ListView的内容高度
         ListView {
@@ -34,10 +34,10 @@ Button {
                    ListElement { name: "工作空间2"; checked: false; shortcut: "" }
                    ListElement { name: "新建工作空间"; checked: false; shortcut: "" }
                    ListElement { name: "移除工作空间"; checked: false; shortcut: "" }
-                   ListElement { name: "竖直拆分"; checked: false; shortcut: "Ctrl+G, \\" }
-                   ListElement { name: "水平拆分"; checked: false; shortcut: "Ctrl+G, -" }
-                   ListElement { name: "最大化拆分  "; checked: false; shortcut: "Ctrl+G, Shift+\\" }
-                   ListElement { name: "平均分配拆分"; checked: false; shortcut: "Ctrl+G, =" }
+                   ListElement { name: "竖直拆分                "; checked: false; shortcut: "Ctrl+G, \\" }
+                   ListElement { name: "水平拆分                "; checked: false; shortcut: "Ctrl+G, -" }
+                   ListElement { name: "最大化拆分             "; checked: false; shortcut: "Ctrl+G, Shift+\\" }
+                   ListElement { name: "平均分配拆分          "; checked: false; shortcut: "Ctrl+G, =" }
                    ListElement { name: "移除拆分"; checked: false; shortcut: "" }
                    ListElement { name: "移除拆分和工作空间"; checked: false; shortcut: "Ctrl+G, R" }
                }
@@ -68,7 +68,7 @@ Button {
                     Text {
                             y:6
                             text: model.shortcut
-                            font.pixelSize: 12
+                            font.pixelSize: 10
                             color: "black"
                             visible: model.shortcut !== ""
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
