@@ -9,7 +9,7 @@ Window {
     width: 450
     height: 300
     minimumHeight: 300
-    minimumWidth: 300
+    minimumWidth: 400
     title: qsTr("Manage Notebooks")
     flags: Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     visible: false

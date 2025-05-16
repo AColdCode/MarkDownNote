@@ -3,9 +3,16 @@ import QtQuick.Layouts
 
 RowLayout {
 
+    Sidebar {
+        id:sidebar
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+    }
+
     EditorPage {
         id: editor
-        text: "# Hello Markdown\n\nThis is **bold** and *italic* text."
+        // text: "# Hello Markdown\n\nThis is **bold** and *italic* text."
         Layout.fillWidth: true
         Layout.fillHeight: true
         font.pixelSize: 18
