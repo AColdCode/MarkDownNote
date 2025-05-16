@@ -1,0 +1,136 @@
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
+import QtQuick.Dialogs
+
+Window {
+    id: openNotebookWindow
+    width: 450
+    height: 200
+    minimumHeight: 200
+    minimumWidth: 300
+    title: qsTr("Open Notebook")
+    flags: Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
+    visible: false
+    modality: Qt.ApplicationModal
+
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: 10
+        color: "#f5f5f5"
+        border.color: "gray"
+        radius: 4
+
+        ColumnLayout {
+            width: parent.width
+            spacing: 10
+
+            GroupBox {
+                title: qsTr("Basic Information")
+                Layout.fillWidth: true
+                Layout.margins: 5
+
+                ColumnLayout {
+                    spacing: 6
+                    width: parent.width
+                    // Name
+                    RowLayout {
+                        Layout.fillWidth: true
+
+                        Label {
+                            text: qsTr("Name") + ":"
+                            Layout.fillWidth: true
+                            Layout.minimumWidth: 90  // 设置一个合理的最小宽度
+                            Layout.horizontalStretchFactor: 0
+                        }
+
+                        TextField {
+                            Layout.fillWidth: true
+                            placeholderText: qsTr("Name of notebook")
+                            placeholderTextColor: "lightgray"
+                            Layout.horizontalStretchFactor: 1
+                            enabled: false
+                        }
+                    }
+
+                    // Description
+                    RowLayout {
+                        Layout.fillWidth: true
+
+                        Label {
+                            text: qsTr("Description") + ":"
+                            Layout.fillWidth: true
+                            Layout.minimumWidth: 90
+                            Layout.horizontalStretchFactor: 0
+                        }
+
+                        TextField {
+                            Layout.fillWidth: true
+                            placeholderTextColor: "lightgray"
+                            placeholderText: qsTr("Description of notebook")
+                            Layout.horizontalStretchFactor: 1
+                            enabled: false
+                        }
+                    }
+
+                    // Root folder
+                    RowLayout {
+                        Layout.fillWidth: true
+
+                        Label {
+                            text: qsTr("Root folder") + ":"
+                            Layout.fillWidth: true
+                            Layout.minimumWidth: 90
+                            Layout.horizontalStretchFactor: 0
+                        }
+
+                        TextField {
+                            id: pathField
+                            Layout.fillWidth: true
+                            placeholderTextColor: "grey"
+                            placeholderText: qsTr("Path of notebook root folder")
+                            Layout.horizontalStretchFactor: 1
+                        }
+
+                        Button {
+                            text: qsTr("Browse")
+                            Layout.fillWidth: true
+                            onClicked: folderDialog.open()
+                            Layout.horizontalStretchFactor: 0
+                        }
+
+                        FolderDialog {
+                            id: folderDialog
+                            onAccepted: pathField.text = folderDialog.folder
+                        }
+                    }
+                }
+            }
+        }
+
+        // 确定 / 取消按钮
+        RowLayout {
+            y: parent.height - height - 5
+            x: parent.width - width - 5
+            spacing: 10
+            Button {
+                text: qsTr("Ok")
+                onClicked: {
+                    // 处理输入内容
+                    openNotebookWindow.close()
+                }
+            }
+            Button {
+                text: qsTr("Cancel")
+                onClicked: {
+                    openNotebookWindow.close()
+                }
+            }
+        }
+    }
+
+    onClosing: {
+        openNotebookWindow.visible = false
+    }
+}

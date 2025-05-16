@@ -30,6 +30,10 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES buttons/SplitButton.qml
     QML_FILES menuManagers/menuMenu/HelpMenuButton.qml
     QML_FILES menuManagers/expandMenu/WindowMenuButton.qml
+    QML_FILES menuManagers/noteBookMenu/NewNotebookDialog.qml
+    QML_FILES menuManagers/noteBookMenu/NewNotebookFromFolderDialog.qml
+    QML_FILES menuManagers/noteBookMenu/OpenOtherNotebooksDialog.qml
+    QML_FILES menuManagers/noteBookMenu/ManagementNotebookDialog.qml
 )
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)

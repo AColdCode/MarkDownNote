@@ -1,8 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 import "../buttons"
+import "noteBookMenu"
 
 MenuButton {
     text: qsTr("Notebook")
@@ -16,22 +18,42 @@ MenuButton {
 
         MenuItem{
             text: qsTr("New Notebook")
+            onClicked: noteBook_new.visible = true
+            NewNotebookDialog{
+                id: noteBook_new
+                visible: false
+            }
         }
         MenuItem{
             text: qsTr("New Notebook from a Folder")
+            onClicked: newNotebook_Folder.visible = true
+            NewNotebookFromFolderDialog{
+                id: newNotebook_Folder
+                visible: false
+            }
         }
 
         MenuSeparator {}
 
-        MenuItem{
+        MenuItem {
             text: qsTr("Open other Notebooks")
+            onClicked: openNotebooks_other.visible = true
+            OpenOtherNotebooksDialog {
+                id: openNotebooks_other
+                visible: false
+            }
         }
 
         MenuSeparator {}
 
-        MenuItem{
+        MenuItem {
             Layout.fillWidth: true
             text: qsTr("Management Notebook")
+            onClicked: managementNotebook.visible = true
+            ManagementNotebookDialog {
+                id: managementNotebook
+                visible: false
+            }
         }
     }
 }

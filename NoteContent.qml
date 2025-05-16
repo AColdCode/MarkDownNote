@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 RowLayout {
+
     EditorPage {
         id: editor
         text: "# Hello Markdown\n\nThis is **bold** and *italic* text."
