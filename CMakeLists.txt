@@ -43,6 +43,8 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES menuManagers/newNoteMenu/NewNoteDialog.qml
     QML_FILES menuManagers/newNoteMenu/NewQuickNoteDialog.qml
     QML_FILES menuManagers/newNoteMenu/NewFolderDialog.qml
+    QML_FILES menuManagers/importMenu/ImportFolderDialog.qml
+    QML_FILES menuManagers/exportMenu/ExportDialog.qml
 )
 
 

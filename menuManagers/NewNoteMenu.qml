@@ -63,13 +63,9 @@ SplitButton{
 
             FileDialog {
                 id: fileDialog
-                flags: Qt.Window
-                title: "请选择一个文件夹"
+                title: qsTr("Open File")
                 onAccepted: {
-                    console.log("你选择的文件夹是:", fileDialog.currentFile)
-                }
-                onRejected: {
-                    console.log("取消选择")
+                    console.log("你选择的文件是:", fileDialog.currentFile)
                 }
             }
         }
