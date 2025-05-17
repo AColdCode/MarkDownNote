@@ -59,7 +59,7 @@ Window {
                                 Label {
                                     text: qsTr("Name") + ":"
                                     Layout.fillWidth: true
-                                    Layout.minimumWidth: 90  // 设置一个合理的最小宽度
+                                    Layout.minimumWidth: 90
                                     Layout.horizontalStretchFactor: 0
                                 }
 
@@ -155,7 +155,7 @@ Window {
 
             Button {
                 text: qsTr("Reset")
-                icon.name: "Reset"
+                icon.source: "qrc:/icons/reset.svg"
             }
 
             Item {
@@ -165,17 +165,17 @@ Window {
 
             Button {
                 text: qsTr("OK")
-                icon.name: "Ok"
+                icon.source: "qrc:/icons/Ok.svg"
             }
 
             Button {
                 text: qsTr("Apply")
-                icon.name: "Ok"
+                icon.source: "qrc:/icons/Ok.svg"
             }
 
             Button {
                 text: qsTr("Cancel")
-                icon.name: "cancel"
+                icon.source: "qrc:/icons/forbid.svg"
             }
         }
     }

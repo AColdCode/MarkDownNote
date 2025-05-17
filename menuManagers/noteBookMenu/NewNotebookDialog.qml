@@ -41,7 +41,7 @@ Window {
                         Label {
                             text: qsTr("Name") + ":"
                             Layout.fillWidth: true
-                            Layout.minimumWidth: 90  // 设置一个合理的最小宽度
+                            Layout.minimumWidth: 90
                             Layout.horizontalStretchFactor: 0
                         }
 
@@ -114,6 +114,7 @@ Window {
             spacing: 10
             Button {
                 text: qsTr("Ok")
+                icon.source: "qrc:/icons/Ok.svg"
                 onClicked: {
                     // 处理输入内容
                     notebookWindow.close()
@@ -121,6 +122,7 @@ Window {
             }
             Button {
                 text: qsTr("Cancel")
+                icon.source: "qrc:/icons/forbid.svg"
                 onClicked: {
                     notebookWindow.close()
                 }

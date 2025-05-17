@@ -2,9 +2,6 @@ import QtQuick
 import QtWebEngine
 
 Rectangle {
-    width: 800
-    height: 600
-
     WebEngineView {
         id: webView
         anchors.fill: parent

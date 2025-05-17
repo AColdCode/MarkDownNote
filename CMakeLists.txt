@@ -40,6 +40,9 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES Sidebar.qml
     QML_FILES Topbar.qml
     QML_FILES WorkspaceMenu.qml
+    QML_FILES menuManagers/newNoteMenu/NewNoteDialog.qml
+    QML_FILES menuManagers/newNoteMenu/NewQuickNoteDialog.qml
+    QML_FILES menuManagers/newNoteMenu/NewFolderDialog.qml
 )
 
 
