@@ -1,5 +1,6 @@
 import QtQuick
 import QtWebEngine
+import MarkDownNote 1.0
 
 Rectangle {
     WebEngineView {
@@ -12,7 +13,7 @@ Rectangle {
 
     onMarkdownTextChanged: {
         if (markdownText.length > 0) {
-            webView.loadHtml(markdownConverter.convertToHtml(markdownText))
+            webView.loadHtml(MarkdownConverter.convertToHtml(markdownText))
         }
     }
 }

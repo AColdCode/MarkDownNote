@@ -12,10 +12,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    MarkdownConverter converter;
-    engine.rootContext()->setContextProperty("markdownConverter", &converter);
-
-    engine.loadFromModule("MarkDownNote", "Main");
+    engine.loadFromModule("MarkDownNote", "MarkDownNote");
 
     return app.exec();
 }

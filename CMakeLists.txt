@@ -14,7 +14,7 @@ qt_add_executable(appMarkDownNote)
 qt_add_qml_module(appMarkDownNote
     URI MarkDownNote
     VERSION 1.0
-    QML_FILES Main.qml
+    QML_FILES MarkDownNote.qml
     SOURCES main.cpp
     SOURCES markdownconverter.h markdownconverter.cpp
     QML_FILES EditorPage.qml
@@ -45,6 +45,7 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES menuManagers/newNoteMenu/NewFolderDialog.qml
     QML_FILES menuManagers/importMenu/ImportFolderDialog.qml
     QML_FILES menuManagers/exportMenu/ExportDialog.qml
+    SOURCES markdownctrl.h markdownctrl.cpp
 )
 
 
