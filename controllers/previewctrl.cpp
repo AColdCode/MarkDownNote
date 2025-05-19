@@ -1,12 +1,10 @@
-// markdownconverter.cpp
-#include "markdownconverter.h"
 #include <QRegularExpression>
 
-MarkdownConverter::MarkdownConverter(QObject *parent)
-    : QObject(parent)
-{}
+#include "previewctrl.h"
 
-QString MarkdownConverter::convertToHtml(const QString &markdown)
+PreviewCtrl::PreviewCtrl(QObject *parent) : QObject{parent} {}
+
+QString PreviewCtrl::convertToHtml(const QString &markdown)
 {
     QString html = markdown;
     html.replace(QRegularExpression(R"(\*\*(.*?)\*\*)"), R"(<b>\1</b>)"); // **加粗**
@@ -25,15 +23,15 @@ QString MarkdownConverter::convertToHtml(const QString &markdown)
                  R"(<h1>\1</h1>)");                                                      //#标题
     html.replace(QRegularExpression(R"(\[(.*?)\]\((.*?)\))"), R"(<a href="\2">\1</a>)"); //链接
     html.replace(QRegularExpression(R"(!\[(.*?)\]\((.*?)\))"),
-                 R"(<img alt="\1" src="\2" />)");                         //图片
+                 R"(<img alt="\1" src="\2" />)"); //图片
     html.replace(QRegularExpression(R"(`(.*?)`)"),
                  R"(<span style="color:blue">\1</span>)"); // 行内代码
 
     html.replace(QRegularExpression(R"(^> (.+)$)", QRegularExpression::MultilineOption),
                  R"(<blockquote>\1</blockquote>)"); //引用块
     html.replace(QRegularExpression(R"(^(-{3,}|[*]{3,})$)", QRegularExpression::MultilineOption),
-                 R"(<hr />)");                                            //分割线
-    html.replace(QRegularExpression(R"(~~(.*?)~~)"), R"(<del>\1</del>)"); //删除线
+                 R"(<hr />)");                                              //分割线
+    html.replace(QRegularExpression(R"(~~(.*?)~~)"), R"(<del>\1</del>)");   //删除线
     html.replace(QRegularExpression(R"(==(.*?)==)"), R"(<mark>\1</mark>)"); //高亮
     // 列表处理（按行处理更准确）
     QStringList lines = html.split('\n');

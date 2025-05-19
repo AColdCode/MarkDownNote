@@ -16,7 +16,6 @@ qt_add_qml_module(appMarkDownNote
     VERSION 1.0
     QML_FILES MarkDownNote.qml
     SOURCES main.cpp
-    SOURCES markdownconverter.h markdownconverter.cpp
     QML_FILES EditorPage.qml
     QML_FILES NoteManager.qml
     QML_FILES PreviewPage.qml
@@ -50,7 +49,10 @@ qt_add_qml_module(appMarkDownNote
     QML_FILES menuManagers/menuMenu/settingContents/QuickAccessContent.qml
     QML_FILES menuManagers/menuMenu/settingContents/GeneralContent.qml
     QML_FILES menuManagers/menuMenu/settingContents/dialogs/NewQuickNoteScheme.qml
-    QML_FILES
+    SOURCES controllers/editorctrl.h controllers/editorctrl.cpp
+    SOURCES controllers/expandctrl.h controllers/expandctrl.cpp
+    SOURCES controllers/menuctrl.h controllers/menuctrl.cpp
+    SOURCES controllers/previewctrl.h controllers/previewctrl.cpp
 )
 
 

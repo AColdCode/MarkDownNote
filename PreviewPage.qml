@@ -12,8 +12,6 @@ Rectangle {
     property string markdownText: ""
 
     onMarkdownTextChanged: {
-        if (markdownText.length > 0) {
-            webView.loadHtml(MarkdownConverter.convertToHtml(markdownText))
-        }
+        webView.loadHtml(MarkDownCtrl.previewCtrl.convertToHtml(markdownText))
     }
 }

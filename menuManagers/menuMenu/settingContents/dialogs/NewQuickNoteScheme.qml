@@ -43,7 +43,7 @@ Window {
             text: qsTr("Ok")
             icon.source: "qrc:/icons/Ok.svg"
             onClicked: {
-                MarkDownCtrl.addNewQuickNoteScheme(newSchemeName.text)
+                MarkDownCtrl.menuCtrl.addNewQuickNoteScheme(newSchemeName.text)
                 newSchemeName.clear()
                 newSchemeWindow.close()
             }

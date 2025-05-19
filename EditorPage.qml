@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import MarkDownNote 1.0
+
 Rectangle {
     property alias text: editor.text
     property alias font: editor.font
@@ -9,7 +11,7 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
         spacing: 1
-        Rectangle{
+        Rectangle {
             Layout.fillWidth: true
             height: 25
             Layout.fillHeight: true
@@ -40,7 +42,7 @@ Rectangle {
             }
         }
 
-        Topbar{
+        Topbar {
             id:topbar
             Layout.fillWidth: true
             height: 25
@@ -48,19 +50,78 @@ Rectangle {
             Layout.verticalStretchFactor: 0
         }
 
-        Rectangle{
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.verticalStretchFactor: 1
-            color:"#eeeeee"
+        Rectangle {
+            id: editorBackGround
+            anchors.fill: parent
+            color: "#eeeeee"
+            property int currentLine: 0
 
-            TextArea {
-                id:editor
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                wrapMode: TextEdit.Wrap
-                text: "##Hello Markdown"
-                onTextChanged: console.log("Text changed:", text)
+            RowLayout {
+                anchors.fill: parent
+                spacing: 0
+
+                ScrollView {
+                    id: lineScrollView
+                    width: 40
+                    Layout.fillHeight: true
+                    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+                    clip: true
+                    Layout.topMargin: 5
+
+                    ListView {
+                        id: lineNumberView
+                        width: 40
+                        spacing: 0
+                        model: editor.lineCount
+                        currentIndex: editorBackGround.currentLine
+                        interactive: false
+                        clip: true
+
+                        delegate: Text {
+                            text: index + 1
+                            font.pixelSize: editor.font.pixelSize
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: lineNumberView.currentIndex === index ? "black" : "lightgrey"
+                            height: editor.contentHeight / editor.lineCount
+                            width: lineNumberView.width
+                        }
+                    }
+                }
+
+                // 编辑器区域
+                ScrollView {
+                    id: editorScrollView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    ScrollBar.vertical.policy: ScrollBar.AsNeeded
+                    ScrollBar.horizontal.policy: ScrollBar.AsNeeded
+
+                    TextArea {
+                        id: editor
+                        wrapMode: TextEdit.NoWrap
+                        selectByMouse: true
+                        text: "## MarkDownNote"
+                        font.pixelSize: 14
+                        width: Math.max(implicitWidth, editorScrollView.width)
+                        height: contentHeight
+
+                        onCursorPositionChanged: {
+                            console.log(editor.contentHeight / editor.lineCount)
+                            Qt.callLater(() => {
+                                const cursorPos = editor.cursorPosition;
+                                const textBeforeCursor = editor.text.slice(0, cursorPos);
+                                editorBackGround.currentLine = textBeforeCursor.split("\n").length - 1;
+                            })
+                        }
+                    }
+
+                    ScrollBar.vertical.onPositionChanged: {
+                        Qt.callLater(() => {
+                            lineScrollView.ScrollBar.vertical.position = ScrollBar.vertical.position;
+                        })
+                    }
+                }
             }
         }
     }

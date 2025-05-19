@@ -39,9 +39,9 @@ SplitButton {
             onTriggered: {
                 select = !select
                 if(select){
-                    MarkDownCtrl.showFullScreen()
+                    MarkDownCtrl.expandCtrl.showFullScreen()
                 }else{
-                    MarkDownCtrl.exitFullScreen()
+                    MarkDownCtrl.expandCtrl.exitFullScreen()
                 }
             }
         }
@@ -57,9 +57,9 @@ SplitButton {
             onTriggered: {
                 select = !select
                 if(select) {
-                    MarkDownCtrl.staysOnTop()
+                    MarkDownCtrl.expandCtrl.staysOnTop()
                 }else{
-                    MarkDownCtrl.notStaysOnTop()
+                    MarkDownCtrl.expandCtrl.notStaysOnTop()
                 }
             }
         }

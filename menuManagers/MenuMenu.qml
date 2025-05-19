@@ -79,7 +79,7 @@ MenuButton {
             label: qsTr("Restart")
 
             onTriggered: {
-                MarkDownCtrl.restartApp()
+                MarkDownCtrl.menuCtrl.restartApp()
             }
         }
         SubMenuButton{
@@ -88,7 +88,7 @@ MenuButton {
             sequence: "Ctrl+Q"
 
             onTriggered: {
-                MarkDownCtrl.exitApp()
+                MarkDownCtrl.menuCtrl.exitApp()
             }
         }
     }

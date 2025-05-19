@@ -1,97 +1,65 @@
 #include "markdownctrl.h"
+#include "controllers/editorctrl.h"
+#include "controllers/expandctrl.h"
+#include "controllers/menuctrl.h"
+#include "controllers/previewctrl.h"
 
-#include <QQuickWindow>
-#include <QProcess>
-#include <QTimer>
+MarkDownCtrl::MarkDownCtrl(QObject *parent)
+    : QObject{parent}
+    , m_editorCtrl{new EditorCtrl(this)}
+    , m_expandCtrl{new ExpandCtrl(this)}
+    , m_menuCtrl{new MenuCtrl(this)}
+    , m_previewCtrl{new PreviewCtrl(this)}
+{}
 
-MarkDownCtrl::MarkDownCtrl(QObject *parent) : QObject{parent} {}
-
-void MarkDownCtrl::showFullScreen()
+EditorCtrl *MarkDownCtrl::editorCtrl() const
 {
-    if (m_mainWindow == nullptr) {
+    return m_editorCtrl;
+}
+
+void MarkDownCtrl::setEditorCtrl(EditorCtrl *newEditorCtrl)
+{
+    if (m_editorCtrl == newEditorCtrl)
         return;
-    }
-
-    QMetaObject::invokeMethod(m_mainWindow, "showFullScreen", Qt::AutoConnection);
+    m_editorCtrl = newEditorCtrl;
+    emit editorCtrlChanged();
 }
 
-void MarkDownCtrl::exitFullScreen()
+ExpandCtrl *MarkDownCtrl::expandCtrl() const
 {
-    if (m_mainWindow == nullptr) {
+    return m_expandCtrl;
+}
+
+void MarkDownCtrl::setExpandCtrl(ExpandCtrl *newExpandCtrl)
+{
+    if (m_expandCtrl == newExpandCtrl)
         return;
-    }
-
-    QMetaObject::invokeMethod(m_mainWindow, "showNormal", Qt::AutoConnection);
+    m_expandCtrl = newExpandCtrl;
+    emit expandCtrlChanged();
 }
 
-void MarkDownCtrl::staysOnTop()
+MenuCtrl *MarkDownCtrl::menuCtrl() const
 {
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(m_mainWindow);
-    if (window) {
-        window->setFlag(Qt::WindowStaysOnTopHint, true);
-        window->show();
-    }
+    return m_menuCtrl;
 }
 
-void MarkDownCtrl::notStaysOnTop()
+void MarkDownCtrl::setmenuCtrl(MenuCtrl *newmenuCtrl)
 {
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(m_mainWindow);
-    if (window) {
-        Qt::WindowFlags flags = window->flags();
-        window->setFlags(flags & ~Qt::WindowStaysOnTopHint);
-    }
-}
-
-void MarkDownCtrl::exitApp()
-{
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(m_mainWindow);
-    if (window) {
-        window->close();
-    }
-}
-
-void MarkDownCtrl::restartApp()
-{
-    QString program = QCoreApplication::applicationFilePath();
-    QStringList args = QCoreApplication::arguments();
-
-    QProcess::startDetached(program, args);
-
-    // 退出旧进程
-    QTimer::singleShot(1000, this, [=]() { QCoreApplication::quit(); });
-}
-
-void MarkDownCtrl::addNewQuickNoteScheme(const QString name)
-{
-    if (name.isEmpty() || m_quickAccess == nullptr)
+    if (m_menuCtrl == newmenuCtrl)
         return;
-    QMetaObject::invokeMethod(m_quickAccess,
-                              "addQuickNoteScheme",
-                              Q_ARG(QVariant, QVariant::fromValue(name)));
+    m_menuCtrl = newmenuCtrl;
+    emit menuCtrlChanged();
 }
 
-QObject *MarkDownCtrl::mainWindow() const
+PreviewCtrl *MarkDownCtrl::previewCtrl() const
 {
-    return m_mainWindow;
+    return m_previewCtrl;
 }
 
-void MarkDownCtrl::setMainWindow(QObject *newMainWindow)
+void MarkDownCtrl::setPreviewCtrl(PreviewCtrl *newPreviewCtrl)
 {
-    if (m_mainWindow == newMainWindow)
+    if (m_previewCtrl == newPreviewCtrl)
         return;
-    m_mainWindow = newMainWindow;
-    emit mainWindowChanged();
-}
-
-QObject *MarkDownCtrl::quickAccess() const
-{
-    return m_quickAccess;
-}
-
-void MarkDownCtrl::setQuickAccess(QObject *newQuickAccess)
-{
-    if (m_quickAccess == newQuickAccess)
-        return;
-    m_quickAccess = newQuickAccess;
-    emit quickAccessChanged();
+    m_previewCtrl = newPreviewCtrl;
+    emit previewCtrlChanged();
 }

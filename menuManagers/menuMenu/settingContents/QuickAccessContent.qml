@@ -131,6 +131,6 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        MarkDownCtrl.quickAccess = this
+        MarkDownCtrl.menuCtrl.quickAccess = this
     }
 }

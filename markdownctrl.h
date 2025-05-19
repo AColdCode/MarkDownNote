@@ -3,6 +3,11 @@
 #include <QObject>
 #include <QQmlEngine>
 
+class ExpandCtrl;
+class EditorCtrl;
+class MenuCtrl;
+class PreviewCtrl;
+
 class MarkDownCtrl : public QObject
 {
     Q_OBJECT
@@ -12,35 +17,40 @@ class MarkDownCtrl : public QObject
 public:
     explicit MarkDownCtrl(QObject *parent = nullptr);
 
-    // 控制扩展区
-    Q_INVOKABLE void showFullScreen();
-    Q_INVOKABLE void exitFullScreen();
-    Q_INVOKABLE void staysOnTop();
-    Q_INVOKABLE void notStaysOnTop();
+    EditorCtrl *editorCtrl() const;
+    void setEditorCtrl(EditorCtrl *newEditorCtrl);
 
-    // 控制菜单区
-    Q_INVOKABLE void exitApp();
-    Q_INVOKABLE void restartApp();
-    Q_INVOKABLE void addNewQuickNoteScheme(const QString name);
+    ExpandCtrl *expandCtrl() const;
+    void setExpandCtrl(ExpandCtrl *newExpandCtrl);
 
-    // 传入QML组件
-    QObject *mainWindow() const;
-    void setMainWindow(QObject *newMainWindow);
+    MenuCtrl *menuCtrl() const;
+    void setmenuCtrl(MenuCtrl *newmenuCtrl);
 
-    QObject *quickAccess() const;
-    void setQuickAccess(QObject *newQuickAccess);
+    PreviewCtrl *previewCtrl() const;
+    void setPreviewCtrl(PreviewCtrl *newPreviewCtrl);
 
 signals:
+    void editorCtrlChanged();
 
-    void mainWindowChanged();
+    void expandCtrlChanged();
 
-    void quickAccessChanged();
+    void menuCtrlChanged();
+
+    void previewCtrlChanged();
 
 private:
-    QObject *m_mainWindow = nullptr;
-    Q_PROPERTY(QObject *mainWindow READ mainWindow WRITE setMainWindow NOTIFY mainWindowChanged FINAL)
-
-    QObject *m_quickAccess = nullptr;
+    ExpandCtrl *m_expandCtrl = nullptr;
     Q_PROPERTY(
-        QObject *quickAccess READ quickAccess WRITE setQuickAccess NOTIFY quickAccessChanged FINAL)
+        ExpandCtrl *expandCtrl READ expandCtrl WRITE setExpandCtrl NOTIFY expandCtrlChanged FINAL)
+
+    EditorCtrl *m_editorCtrl = nullptr;
+    Q_PROPERTY(
+        EditorCtrl *editorCtrl READ editorCtrl WRITE setEditorCtrl NOTIFY editorCtrlChanged FINAL)
+
+    MenuCtrl *m_menuCtrl = nullptr;
+    Q_PROPERTY(MenuCtrl *menuCtrl READ menuCtrl WRITE setmenuCtrl NOTIFY menuCtrlChanged FINAL)
+
+    PreviewCtrl *m_previewCtrl = nullptr;
+    Q_PROPERTY(PreviewCtrl *previewCtrl READ previewCtrl WRITE setPreviewCtrl NOTIFY
+                   previewCtrlChanged FINAL)
 };

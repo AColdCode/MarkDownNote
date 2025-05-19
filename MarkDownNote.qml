@@ -26,6 +26,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        MarkDownCtrl.mainWindow = mainWindow
+        MarkDownCtrl.expandCtrl.mainWindow = mainWindow
+        MarkDownCtrl.menuCtrl.mainWindow = mainWindow
     }
 }
