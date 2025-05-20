@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 
+import MarkDownNote 1.0
+
 import "../buttons"
 import "importMenu"
 
@@ -17,15 +19,7 @@ MenuButton {
         MenuItem{
             text: qsTr("Import File")
             onClicked: {
-                fileDialog.open()
-            }
-
-            FileDialog {
-                id: fileDialog
-                title: qsTr("Select Files To Import")
-                onAccepted: {
-                    console.log("你选择的文件是:", fileDialog.currentFile)
-                }
+                MarkDownCtrl.importMenuCtrl.selectFile()
             }
         }
         MenuItem{

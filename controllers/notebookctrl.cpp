@@ -9,11 +9,11 @@ void NoteBookCtrl::selectRoot(QObject *textField)
 {
     if (textField == nullptr)
         return;
-    QString file = QFileDialog::getExistingDirectory(nullptr,
-                                                     tr("Select Notebook Root Folder"),
-                                                     QString(""),
-                                                     QFileDialog::ShowDirsOnly
-                                                         | QFileDialog::DontResolveSymlinks);
+    QString folder = QFileDialog::getExistingDirectory(nullptr,
+                                                       tr("Select Notebook Root Folder"),
+                                                       QString(""),
+                                                       QFileDialog::ShowDirsOnly
+                                                           | QFileDialog::DontResolveSymlinks);
 
-    textField->setProperty("text", file);
+    textField->setProperty("text", folder);
 }

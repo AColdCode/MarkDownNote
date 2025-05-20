@@ -5,6 +5,7 @@
 #include "controllers/previewctrl.h"
 #include "controllers/notebookctrl.h"
 #include "controllers/newnotesctrl.h"
+#include "controllers/importmenuctrl.h"
 
 MarkDownCtrl::MarkDownCtrl(QObject *parent)
     : QObject{parent}
@@ -14,6 +15,7 @@ MarkDownCtrl::MarkDownCtrl(QObject *parent)
     , m_previewCtrl{new PreviewCtrl(this)}
     , m_noteBookCtrl{new NoteBookCtrl(this)}
     , m_newNotesCtrl{new NewNotesCtrl(this)}
+    , m_importMenuCtrl{new ImportMenuCtrl(this)}
 {}
 
 EditorCtrl *MarkDownCtrl::editorCtrl() const
@@ -92,4 +94,17 @@ void MarkDownCtrl::setNewNotesCtrl(NewNotesCtrl *newNewNotesCtrl)
         return;
     m_newNotesCtrl = newNewNotesCtrl;
     emit newNotesCtrlChanged();
+}
+
+ImportMenuCtrl *MarkDownCtrl::importMenuCtrl() const
+{
+    return m_importMenuCtrl;
+}
+
+void MarkDownCtrl::setImportMenuCtrl(ImportMenuCtrl *newImportMenuCtrl)
+{
+    if (m_importMenuCtrl == newImportMenuCtrl)
+        return;
+    m_importMenuCtrl = newImportMenuCtrl;
+    emit importMenuCtrlChanged();
 }

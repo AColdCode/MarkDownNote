@@ -52,7 +52,9 @@ Rectangle {
 
         Rectangle {
             id: editorBackGround
-            anchors.fill: parent
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.verticalStretchFactor: 1
             color: "#eeeeee"
             property int currentLine: 0
 
