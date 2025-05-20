@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
-import QtQuick.Dialogs
+
+import MarkDownNote 1.0
 
 Window {
     id: notebookWindow_folder
@@ -47,6 +48,7 @@ Window {
                         }
 
                         TextField {
+                            id: pathField
                             Layout.fillWidth: true
                             Layout.horizontalStretchFactor: 1
                         }
@@ -55,6 +57,8 @@ Window {
                             text: qsTr("Browse")
                             Layout.fillWidth: true
                             Layout.horizontalStretchFactor: 0
+
+                            onClicked: MarkDownCtrl.noteBookCtrl.selectRoot(pathField)
                         }
                     }
 
@@ -170,7 +174,6 @@ Window {
                         }
 
                         TextField {
-                            id: pathField
                             Layout.fillWidth: true
                             placeholderTextColor: "grey"
                             placeholderText: qsTr("Path of notebook root folder")

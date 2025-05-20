@@ -74,7 +74,7 @@ Rectangle {
                         spacing: 0
                         model: editor.lineCount
                         currentIndex: editorBackGround.currentLine
-                        interactive: false
+                        interactive: true
                         clip: true
 
                         delegate: Text {
@@ -86,6 +86,15 @@ Rectangle {
                             height: editor.contentHeight / editor.lineCount
                             width: lineNumberView.width
                         }
+                    }
+                    background: Rectangle {
+                        anchors.fill: parent
+                        z: -1
+                        color: "#fafafa"
+                    }
+
+                    ScrollBar.vertical.onPositionChanged: {
+                        editorScrollView.ScrollBar.vertical.position = ScrollBar.vertical.position
                     }
                 }
 
@@ -107,7 +116,6 @@ Rectangle {
                         height: contentHeight
 
                         onCursorPositionChanged: {
-                            console.log(editor.contentHeight / editor.lineCount)
                             Qt.callLater(() => {
                                 const cursorPos = editor.cursorPosition;
                                 const textBeforeCursor = editor.text.slice(0, cursorPos);

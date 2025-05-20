@@ -1,13 +1,9 @@
-#include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include <QtWebEngineQuick>
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {
-    QtWebEngineQuick::initialize();
-
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
 

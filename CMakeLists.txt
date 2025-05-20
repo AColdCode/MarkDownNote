@@ -5,7 +5,7 @@ project(
   VERSION 0.1
   LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick WebEngineQuick)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick WebEngineQuick Widgets)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -53,6 +53,8 @@ qt_add_qml_module(appMarkDownNote
     SOURCES controllers/expandctrl.h controllers/expandctrl.cpp
     SOURCES controllers/menuctrl.h controllers/menuctrl.cpp
     SOURCES controllers/previewctrl.h controllers/previewctrl.cpp
+    SOURCES controllers/notebookctrl.h controllers/notebookctrl.cpp
+    SOURCES controllers/newnotesctrl.h controllers/newnotesctrl.cpp
 )
 
 
@@ -68,7 +70,7 @@ set_target_properties(
              MACOSX_BUNDLE TRUE
              WIN32_EXECUTABLE TRUE)
 
-target_link_libraries(appMarkDownNote PRIVATE Qt6::Quick Qt6::WebEngineQuick)
+target_link_libraries(appMarkDownNote PRIVATE Qt6::Quick Qt6::WebEngineQuick Qt6::Widgets)
 
 include(GNUInstallDirs)
 install(

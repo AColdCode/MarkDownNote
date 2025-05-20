@@ -7,6 +7,8 @@ class ExpandCtrl;
 class EditorCtrl;
 class MenuCtrl;
 class PreviewCtrl;
+class NoteBookCtrl;
+class NewNotesCtrl;
 
 class MarkDownCtrl : public QObject
 {
@@ -29,6 +31,12 @@ public:
     PreviewCtrl *previewCtrl() const;
     void setPreviewCtrl(PreviewCtrl *newPreviewCtrl);
 
+    NoteBookCtrl *noteBookCtrl() const;
+    void setNoteBookCtrl(NoteBookCtrl *newNoteBookCtrl);
+
+    NewNotesCtrl *newNotesCtrl() const;
+    void setNewNotesCtrl(NewNotesCtrl *newNewNotesCtrl);
+
 signals:
     void editorCtrlChanged();
 
@@ -37,6 +45,10 @@ signals:
     void menuCtrlChanged();
 
     void previewCtrlChanged();
+
+    void noteBookCtrlChanged();
+
+    void newNotesCtrlChanged();
 
 private:
     ExpandCtrl *m_expandCtrl = nullptr;
@@ -53,4 +65,12 @@ private:
     PreviewCtrl *m_previewCtrl = nullptr;
     Q_PROPERTY(PreviewCtrl *previewCtrl READ previewCtrl WRITE setPreviewCtrl NOTIFY
                    previewCtrlChanged FINAL)
+
+    NoteBookCtrl *m_noteBookCtrl = nullptr;
+    Q_PROPERTY(NoteBookCtrl *noteBookCtrl READ noteBookCtrl WRITE setNoteBookCtrl NOTIFY
+                   noteBookCtrlChanged FINAL)
+
+    NewNotesCtrl *m_newNotesCtrl = nullptr;
+    Q_PROPERTY(NewNotesCtrl *newNotesCtrl READ newNotesCtrl WRITE setNewNotesCtrl NOTIFY
+                   newNotesCtrlChanged FINAL)
 };

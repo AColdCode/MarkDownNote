@@ -3,6 +3,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
+import MarkDownNote 1.0
+
 import "../buttons"
 import "newNoteMenu"
 
@@ -58,15 +60,7 @@ SplitButton{
         SubMenuButton{
             label: qsTr("Open File")
             onClicked: {
-                fileDialog.open()
-            }
-
-            FileDialog {
-                id: fileDialog
-                title: qsTr("Open File")
-                onAccepted: {
-                    console.log("你选择的文件是:", fileDialog.currentFile)
-                }
+                MarkDownCtrl.newNotesCtrl.selectFile()
             }
         }
     }

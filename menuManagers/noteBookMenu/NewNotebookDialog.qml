@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
-import QtQuick.Dialogs
+
+import MarkDownNote 1.0
 
 Window {
     id: notebookWindow
@@ -11,7 +12,6 @@ Window {
     minimumHeight: 200
     minimumWidth: 300
     title: qsTr("New Notebook")
-    flags: Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     visible: false
     modality: Qt.ApplicationModal
 
@@ -94,13 +94,10 @@ Window {
                         Button {
                             text: qsTr("Browse")
                             Layout.fillWidth: true
-                            onClicked: folderDialog.open()
                             Layout.horizontalStretchFactor: 0
-                        }
-
-                        FolderDialog {
-                            id: folderDialog
-                            onAccepted: pathField.text = folderDialog.folder
+                            onClicked: {
+                                MarkDownCtrl.noteBookCtrl.selectRoot(pathField)
+                            }
                         }
                     }
                 }

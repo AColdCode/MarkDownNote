@@ -19,7 +19,7 @@ ApplicationWindow {
         Layout.preferredHeight: 40
     }
 
-    NoteContent{
+    NoteContent {
         id: note_content
         Layout.fillWidth: true
         Layout.fillHeight: true
