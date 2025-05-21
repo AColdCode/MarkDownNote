@@ -6,7 +6,7 @@ import MarkDownNote 1.0
 
 Rectangle {
     property alias text: editor.text
-    property alias font: editor.font
+    property alias font: editor.font        
 
     ColumnLayout {
         anchors.fill: parent
@@ -23,6 +23,7 @@ Rectangle {
 
                 // 中间空白区域
                 Rectangle {
+
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     color: "transparent"

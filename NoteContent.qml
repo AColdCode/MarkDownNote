@@ -4,14 +4,26 @@ import QtQuick.Layouts
 import MarkDownNote 1.0
 
 RowLayout {
+
+    spacing: 0
+
     anchors.fill: parent
+
 
     Sidebar {
         id:sidebar
         Layout.fillWidth: true
         Layout.fillHeight: true
+
         Layout.horizontalStretchFactor: 0
+
     }
+    SidebarResponsiveArea{
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+    }
+
+
 
     EditorPage {
         id: editor

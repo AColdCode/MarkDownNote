@@ -11,55 +11,122 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appMarkDownNote)
 
-qt_add_qml_module(appMarkDownNote
-    URI MarkDownNote
-    VERSION 1.0
-    QML_FILES MarkDownNote.qml
-    SOURCES main.cpp
-    QML_FILES EditorPage.qml
-    QML_FILES NoteManager.qml
-    QML_FILES PreviewPage.qml
-    QML_FILES NoteContent.qml
-    RESOURCES src.qrc
-    QML_FILES buttons/MenuButton.qml
-    QML_FILES menuManagers/NoteBookMenu.qml
-    QML_FILES menuManagers/NewNoteMenu.qml
-    QML_FILES menuManagers/ImportMenu.qml
-    QML_FILES menuManagers/ExportMenu.qml
-    QML_FILES menuManagers/ExpandMenu.qml
-    QML_FILES menuManagers/MenuMenu.qml
-    QML_FILES buttons/SubMenuButton.qml
-    QML_FILES buttons/SplitButton.qml
-    QML_FILES menuManagers/menuMenu/HelpMenuButton.qml
-    QML_FILES menuManagers/expandMenu/WindowMenuButton.qml
-    QML_FILES menuManagers/noteBookMenu/NewNotebookDialog.qml
-    QML_FILES menuManagers/noteBookMenu/NewNotebookFromFolderDialog.qml
-    QML_FILES menuManagers/noteBookMenu/OpenOtherNotebooksDialog.qml
-    QML_FILES menuManagers/noteBookMenu/ManagementNotebookDialog.qml
-    QML_FILES Sidebar.qml
-    QML_FILES Topbar.qml
-    QML_FILES WorkspaceMenu.qml
-    QML_FILES menuManagers/newNoteMenu/NewNoteDialog.qml
-    QML_FILES menuManagers/newNoteMenu/NewQuickNoteDialog.qml
-    QML_FILES menuManagers/newNoteMenu/NewFolderDialog.qml
-    QML_FILES menuManagers/importMenu/ImportFolderDialog.qml
-    QML_FILES menuManagers/exportMenu/ExportDialog.qml
-    SOURCES markdownctrl.h markdownctrl.cpp
-    QML_FILES menuManagers/menuMenu/SettingDialog.qml
-    QML_FILES menuManagers/menuMenu/settingContents/QuickAccessContent.qml
-    QML_FILES menuManagers/menuMenu/settingContents/GeneralContent.qml
-    QML_FILES menuManagers/menuMenu/settingContents/dialogs/NewQuickNoteScheme.qml
-    SOURCES controllers/editorctrl.h controllers/editorctrl.cpp
-    SOURCES controllers/expandctrl.h controllers/expandctrl.cpp
-    SOURCES controllers/menuctrl.h controllers/menuctrl.cpp
-    SOURCES controllers/previewctrl.h controllers/previewctrl.cpp
-    SOURCES controllers/notebookctrl.h controllers/notebookctrl.cpp
-    SOURCES controllers/newnotesctrl.h controllers/newnotesctrl.cpp
-    SOURCES controllers/importmenuctrl.h controllers/importmenuctrl.cpp
-    SOURCES controllers/exportmenuctrl.h controllers/exportmenuctrl.cpp
-    SOURCES controllers/topbarctrl.h controllers/topbarctrl.cpp
-)
-
+qt_add_qml_module(
+  appMarkDownNote
+  URI
+  MarkDownNote
+  VERSION
+  1.0
+  QML_FILES
+  MarkDownNote.qml
+  SOURCES
+  main.cpp
+  QML_FILES
+  EditorPage.qml
+  QML_FILES
+  NoteManager.qml
+  QML_FILES
+  PreviewPage.qml
+  QML_FILES
+  NoteContent.qml
+  RESOURCES
+  src.qrc
+  QML_FILES
+  buttons/MenuButton.qml
+  QML_FILES
+  menuManagers/NoteBookMenu.qml
+  QML_FILES
+  menuManagers/NewNoteMenu.qml
+  QML_FILES
+  menuManagers/ImportMenu.qml
+  QML_FILES
+  menuManagers/ExportMenu.qml
+  QML_FILES
+  menuManagers/ExpandMenu.qml
+  QML_FILES
+  menuManagers/MenuMenu.qml
+  QML_FILES
+  buttons/SubMenuButton.qml
+  QML_FILES
+  buttons/SplitButton.qml
+  QML_FILES
+  menuManagers/menuMenu/HelpMenuButton.qml
+  QML_FILES
+  menuManagers/expandMenu/WindowMenuButton.qml
+  QML_FILES
+  menuManagers/noteBookMenu/NewNotebookDialog.qml
+  QML_FILES
+  menuManagers/noteBookMenu/NewNotebookFromFolderDialog.qml
+  QML_FILES
+  menuManagers/noteBookMenu/OpenOtherNotebooksDialog.qml
+  QML_FILES
+  menuManagers/noteBookMenu/ManagementNotebookDialog.qml
+  QML_FILES
+  Topbar.qml
+  QML_FILES
+  WorkspaceMenu.qml
+  QML_FILES
+  menuManagers/newNoteMenu/NewNoteDialog.qml
+  QML_FILES
+  menuManagers/newNoteMenu/NewQuickNoteDialog.qml
+  QML_FILES
+  menuManagers/newNoteMenu/NewFolderDialog.qml
+  QML_FILES
+  menuManagers/importMenu/ImportFolderDialog.qml
+  QML_FILES
+  menuManagers/exportMenu/ExportDialog.qml
+  SOURCES
+  markdownctrl.h
+  markdownctrl.cpp
+  QML_FILES
+  menuManagers/menuMenu/SettingDialog.qml
+  QML_FILES
+  menuManagers/menuMenu/settingContents/QuickAccessContent.qml
+  QML_FILES
+  menuManagers/menuMenu/settingContents/GeneralContent.qml
+  QML_FILES
+  menuManagers/menuMenu/settingContents/dialogs/NewQuickNoteScheme.qml
+  QML_FILES
+  buttons/ViewButton.qml
+  QML_FILES
+  buttons/RecycleButton.qml
+  QML_FILES
+  buttons/Manage_notebooksButton.qml
+  QML_FILES
+  dialogs/ManageNotebookDialog.qml
+  QML_FILES
+  sidebar/Sidebar.qml
+  QML_FILES
+  sidebar/SidebarResponsiveArea.qml
+  QML_FILES
+  sidebar/sidebarToggle/NavigationPage.qml
+  SOURCES
+  controllers/editorctrl.h
+  controllers/editorctrl.cpp
+  SOURCES
+  controllers/expandctrl.h
+  controllers/expandctrl.cpp
+  SOURCES
+  controllers/menuctrl.h
+  controllers/menuctrl.cpp
+  SOURCES
+  controllers/previewctrl.h
+  controllers/previewctrl.cpp
+  SOURCES
+  controllers/notebookctrl.h
+  controllers/notebookctrl.cpp
+  SOURCES
+  controllers/newnotesctrl.h
+  controllers/newnotesctrl.cpp
+  SOURCES
+  controllers/importmenuctrl.h
+  controllers/importmenuctrl.cpp
+  SOURCES
+  controllers/exportmenuctrl.h
+  controllers/exportmenuctrl.cpp
+  SOURCES
+  controllers/topbarctrl.h
+  controllers/topbarctrl.cpp)
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 
@@ -73,7 +140,8 @@ set_target_properties(
              MACOSX_BUNDLE TRUE
              WIN32_EXECUTABLE TRUE)
 
-target_link_libraries(appMarkDownNote PRIVATE Qt6::Quick Qt6::WebEngineQuick Qt6::Widgets)
+target_link_libraries(appMarkDownNote PRIVATE Qt6::Quick Qt6::WebEngineQuick
+                                              Qt6::Widgets)
 
 include(GNUInstallDirs)
 install(

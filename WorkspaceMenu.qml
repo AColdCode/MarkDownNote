@@ -7,7 +7,7 @@ import QtQuick.Layouts
 Button {
     id:button
     background: Rectangle {
-        color: "transparent"
+        color: parent.hovered ? "#e0e0e0": "transparent"//最新更改
     }
     icon.source: "qrc:/icons/menu.svg"
     onClicked:menu.open()

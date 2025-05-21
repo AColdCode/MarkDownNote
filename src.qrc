@@ -93,5 +93,6 @@
         <file>icons/Ok.svg</file>
         <file>icons/forbid.svg</file>
         <file>icons/warn.svg</file>
+        <file>icons/float.svg</file>
     </qresource>
 </RCC>
