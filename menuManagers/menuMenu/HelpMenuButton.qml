@@ -3,6 +3,8 @@ import QtQuick.Controls
 
 import "../../buttons"
 
+import MarkDownNote 1.0
+
 SubMenuButton {
     id: helpButton
     label: qsTr("Help")
@@ -92,6 +94,10 @@ SubMenuButton {
                     }
                 }
             }
+
+            onTriggered: {
+                Qt.openUrlExternally("https://github.com/AColdCode/MarkDownNote/graphs/contributors")
+            }
         }
         SubMenuButton {
             label: qsTr("About")
@@ -106,6 +112,10 @@ SubMenuButton {
                     }
                 }
             }
+
+            onTriggered: {
+                Qt.openUrlExternally("https://github.com/AColdCode/MarkDownNote")
+            }
         }
         SubMenuButton {
             label: qsTr("About Qt")
@@ -119,6 +129,10 @@ SubMenuButton {
                         closeMenuTimer.stop()
                     }
                 }
+            }
+
+            onTriggered: {
+                Qt.openUrlExternally("https://doc.qt.io/qt-6")
             }
         }
     }

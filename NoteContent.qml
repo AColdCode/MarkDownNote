@@ -1,13 +1,22 @@
 import QtQuick
 import QtQuick.Layouts
 
+import MarkDownNote 1.0
+
 RowLayout {
+
     spacing: 0
+
+    anchors.fill: parent
+
 
     Sidebar {
         id:sidebar
         Layout.fillWidth: true
         Layout.fillHeight: true
+
+        Layout.horizontalStretchFactor: 0
+
     }
     SidebarResponsiveArea{
         Layout.fillWidth: true
@@ -18,10 +27,10 @@ RowLayout {
 
     EditorPage {
         id: editor
-        // text: "# Hello Markdown\n\nThis is **bold** and *italic* text."
         Layout.fillWidth: true
         Layout.fillHeight: true
         font.pixelSize: 18
+        Layout.horizontalStretchFactor: 1
     }
 
     PreviewPage {
@@ -29,5 +38,10 @@ RowLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         markdownText: editor.text
+        Layout.horizontalStretchFactor: 1
+    }
+
+    Component.onCompleted: {
+        MarkDownCtrl.expandCtrl.sidebar = sidebar
     }
 }

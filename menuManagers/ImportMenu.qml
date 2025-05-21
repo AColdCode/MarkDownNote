@@ -1,7 +1,11 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs
+
+import MarkDownNote 1.0
 
 import "../buttons"
+import "importMenu"
 
 MenuButton {
     hoverText: qsTr("Import")
@@ -14,9 +18,17 @@ MenuButton {
 
         MenuItem{
             text: qsTr("Import File")
+            onClicked: {
+                MarkDownCtrl.importMenuCtrl.selectFile()
+            }
         }
         MenuItem{
             text: qsTr("Import Folder")
+            onClicked: importfloder.visible = true
+            ImportFolderDialog {
+                id: importfloder
+                visible: false
+            }
         }
     }
 }

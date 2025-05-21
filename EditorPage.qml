@@ -2,76 +2,148 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import MarkDownNote 1.0
+
 Rectangle {
-    width: 400
-    height: parent.height
     property alias text: editor.text
-    property alias font: editor.font
+    property alias font: editor.font        
 
-    Rectangle {
-        width: 400
-        height: parent.height
-        Column{
-            anchors.fill: parent
-            spacing: 1
-            Rectangle{
-                width: 400
-                height: 25
-                color: "#efeded"
-                Row {
-                        anchors.fill: parent
-                        spacing: 5
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 1
+        Rectangle {
+            Layout.fillWidth: true
+            height: 25
+            Layout.fillHeight: true
+            Layout.verticalStretchFactor: 0
+            color: "#e0e0e0"
+            RowLayout {
+                anchors.fill: parent
+                spacing: 5 // 可以调整间距
 
-                        // 中间空白区域
-                        Rectangle {
-                            width: parent.width*0.8
-                            height: parent.height
-                            color: "transparent"
-                        }
+                // 中间空白区域
+                Rectangle {
 
-                        // 第一个图标按钮
-                        Button {
-                            width: parent.width * 0.08
-                            height: parent.height
-                            background: Rectangle {
-                                color: "transparent"
-                            }
-                            contentItem: Image {
-                                source: "qrc:/icons/split_window_list.svg"
-                                fillMode: Image.PreserveAspectFit
-                                width: parent.width * 0.8
-                                height: width
-                            }
-                            onClicked: console.log("Snippet Dock Clicked")
-                        }
-
-                        WorkspaceMenu{}
-                    }
-
-            }
-
-            Topbar{
-                id:topbar
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-            }
-
-            Rectangle{
-                width: parent.width
-                height: parent.height-50
-                color:"#eeeeee"
-
-                TextArea {
-                    id:editor
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    wrapMode: TextEdit.Wrap
-                    text: "##Hello Markdown"
-                    onTextChanged: console.log("Text changed:", text)
+                    color: "transparent"
                 }
 
+                // 第一个图标按钮
+                Button {
+                    Layout.fillHeight: true
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+                    icon.source: "qrc:/icons/split_window_list.svg"
+                    onClicked: console.log("Snippet Dock Clicked")
+                }
+                // 第二个图标按钮
+                WorkspaceMenu{}
+            }
         }
+
+        Topbar {
+            id:topbar
+            Layout.fillWidth: true
+            height: 25
+            Layout.fillHeight: true
+            Layout.verticalStretchFactor: 0
         }
+
+        Rectangle {
+            id: editorBackGround
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.verticalStretchFactor: 1
+            color: "#eeeeee"
+            property int currentLine: 0
+
+            RowLayout {
+                anchors.fill: parent
+                spacing: 0
+
+                ScrollView {
+                    id: lineScrollView
+                    width: 40
+                    Layout.fillHeight: true
+                    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+                    clip: true
+                    Layout.topMargin: 5
+
+                    ListView {
+                        id: lineNumberView
+                        width: 40
+                        spacing: 0
+                        model: editor.lineCount
+                        currentIndex: editorBackGround.currentLine
+                        interactive: true
+                        clip: true
+
+                        delegate: Text {
+                            text: index + 1
+                            font.pixelSize: editor.font.pixelSize
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: lineNumberView.currentIndex === index ? "black" : "lightgrey"
+                            height: editor.contentHeight / editor.lineCount
+                            width: lineNumberView.width
+                        }
+                    }
+                    background: Rectangle {
+                        anchors.fill: parent
+                        z: -1
+                        color: "#fafafa"
+                    }
+
+                    ScrollBar.vertical.onPositionChanged: {
+                        editorScrollView.ScrollBar.vertical.position = ScrollBar.vertical.position
+                    }
+                }
+
+                // 编辑器区域
+                ScrollView {
+                    id: editorScrollView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    ScrollBar.vertical.policy: ScrollBar.AsNeeded
+                    ScrollBar.horizontal.policy: ScrollBar.AsNeeded
+
+                    TextArea {
+                        id: editor
+                        wrapMode: TextEdit.NoWrap
+                        selectByMouse: true
+                        text: "## MarkDownNote"
+                        font.pixelSize: 14
+                        width: Math.max(implicitWidth, editorScrollView.width)
+                        height: contentHeight
+
+                        onCursorPositionChanged: {
+                            Qt.callLater(() => {
+                                const cursorPos = editor.cursorPosition;
+                                const textBeforeCursor = editor.text.slice(0, cursorPos);
+                                editorBackGround.currentLine = textBeforeCursor.split("\n").length - 1;
+                            })
+                        }
+                    }
+
+                    ScrollBar.vertical.onPositionChanged: {
+                        Qt.callLater(() => {
+                            lineScrollView.ScrollBar.vertical.position = ScrollBar.vertical.position;
+                        })
+                    }
+
+                    TapHandler {
+                        onTapped: {
+                            editor.forceActiveFocus()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        editor.forceActiveFocus()
     }
 }

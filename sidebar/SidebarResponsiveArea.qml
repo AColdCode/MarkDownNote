@@ -29,7 +29,7 @@ Rectangle {
                 }
                 Button {
                     onClicked: console.log("功能待实现")
-                    icon.source: "qrc:/themes/vscode-dark/float.svg"
+                    icon.source: "qrc:/icons/float.svg"
                     icon.width:13
                     icon.color:"black"
 

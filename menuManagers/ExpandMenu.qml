@@ -3,6 +3,8 @@ import QtQuick.Controls
 import "../buttons"
 import "./expandMenu"
 
+import MarkDownNote 1.0
+
 SplitButton {
     id: expand_menu
     hoverText: qsTr("Expand Content Area")
@@ -21,7 +23,7 @@ SplitButton {
             icon.source: "qrc:/icons/expand.svg"
             icon.color: expand_menu.selected ? "red" : "black"
 
-            onClicked: {
+            onTriggered: {
                 expand_menu.selected = !expand_menu.selected
             }
         }
@@ -34,8 +36,13 @@ SplitButton {
             icon.source: "qrc:/icons/fullscreen.svg"
             icon.color: select ? "red" : "black"
 
-            onClicked: {
+            onTriggered: {
                 select = !select
+                if(select){
+                    MarkDownCtrl.expandCtrl.showFullScreen()
+                }else{
+                    MarkDownCtrl.expandCtrl.exitFullScreen()
+                }
             }
         }
 
@@ -47,8 +54,13 @@ SplitButton {
             icon.source: "qrc:/icons/stay_on_top.svg"
             icon.color: select ? "red" : "black"
 
-            onClicked: {
+            onTriggered: {
                 select = !select
+                if(select) {
+                    MarkDownCtrl.expandCtrl.staysOnTop()
+                }else{
+                    MarkDownCtrl.expandCtrl.notStaysOnTop()
+                }
             }
         }
 
@@ -59,5 +71,9 @@ SplitButton {
 
     onClicked: {
         selected = !selected
+    }
+
+    onSelectedChanged: {
+        MarkDownCtrl.expandCtrl.expendContent(selected)
     }
 }

@@ -6,17 +6,10 @@ import QtQuick.Layouts
 
 Button {
     id:button
-    width: parent.width * 0.08 // 占据大约18%的宽度
-    height: parent.height // 高度与父级相同
     background: Rectangle {
         color: parent.hovered ? "#e0e0e0": "transparent"//最新更改
     }
-    contentItem: Image {
-        source: "qrc:/icons/menu.svg" // 替换为另一个图标的路径
-        fillMode: Image.PreserveAspectFit
-        width: parent.width * 0.8 // 图标宽度占按钮宽度的80%
-        height: width // 保持宽高比一致
-    }
+    icon.source: "qrc:/icons/menu.svg"
     onClicked:menu.open()
 
     Menu {
@@ -48,9 +41,10 @@ Button {
                 width: parent.width
                 height: 30
 
-                Row {
+                RowLayout {
                     spacing: 10
                     Rectangle {
+                        Layout.leftMargin: 5
                         y:10
                         width: 6
                         height: 6

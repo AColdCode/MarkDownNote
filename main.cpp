@@ -1,21 +1,13 @@
-#include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include <QtWebEngineQuick>
-#include "markdownconverter.h"
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {
-    QtWebEngineQuick::initialize();
-
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
 
-    MarkdownConverter converter;
-    engine.rootContext()->setContextProperty("markdownConverter", &converter);
-
-    engine.loadFromModule("MarkDownNote", "Main");
+    engine.loadFromModule("MarkDownNote", "MarkDownNote");
 
     return app.exec();
 }

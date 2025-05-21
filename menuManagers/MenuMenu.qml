@@ -4,6 +4,8 @@ import QtQuick.Controls
 import "../buttons"
 import "./menuMenu"
 
+import MarkDownNote 1.0
+
 MenuButton {
     hoverText: qsTr("Menu")
     icon.source: "qrc:/icons/menu.svg"
@@ -18,6 +20,12 @@ MenuButton {
             label: qsTr("Settings")
             spaces: "                   "
             sequence: "Ctrl+Alt+P"
+            
+            onTriggered: setting_dialog.visible = true
+            SettingDialog{
+                id: setting_dialog
+                visible: false
+            }
         }
 
         MenuSeparator {}
@@ -69,11 +77,19 @@ MenuButton {
 
         SubMenuButton{
             label: qsTr("Restart")
+
+            onTriggered: {
+                MarkDownCtrl.menuCtrl.restartApp()
+            }
         }
         SubMenuButton{
             label: qsTr("Quit")
             spaces: "                          "
             sequence: "Ctrl+Q"
+
+            onTriggered: {
+                MarkDownCtrl.menuCtrl.exitApp()
+            }
         }
     }
 }
