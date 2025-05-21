@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 
+import MarkDownNote 1.0
+
 RowLayout {
     anchors.fill: parent
 
@@ -25,5 +27,9 @@ RowLayout {
         Layout.fillHeight: true
         markdownText: editor.text
         Layout.horizontalStretchFactor: 1
+    }
+
+    Component.onCompleted: {
+        MarkDownCtrl.expandCtrl.sidebar = sidebar
     }
 }

@@ -131,8 +131,18 @@ Rectangle {
                             lineScrollView.ScrollBar.vertical.position = ScrollBar.vertical.position;
                         })
                     }
+
+                    TapHandler {
+                        onTapped: {
+                            editor.forceActiveFocus()
+                        }
+                    }
                 }
             }
         }
+    }
+
+    Component.onCompleted: {
+        editor.forceActiveFocus()
     }
 }

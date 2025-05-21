@@ -6,6 +6,7 @@
 #include "controllers/notebookctrl.h"
 #include "controllers/newnotesctrl.h"
 #include "controllers/importmenuctrl.h"
+#include "controllers/exportmenuctrl.h"
 
 MarkDownCtrl::MarkDownCtrl(QObject *parent)
     : QObject{parent}
@@ -16,6 +17,7 @@ MarkDownCtrl::MarkDownCtrl(QObject *parent)
     , m_noteBookCtrl{new NoteBookCtrl(this)}
     , m_newNotesCtrl{new NewNotesCtrl(this)}
     , m_importMenuCtrl{new ImportMenuCtrl(this)}
+    , m_exportMenuCtrl{new ExportMenuCtrl(this)}
 {}
 
 EditorCtrl *MarkDownCtrl::editorCtrl() const
@@ -107,4 +109,17 @@ void MarkDownCtrl::setImportMenuCtrl(ImportMenuCtrl *newImportMenuCtrl)
         return;
     m_importMenuCtrl = newImportMenuCtrl;
     emit importMenuCtrlChanged();
+}
+
+ExportMenuCtrl *MarkDownCtrl::exportMenuCtrl() const
+{
+    return m_exportMenuCtrl;
+}
+
+void MarkDownCtrl::setExportMenuCtrl(ExportMenuCtrl *newExportMenuCtrl)
+{
+    if (m_exportMenuCtrl == newExportMenuCtrl)
+        return;
+    m_exportMenuCtrl = newExportMenuCtrl;
+    emit exportMenuCtrlChanged();
 }

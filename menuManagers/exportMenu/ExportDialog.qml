@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import QtQuick.Window
 import QtQuick.Dialogs
 
+import MarkDownNote 1.0
+
 Window {
     id: notebookWindow
     width: 450
@@ -112,7 +114,7 @@ Window {
                                 }
 
                                 TextField {
-                                    id: pathField
+                                    id: folderPath_field
                                     Layout.fillWidth: true
                                     Layout.horizontalStretchFactor: 1
                                 }
@@ -120,8 +122,11 @@ Window {
                                 Button {
                                     text: qsTr("Browse")
                                     Layout.fillWidth: true
-                                    onClicked: folderDialog.open()
                                     Layout.horizontalStretchFactor: 0
+
+                                    onClicked: {
+                                        MarkDownCtrl.exportMenuCtrl.selectFolder(folderPath_field)
+                                    }
                                 }
                             }
                         }
