@@ -46,7 +46,7 @@ Rectangle{
                     color: "transparent"
                 }
                 contentItem: Image {
-                    source: "qrc:/icons/view_mode_editor.svg" // 替换为另一个图标的路径
+                    source: "qrc:/icons/view_mode_editor.svg"
                     fillMode: Image.PreserveAspectFit
                     width: parent.width * 0.08 // 图标宽度占按钮宽度的80%
                     height: width // 保持宽高比一致

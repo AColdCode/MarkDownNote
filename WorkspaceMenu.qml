@@ -9,7 +9,7 @@ Button {
     width: parent.width * 0.08 // 占据大约18%的宽度
     height: parent.height // 高度与父级相同
     background: Rectangle {
-        color: "transparent"
+        color: parent.hovered ? "#e0e0e0": "transparent"//最新更改
     }
     contentItem: Image {
         source: "qrc:/icons/menu.svg" // 替换为另一个图标的路径

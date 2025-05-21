@@ -37,8 +37,6 @@ qt_add_qml_module(
   QML_FILES
   Buttons/MenuButton.qml
   QML_FILES
-  Sidebar.qml
-  QML_FILES
   Topbar.qml
   QML_FILES
   WorkspaceMenu.qml
@@ -63,7 +61,24 @@ qt_add_qml_module(
   QML_FILES
   menuManagers/menuMenu/HelpMenuButton.qml
   QML_FILES
-  menuManagers/expandMenu/WindowMenuButton.qml)
+  menuManagers/expandMenu/WindowMenuButton.qml
+  QML_FILES
+  buttons/ViewButton.qml
+  QML_FILES
+  buttons/RecycleButton.qml
+  QML_FILES
+  buttons/Manage_notebooksButton.qml
+  QML_FILES
+  dialogs/ManageNotebookDialog.qml
+  QML_FILES
+  sidebar/Sidebar.qml
+  QML_FILES sidebar/SidebarResponsiveArea.qml
+  QML_FILES sidebar/sidebarToggle/NavigationPage.qml
+  #[[ QML_FILES
+  sidebar/SidebarToggle/NavigationPage.qml]]
+  #[[QML_FILES
+  sidebar/SidebarResponsiveArea.qml]]
+)
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 

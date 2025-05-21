@@ -2,12 +2,19 @@ import QtQuick
 import QtQuick.Layouts
 
 RowLayout {
+    spacing: 0
+
     Sidebar {
         id:sidebar
         Layout.fillWidth: true
         Layout.fillHeight: true
-
     }
+    SidebarResponsiveArea{
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+    }
+
+
 
     EditorPage {
         id: editor

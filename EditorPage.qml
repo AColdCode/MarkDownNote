@@ -17,34 +17,34 @@ Rectangle {
             Rectangle{
                 width: 400
                 height: 25
-                color: "#e0e0e0"
+                color: "#efeded"
                 Row {
                         anchors.fill: parent
-                        spacing: 5 // 可以调整间距
+                        spacing: 5
 
                         // 中间空白区域
                         Rectangle {
-                            width: parent.width*0.8// 占据60%的宽度
+                            width: parent.width*0.8
                             height: parent.height
                             color: "transparent"
                         }
 
                         // 第一个图标按钮
                         Button {
-                            width: parent.width * 0.08 // 占据大约18%的宽度
-                            height: parent.height // 高度与父级相同
+                            width: parent.width * 0.08
+                            height: parent.height
                             background: Rectangle {
                                 color: "transparent"
                             }
                             contentItem: Image {
                                 source: "qrc:/icons/split_window_list.svg"
                                 fillMode: Image.PreserveAspectFit
-                                width: parent.width * 0.8 // 图标宽度占按钮宽度的80%
-                                height: width // 保持宽高比一致
+                                width: parent.width * 0.8
+                                height: width
                             }
                             onClicked: console.log("Snippet Dock Clicked")
                         }
-                        // 第二个图标按钮
+
                         WorkspaceMenu{}
                     }
 
