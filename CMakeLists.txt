@@ -22,11 +22,11 @@ qt_add_qml_module(
   SOURCES
   main.cpp
   QML_FILES
-  EditorPage.qml
+  leftContent/EditorPage.qml
   QML_FILES
   NoteManager.qml
   QML_FILES
-  PreviewPage.qml
+  leftContent/PreviewPage.qml
   QML_FILES
   NoteContent.qml
   RESOURCES
@@ -62,9 +62,9 @@ qt_add_qml_module(
   QML_FILES
   menuManagers/noteBookMenu/ManagementNotebookDialog.qml
   QML_FILES
-  Topbar.qml
+  leftContent/Topbar.qml
   QML_FILES
-  WorkspaceMenu.qml
+  leftContent/WorkspaceMenu.qml
   QML_FILES
   menuManagers/newNoteMenu/NewNoteDialog.qml
   QML_FILES
@@ -123,7 +123,9 @@ qt_add_qml_module(
   controllers/importmenuctrl.cpp
   SOURCES
   controllers/exportmenuctrl.h
-  controllers/exportmenuctrl.cpp)
+  controllers/exportmenuctrl.cpp
+  QML_FILES LeftContent.qml
+  QML_FILES RightContent.qml)
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 

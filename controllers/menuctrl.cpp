@@ -1,6 +1,7 @@
 #include <QQuickWindow>
 #include <QProcess>
 #include <QTimer>
+#include <QMessageBox>
 
 #include "menuctrl.h"
 
@@ -32,6 +33,11 @@ void MenuCtrl::addNewQuickNoteScheme(const QString name)
     QMetaObject::invokeMethod(m_quickAccess,
                               "addQuickNoteScheme",
                               Q_ARG(QVariant, QVariant::fromValue(name)));
+}
+
+void MenuCtrl::openAboutQt()
+{
+    QMessageBox::aboutQt(nullptr, tr("About Qt"));
 }
 
 QObject *MenuCtrl::quickAccess() const

@@ -74,6 +74,6 @@ SplitButton {
     }
 
     onSelectedChanged: {
-        MarkDownCtrl.expandCtrl.expendContent(selected)
+        MarkDownCtrl.expandCtrl.expandContent(selected)
     }
 }

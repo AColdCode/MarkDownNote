@@ -11,6 +11,7 @@ public:
     Q_INVOKABLE void exitApp();
     Q_INVOKABLE void restartApp();
     Q_INVOKABLE void addNewQuickNoteScheme(const QString name);
+    Q_INVOKABLE void openAboutQt();
 
     // GET/SET QML组件
     QObject *quickAccess() const;

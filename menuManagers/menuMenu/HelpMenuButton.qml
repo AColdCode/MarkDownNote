@@ -132,7 +132,7 @@ SubMenuButton {
             }
 
             onTriggered: {
-                Qt.openUrlExternally("https://doc.qt.io/qt-6")
+                MarkDownCtrl.menuCtrl.openAboutQt()
             }
         }
     }

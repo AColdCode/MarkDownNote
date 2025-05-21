@@ -40,14 +40,14 @@ void ExpandCtrl::notStaysOnTop()
     }
 }
 
-void ExpandCtrl::expendContent(bool selected)
+void ExpandCtrl::expandContent(bool selected)
 {
-    if (m_sidebar == nullptr)
+    if (m_rightContent == nullptr)
         return;
     if (selected) {
-        m_sidebar->setProperty("visible", false);
+        m_rightContent->setProperty("visible", false);
     } else {
-        m_sidebar->setProperty("visible", true);
+        m_rightContent->setProperty("visible", true);
     }
 }
 
@@ -64,15 +64,15 @@ void ExpandCtrl::setMainWindow(QObject *newMainWindow)
     emit mainWindowChanged();
 }
 
-QObject *ExpandCtrl::sidebar() const
+QObject *ExpandCtrl::rightContent() const
 {
-    return m_sidebar;
+    return m_rightContent;
 }
 
-void ExpandCtrl::setSidebar(QObject *newSidebar)
+void ExpandCtrl::setRightContent(QObject *newRightContent)
 {
-    if (m_sidebar == newSidebar)
+    if (m_rightContent == newRightContent)
         return;
-    m_sidebar = newSidebar;
-    emit sidebarChanged();
+    m_rightContent = newRightContent;
+    emit rightContentChanged();
 }

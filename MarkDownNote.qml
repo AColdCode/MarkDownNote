@@ -10,7 +10,7 @@ ApplicationWindow {
     width: 800
     height: 600
     visible: true
-    title: "Markdown Note"
+    title: qsTr("Markdown Note")
     flags: Qt.Window | Qt.BypassWindowManagerHint
 
     header:NoteManager {
