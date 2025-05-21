@@ -124,6 +124,10 @@ Rectangle {
                                 editorBackGround.currentLine = textBeforeCursor.split("\n").length - 1;
                             })
                         }
+
+                        Component.onCompleted: {
+                            MarkDownCtrl.topbarCtrl.textArea = editor
+                        }
                     }
 
                     ScrollBar.vertical.onPositionChanged: {

@@ -1,12 +1,13 @@
 #include "markdownctrl.h"
 #include "controllers/editorctrl.h"
 #include "controllers/expandctrl.h"
-#include "controllers/menuctrl.h"
-#include "controllers/previewctrl.h"
-#include "controllers/notebookctrl.h"
-#include "controllers/newnotesctrl.h"
-#include "controllers/importmenuctrl.h"
 #include "controllers/exportmenuctrl.h"
+#include "controllers/importmenuctrl.h"
+#include "controllers/menuctrl.h"
+#include "controllers/newnotesctrl.h"
+#include "controllers/notebookctrl.h"
+#include "controllers/previewctrl.h"
+#include "controllers/topbarctrl.h"
 
 MarkDownCtrl::MarkDownCtrl(QObject *parent)
     : QObject{parent}
@@ -18,6 +19,7 @@ MarkDownCtrl::MarkDownCtrl(QObject *parent)
     , m_newNotesCtrl{new NewNotesCtrl(this)}
     , m_importMenuCtrl{new ImportMenuCtrl(this)}
     , m_exportMenuCtrl{new ExportMenuCtrl(this)}
+    , m_topbarCtrl{new TopbarCtrl(this)}
 {}
 
 EditorCtrl *MarkDownCtrl::editorCtrl() const
@@ -122,4 +124,17 @@ void MarkDownCtrl::setExportMenuCtrl(ExportMenuCtrl *newExportMenuCtrl)
         return;
     m_exportMenuCtrl = newExportMenuCtrl;
     emit exportMenuCtrlChanged();
+}
+
+TopbarCtrl *MarkDownCtrl::topbarCtrl() const
+{
+    return m_topbarCtrl;
+}
+
+void MarkDownCtrl::setTopbarCtrl(TopbarCtrl *newTopbarCtrl)
+{
+    if (m_topbarCtrl == newTopbarCtrl)
+        return;
+    m_topbarCtrl = newTopbarCtrl;
+    emit topbarCtrlChanged();
 }

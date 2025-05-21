@@ -57,6 +57,7 @@ qt_add_qml_module(appMarkDownNote
     SOURCES controllers/newnotesctrl.h controllers/newnotesctrl.cpp
     SOURCES controllers/importmenuctrl.h controllers/importmenuctrl.cpp
     SOURCES controllers/exportmenuctrl.h controllers/exportmenuctrl.cpp
+    SOURCES controllers/topbarctrl.h controllers/topbarctrl.cpp
 )
 
 
