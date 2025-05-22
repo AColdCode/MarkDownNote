@@ -33,6 +33,8 @@ QVariant NotebookListModel::data(const QModelIndex &index, int role) const
         return notebook->description;
     case PathRole:
         return notebook->rootPath;
+    case MaxIdRole:
+        return notebook->maxId;
     default:
         return {};
     }
@@ -40,7 +42,10 @@ QVariant NotebookListModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> NotebookListModel::roleNames() const
 {
-    return {{NameRole, "name"}, {DescriptionRole, "description"}, {PathRole, "rootPath"}};
+    return {{NameRole, "name"},
+            {DescriptionRole, "description"},
+            {PathRole, "rootPath"},
+            {MaxIdRole, "maxId"}};
 }
 
 void NotebookListModel::addNotebook(Notebook *notebook)
@@ -53,11 +58,12 @@ void NotebookListModel::addNotebook(Notebook *notebook)
 
 void NotebookListModel::addNotebookByinfo(const QString &name,
                                           const QString &desc,
-                                          const QString &path)
+                                          const QString &path,
+                                          const int &maxId)
 {
     if (name == "" || path == "")
         return;
-    addNotebook(new Notebook(name, desc, path, this));
+    addNotebook(new Notebook(name, desc, path, maxId, this));
 }
 
 void NotebookListModel::clear()
@@ -95,7 +101,8 @@ void NotebookListModel::load()
 
     clear();
     for (const auto &item : array) {
-        Notebook *notebook = Notebook::fromJson(item.toObject(), this);
+        QString rootPath = item.toObject()["rootPath"].toString();
+        Notebook *notebook = Notebook::fromPath(rootPath, this);
         if (notebook != nullptr)
             addNotebook(notebook);
     }
@@ -108,7 +115,7 @@ bool NotebookListModel::updateNotebook(int row, Notebook *notebook)
 
     m_notebooks[row] = notebook;
     QModelIndex idx = createIndex(row, 0);
-    emit dataChanged(idx, idx, {NameRole, DescriptionRole, PathRole});
+    emit dataChanged(idx, idx, {NameRole, DescriptionRole, PathRole, MaxIdRole});
     save();
     return true;
 }

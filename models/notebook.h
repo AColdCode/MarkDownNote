@@ -17,7 +17,9 @@ public:
     Notebook(const QString &name,
              const QString &description,
              const QString &rootPath,
-             QObject *parent = nullptr);
+             const int &maxId,
+             QObject *parent = nullptr,
+             const int id = 1);
 
     QJsonObject toJson() const;
     static Notebook *fromJson(const QJsonObject &obj, QObject *parent = nullptr);
@@ -30,18 +32,19 @@ public:
     void save(); // 保存到 vx.json
     void saveNotebookInfo();
     Note *createNote(const QString &name);
+    Notebook *createfolder(const QString &name);
     QList<Notebook *> childNotebooks() const;
 
     QString name;
     QString description;
     QString rootPath;
+    int maxId = 0;
 
 private:
     QList<Note *> notes;
     QList<Notebook *> children;
 
     int version = 1;
-    int maxId = -1;
     int id = 1;
     QDateTime createdTime;
     QDateTime modifiedTime;

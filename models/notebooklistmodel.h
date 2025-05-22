@@ -8,7 +8,7 @@ class NotebookListModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    enum Roles { NameRole = Qt::UserRole + 1, DescriptionRole, PathRole };
+    enum Roles { NameRole = Qt::UserRole + 1, DescriptionRole, PathRole, MaxIdRole };
 
     explicit NotebookListModel(QObject *parent = nullptr);
 
@@ -19,7 +19,8 @@ public:
     Q_INVOKABLE void addNotebook(Notebook *notebook);
     Q_INVOKABLE void addNotebookByinfo(const QString &name,
                                        const QString &desc,
-                                       const QString &path);
+                                       const QString &path,
+                                       const int &maxId = 0);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void save();
     Q_INVOKABLE void load();

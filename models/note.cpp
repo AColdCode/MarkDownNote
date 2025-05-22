@@ -5,7 +5,7 @@
 
 #include "note.h"
 
-Note::Note(const QString &id, const QString &name, QObject *parent)
+Note::Note(const int &id, const QString &name, QObject *parent)
     : QObject{parent}
     , id{id}
     , name{name}
@@ -32,7 +32,7 @@ QJsonObject Note::toJson() const
 
 Note *Note::fromJson(const QJsonObject &obj, QObject *parent)
 {
-    Note *note = new Note(obj["id"].toString(), obj["name"].toString(), parent);
+    Note *note = new Note(obj["id"].toInt(), obj["name"].toString(), parent);
     note->createdTime = QDateTime::fromString(obj["created_time"].toString(), Qt::ISODate);
     note->modifiedTime = QDateTime::fromString(obj["modified_time"].toString(), Qt::ISODate);
     note->attachmentFolder = obj["attachment_folder"].toString();

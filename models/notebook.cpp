@@ -10,16 +10,24 @@
 Notebook::Notebook(const QString &name,
                    const QString &description,
                    const QString &rootPath,
-                   QObject *parent)
+                   const int &maxId,
+                   QObject *parent,
+                   const int id)
     : QObject{parent}
     , name{name}
     , description{description}
     , rootPath{rootPath}
+    , maxId{maxId}
+    , id{id}
 {
-    createdTime = QDateTime::currentDateTimeUtc();
-    modifiedTime = QDateTime::currentDateTimeUtc();
-    signature = QString::number(QRandomGenerator::global()->generate())
-                + QString::number(QRandomGenerator::global()->generate());
+    if (QFile::exists(rootPath + noteInfoFile)) {
+        load();
+    } else {
+        createdTime = QDateTime::currentDateTimeUtc();
+        modifiedTime = QDateTime::currentDateTimeUtc();
+        signature = QString::number(QRandomGenerator::global()->generate())
+                    + QString::number(QRandomGenerator::global()->generate());
+    }
 
     if (name != "" && !QFile::exists(rootPath + notebookInfoDir + notebookInfoFile)) {
         attachmentFolder = "attachment_folder";
@@ -38,36 +46,36 @@ QJsonObject Notebook::toJson() const
     obj["name"] = name;
     obj["description"] = description;
     obj["rootPath"] = rootPath;
+    obj["maxId"] = maxId;
     return obj;
 }
 
 Notebook *Notebook::fromJson(const QJsonObject &obj, QObject *parent)
 {
-    QDir dir(obj["rootPath"].toString());
-    if (!dir.exists())
-        return nullptr;
-
     return new Notebook(obj["name"].toString(),
                         obj["description"].toString(),
                         obj["rootPath"].toString(),
+                        obj["maxId"].toInt(),
                         parent);
 }
 
 Notebook *Notebook::fromPath(const QString &rootPath, QObject *parent)
 {
     Notebook *notebook = nullptr;
+    QDir dir(rootPath);
+    if (!dir.exists())
+        return notebook;
+
     if (QFile::exists(rootPath + notebookInfoDir + notebookInfoFile)) {
         QFile file(rootPath + notebookInfoDir + notebookInfoFile);
-        if (!file.open(QIODevice::ReadOnly))
-            return notebook;
-        QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-        QJsonObject obj = doc.object();
-        notebook = fromJson(obj, parent);
+        if (file.open(QIODevice::ReadOnly)) {
+            QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+            QJsonObject obj = doc.object();
+            notebook = fromJson(obj, parent);
+        }
     } else {
-        notebook = new Notebook("", "", rootPath, parent);
+        notebook = new Notebook("", "", rootPath, 0, parent);
     }
-
-    notebook->load();
 
     return notebook;
 }
@@ -81,11 +89,17 @@ void Notebook::load()
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
     QJsonObject obj = doc.object();
 
+    // 加载notebook基本信息
+    createdTime = QDateTime::fromString(obj["created_time"].toString(), Qt::ISODate);
+    modifiedTime = QDateTime::fromString(obj["modified_time"].toString(), Qt::ISODate);
+    signature = obj["signature"].toString();
+    id = obj["id"].toInt();
+    version = obj["version"].toInt();
+
     // 加载 notes
     QJsonArray files = obj["files"].toArray();
     for (const QJsonValue &fileVal : files) {
         QJsonObject fileObj = fileVal.toObject();
-        maxId = std::max(maxId, fileObj["id"].toInt(-1));
         Note *note = Note::fromJson(fileObj, this);
         notes.append(note);
     }
@@ -97,7 +111,9 @@ void Notebook::load()
         QString subPath = rootPath + "/" + subName;
         if (QFile::exists(subPath + "/vx.json")) {
             Notebook *child = fromPath(subPath, this);
-            children.append(child);
+            if (child == nullptr) {
+                children.append(child);
+            }
         }
     }
 }
@@ -155,9 +171,36 @@ void Notebook::saveNotebookInfo()
 
 Note *Notebook::createNote(const QString &name)
 {
-    QString newId = QString::number(maxId + 1);
-    Note *note = new Note(newId, name, this);
-    notes.append(note);
-    modifiedTime = QDateTime::currentDateTimeUtc();
+    Note *note = nullptr;
+
+    int newId = ++maxId;
+    QFile file(rootPath + "/" + name + ".md");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream(&file) << "# " + name;
+        note = new Note(newId, name, this);
+        notes.append(note);
+        modifiedTime = QDateTime::currentDateTimeUtc();
+        file.close();
+    } else {
+        qDebug() << "创建笔记失败";
+    }
+
     return note;
+}
+
+Notebook *Notebook::createfolder(const QString &name)
+{
+    Notebook *folder = nullptr;
+
+    int newId = ++maxId;
+    QString newPath = rootPath + "/" + name;
+    if (QDir().mkdir(newPath)) {
+        folder = new Notebook("", "", newPath, 0, this, newId);
+        children.append(folder);
+        modifiedTime = QDateTime::currentDateTimeUtc();
+    } else {
+        qDebug() << "失败：父目录不存在或权限不足";
+    }
+
+    return folder;
 }
