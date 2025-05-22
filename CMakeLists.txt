@@ -125,7 +125,10 @@ qt_add_qml_module(
   controllers/exportmenuctrl.h
   controllers/exportmenuctrl.cpp
   QML_FILES LeftContent.qml
-  QML_FILES RightContent.qml)
+  QML_FILES RightContent.qml
+  SOURCES models/notebook.h models/notebook.cpp
+  SOURCES models/notebooklistmodel.h models/notebooklistmodel.cpp
+  SOURCES models/note.h models/note.cpp)
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 

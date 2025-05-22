@@ -3,6 +3,8 @@
 #include <QObject>
 #include <QQmlEngine>
 
+#include <models/notebooklistmodel.h>
+
 class ExpandCtrl;
 class EditorCtrl;
 class MenuCtrl;
@@ -45,6 +47,9 @@ public:
     ExportMenuCtrl *exportMenuCtrl() const;
     void setExportMenuCtrl(ExportMenuCtrl *newExportMenuCtrl);
 
+    NotebookListModel *noteBookmodel() const;
+    void setNoteBookmodel(NotebookListModel *newNoteBookmodel);
+
 signals:
     void editorCtrlChanged();
 
@@ -61,6 +66,8 @@ signals:
     void importMenuCtrlChanged();
 
     void exportMenuCtrlChanged();
+
+    void noteBookmodelChanged();
 
 private:
     ExpandCtrl *m_expandCtrl = nullptr;
@@ -93,4 +100,8 @@ private:
     ExportMenuCtrl *m_exportMenuCtrl = nullptr;
     Q_PROPERTY(ExportMenuCtrl *exportMenuCtrl READ exportMenuCtrl WRITE setExportMenuCtrl NOTIFY
                    exportMenuCtrlChanged FINAL)
+
+    NotebookListModel *m_noteBookmodel = nullptr;
+    Q_PROPERTY(NotebookListModel *noteBookmodel READ noteBookmodel WRITE setNoteBookmodel NOTIFY
+                   noteBookmodelChanged FINAL)
 };

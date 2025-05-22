@@ -46,6 +46,7 @@ Window {
                         }
 
                         TextField {
+                            id: name_field
                             Layout.fillWidth: true
                             placeholderText: qsTr("Name of notebook")
                             placeholderTextColor: "grey"
@@ -65,6 +66,7 @@ Window {
                         }
 
                         TextField {
+                            id: desc_field
                             Layout.fillWidth: true
                             placeholderTextColor: "grey"
                             placeholderText: qsTr("Description of notebook")
@@ -84,7 +86,7 @@ Window {
                         }
 
                         TextField {
-                            id: pathField
+                            id: rootFolder_field
                             Layout.fillWidth: true
                             placeholderTextColor: "grey"
                             placeholderText: qsTr("Path of notebook root folder")
@@ -96,7 +98,7 @@ Window {
                             Layout.fillWidth: true
                             Layout.horizontalStretchFactor: 0
                             onClicked: {
-                                MarkDownCtrl.noteBookCtrl.selectRoot(pathField)
+                                MarkDownCtrl.noteBookCtrl.selectRoot(rootFolder_field)
                             }
                         }
                     }
@@ -113,7 +115,7 @@ Window {
                 text: qsTr("Ok")
                 icon.source: "qrc:/icons/Ok.svg"
                 onClicked: {
-                    // 处理输入内容
+                    MarkDownCtrl.noteBookmodel.addNotebookByinfo(name_field.text, desc_field.text, rootFolder_field.text)
                     notebookWindow.close()
                 }
             }
