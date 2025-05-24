@@ -21,11 +21,15 @@ public:
                                        const QString &desc,
                                        const QString &path,
                                        const int &maxId = 0);
+    Q_INVOKABLE void addNotebookFromPath(const QString &rootPath);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void save();
     Q_INVOKABLE void load();
     Q_INVOKABLE bool updateNotebook(int row, Notebook *notebook);
     Q_INVOKABLE bool removeRow(int row);
+
+signals:
+    void countChanged(int newCount);
 
 private:
     QList<Notebook *> m_notebooks;

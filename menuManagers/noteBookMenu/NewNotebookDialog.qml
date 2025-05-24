@@ -129,6 +129,14 @@ Window {
         }
     }
 
+    onVisibleChanged: {
+        if(visible) {
+            name_field.clear()
+            desc_field.clear()
+            rootFolder_field.clear()
+        }
+    }
+
     onClosing: {
         notebookWindow.visible = false
     }

@@ -15,6 +15,9 @@ Window {
     flags: Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     visible: false
     modality: Qt.ApplicationModal
+    property alias nameText: name_field.text
+    property alias descText: desc_field.text
+    property alias okEnable: ok_btn.enabled
 
     Rectangle {
         anchors.fill: parent
@@ -47,6 +50,7 @@ Window {
                         }
 
                         TextField {
+                            id: name_field
                             Layout.fillWidth: true
                             placeholderText: qsTr("Name of notebook")
                             placeholderTextColor: "lightgray"
@@ -67,6 +71,7 @@ Window {
                         }
 
                         TextField {
+                            id: desc_field
                             Layout.fillWidth: true
                             placeholderTextColor: "lightgray"
                             placeholderText: qsTr("Description of notebook")
@@ -87,18 +92,22 @@ Window {
                         }
 
                         TextField {
-                            id: pathField
+                            id: rootFolder_field
                             Layout.fillWidth: true
                             placeholderTextColor: "grey"
                             placeholderText: qsTr("Path of notebook root folder")
                             Layout.horizontalStretchFactor: 1
+
+                            onTextChanged: {
+                                MarkDownCtrl.noteBookCtrl.isLegalPath(rootFolder_field.text, openNotebookWindow)
+                            }
                         }
 
                         Button {
                             text: qsTr("Browse")
                             Layout.fillWidth: true
                             Layout.horizontalStretchFactor: 0
-                            onClicked: MarkDownCtrl.noteBookCtrl.selectRoot(pathField)
+                            onClicked: MarkDownCtrl.noteBookCtrl.selectRoot(rootFolder_field)
                         }
                     }
                 }
@@ -111,10 +120,12 @@ Window {
             x: parent.width - width - 5
             spacing: 10
             Button {
+                id: ok_btn
                 text: qsTr("Ok")
                 icon.source: "qrc:/icons/Ok.svg"
+                enabled: false
                 onClicked: {
-                    // 处理输入内容
+                    MarkDownCtrl.noteBookmodel.addNotebookByinfo(name_field.text, desc_field.text, rootFolder_field.text)
                     openNotebookWindow.close()
                 }
             }
@@ -125,6 +136,14 @@ Window {
                     openNotebookWindow.close()
                 }
             }
+        }
+    }
+
+    onVisibleChanged: {
+        if(visible) {
+            name_field.clear()
+            desc_field.clear()
+            rootFolder_field.clear()
         }
     }
 

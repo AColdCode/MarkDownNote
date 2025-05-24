@@ -9,6 +9,7 @@ public:
     explicit NoteBookCtrl(QObject *parent = nullptr);
 
     Q_INVOKABLE void selectRoot(QObject *textField);
+    Q_INVOKABLE void isLegalPath(const QString &rootPath, QObject *dialog);
 
 signals:
 

@@ -161,6 +161,7 @@ void Notebook::saveNotebookInfo()
     obj["image_folder"] = imageFolder;
     obj["name"] = name;
     obj["version"] = version;
+    obj["rootPath"] = rootPath;
 
     QJsonDocument doc(obj);
     QFile file(rootPath + notebookInfoDir + notebookInfoFile);

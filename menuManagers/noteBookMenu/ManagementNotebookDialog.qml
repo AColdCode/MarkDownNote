@@ -31,6 +31,30 @@ Window {
                 Layout.horizontalStretchFactor: 3
                 Layout.margins: 10
                 color: "white"
+                ListView {
+                    anchors.fill: parent
+                    id: notebooks_list
+                    model: MarkDownCtrl.noteBookmodel
+                    currentIndex: 0
+
+                    delegate: Rectangle {
+                        height: 25
+                        width: notebooks_list.width
+                        color: notebooks_list.currentIndex === index ? "grey" : "white"
+                        property string name: model.name
+                        property string rootPath: model.rootPath
+                        property string decs: model.description
+
+                        Label {
+                            anchors.fill: parent
+                            text: name
+                        }
+
+                        TapHandler {
+                            onTapped: notebooks_list.currentIndex = index
+                        }
+                    }
+                }
             }
 
             Rectangle {

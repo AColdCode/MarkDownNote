@@ -54,6 +54,7 @@ void NotebookListModel::addNotebook(Notebook *notebook)
     m_notebooks.append(notebook);
     endInsertRows();
     save();
+    emit countChanged(m_notebooks.count());
 }
 
 void NotebookListModel::addNotebookByinfo(const QString &name,
@@ -64,6 +65,14 @@ void NotebookListModel::addNotebookByinfo(const QString &name,
     if (name == "" || path == "")
         return;
     addNotebook(new Notebook(name, desc, path, maxId, this));
+}
+
+void NotebookListModel::addNotebookFromPath(const QString &rootPath)
+{
+    Notebook *notebook = Notebook::fromPath(rootPath, this);
+    if (notebook != nullptr)
+        addNotebook(notebook);
+    save();
 }
 
 void NotebookListModel::clear()
