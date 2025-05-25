@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import QtQuick.Window
 import QtQuick.Dialogs
 
+import MarkDownNote 1.0
+
 Window {
     id: noteWindow
     width: 300
@@ -43,6 +45,7 @@ Window {
                         id: notebook
                         Layout.fillWidth: true
                         Layout.horizontalStretchFactor: 1
+                        text: MarkDownCtrl.noteBookCtrl.currentNotebookName
                     }
                 }
 
@@ -69,6 +72,7 @@ Window {
                         text: qsTr("Up")
                         Layout.fillWidth: true
                         Layout.horizontalStretchFactor: 0
+                        visible: false
                     }
                 }
 
@@ -87,8 +91,19 @@ Window {
                         id: filetype_combo
                         Layout.fillWidth: true
                         Layout.horizontalStretchFactor: 1
-                        model: ["Markdown", "Text", "Mind Map", "Others"]
+                        model: ["Markdown", "Text", "Others"]
                         currentIndex: 0
+
+                        onCurrentIndexChanged: {
+                            var text = filename.text
+                            var split = text.lastIndexOf('.')
+                            var name = (split >= 0) ? text.substring(0, split) : text
+                            if(currentIndex === 0) {
+                                filename.text = name + ".md"
+                            }else if(currentIndex === 1) {
+                                filename.text = name + ".txt"
+                            }
+                        }
                     }
                 }
 
@@ -107,6 +122,19 @@ Window {
                         id: filename
                         Layout.fillWidth: true
                         Layout.horizontalStretchFactor: 1
+                        text: ".md"
+
+                        onTextChanged: {
+                            var split = text.lastIndexOf('.')
+                            var suffix = text.substring(split + 1)
+                            if(suffix === "md") {
+                                filetype_combo.currentIndex = 0
+                            }else if(suffix === "txt") {
+                                filetype_combo.currentIndex = 1
+                            }else {
+                                filetype_combo.currentIndex = 2
+                            }
+                        }
                     }
                 }
             }
@@ -121,7 +149,7 @@ Window {
                 text: qsTr("Ok")
                 icon.source: "qrc:/icons/Ok.svg"
                 onClicked: {
-                    // 处理输入内容
+                    MarkDownCtrl.noteBookmodel.createNewNote(filename.text)
                     noteWindow.close()
                 }
             }
@@ -137,5 +165,9 @@ Window {
 
     onClosing: {
         noteWindow.visible = false
+    }
+
+    Component.onCompleted: {
+
     }
 }

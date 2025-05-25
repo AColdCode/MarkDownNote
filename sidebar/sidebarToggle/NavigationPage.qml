@@ -100,6 +100,12 @@ Rectangle{
                     notebookComboBox.currentIndex = newCount - 1
                 }
             }
+
+            onCurrentIndexChanged: {
+                MarkDownCtrl.noteBookmodel.currentNotebook = MarkDownCtrl.noteBookmodel.getNotebookByIndex(currentIndex)
+                note_listView.model = MarkDownCtrl.noteBookmodel.currentNotebook.notes
+                MarkDownCtrl.noteBookCtrl.currentNotebookName = MarkDownCtrl.noteBookmodel.currentNotebook.name
+            }
         }
 
 
@@ -111,13 +117,14 @@ Rectangle{
 
             // 这里添加你的文件树视图内容
             ListView {
-                id:listView
+                id:note_listView
                 anchors.fill: notesshow
                 anchors.margins: 10
                 model: ListModel {
-                    // ListElement { name: "笔记1.md"; checked: true  }
+                    id: notemodel
+                    ListElement { name: "笔记1.md" }
+                    ListElement { name: "笔记2.md" }
                 }
-                property int selectedIndex: 0
 
                 delegate: ItemDelegate {
                     spacing: 5
@@ -139,31 +146,25 @@ Rectangle{
                         }
                     }
 
-                    // 鼠标悬停时的背景色
-                    background: Rectangle {
-                        color: parent.hovered ? "#e0e0e0" : (index === listView.selectedIndex ?  "lightgray" : "transparent")
+                    TapHandler {
+                        onTapped: {
+                            note_listView.currentIndex = index
+                        }
                     }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onHoveredChanged: {
-                            if(hovered) {
-                                console.log(model.name + " hovered");
-                            }
-                        }
-                        onClicked: {
-                            // 更新选中索引
-                            listView.selectedIndex = index;
-                            // 更新模型中的checked状态
-                            for (var i = 0; i < listView.model.count; ++i) {
-                                listView.model.setProperty(i, "checked", i === index);
-                            }
-                            console.log(model.name + " selected");
-                        }
+                    // 鼠标悬停时的背景色
+                    background: Rectangle {
+                        color: parent.hovered ? "#e0e0e0" : (index === note_listView.currentIndex ?  "lightgray" : "transparent")
                     }
                 }
             }
+        }
+    }
+
+    Connections {
+        target: MarkDownCtrl.noteBookmodel
+        function onUpdateNoteModel() {
+            note_listView.model = MarkDownCtrl.noteBookmodel.currentNotebook.notes
         }
     }
 }

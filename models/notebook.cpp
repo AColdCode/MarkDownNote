@@ -14,7 +14,7 @@ Notebook::Notebook(const QString &name,
                    QObject *parent,
                    const int id)
     : QObject{parent}
-    , name{name}
+    , m_name{name}
     , description{description}
     , rootPath{rootPath}
     , maxId{maxId}
@@ -29,7 +29,7 @@ Notebook::Notebook(const QString &name,
                     + QString::number(QRandomGenerator::global()->generate());
     }
 
-    if (name != "" && !QFile::exists(rootPath + notebookInfoDir + notebookInfoFile)) {
+    if (m_name != "" && !QFile::exists(rootPath + notebookInfoDir + notebookInfoFile)) {
         attachmentFolder = "attachment_folder";
         imageFolder = "image_folder";
         tag_graph = "";
@@ -43,7 +43,7 @@ Notebook::Notebook(const QString &name,
 QJsonObject Notebook::toJson() const
 {
     QJsonObject obj;
-    obj["name"] = name;
+    obj["name"] = m_name;
     obj["description"] = description;
     obj["rootPath"] = rootPath;
     obj["maxId"] = maxId;
@@ -96,12 +96,12 @@ void Notebook::load()
     id = obj["id"].toInt();
     version = obj["version"].toInt();
 
-    // 加载 notes
+    // 加载 m_notes
     QJsonArray files = obj["files"].toArray();
     for (const QJsonValue &fileVal : files) {
         QJsonObject fileObj = fileVal.toObject();
         Note *note = Note::fromJson(fileObj, this);
-        notes.append(note);
+        m_notes.append(note);
     }
 
     // 加载子文件夹作为子 Notebook(无x_notebook文件夹)
@@ -128,9 +128,9 @@ void Notebook::save()
     obj["signature"] = signature;
     obj["version"] = version;
 
-    // 保存 notes
+    // 保存 m_notes
     QJsonArray files;
-    for (Note *note : notes) {
+    for (Note *note : m_notes) {
         files.append(note->toJson());
     }
     obj["files"] = files;
@@ -159,7 +159,7 @@ void Notebook::saveNotebookInfo()
     obj["created_time"] = createdTime.toString(Qt::ISODate);
     obj["description"] = description;
     obj["image_folder"] = imageFolder;
-    obj["name"] = name;
+    obj["name"] = m_name;
     obj["version"] = version;
     obj["rootPath"] = rootPath;
 
@@ -175,12 +175,16 @@ Note *Notebook::createNote(const QString &name)
     Note *note = nullptr;
 
     int newId = ++maxId;
-    QFile file(rootPath + "/" + name + ".md");
+    QFile file(rootPath + "/" + name);
+    QFileInfo info(name);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream(&file) << "# " + name;
+        if (info.suffix() == "md")
+            QTextStream(&file) << "# " + info.completeBaseName();
         note = new Note(newId, name, this);
-        notes.append(note);
+        m_notes.append(note);
+        emit notesChanged();
         modifiedTime = QDateTime::currentDateTimeUtc();
+        save();
         file.close();
     } else {
         qDebug() << "创建笔记失败";
@@ -204,4 +208,38 @@ Notebook *Notebook::createfolder(const QString &name)
     }
 
     return folder;
+}
+
+QQmlListProperty<Note> Notebook::notes()
+{
+    return QQmlListProperty<Note>(this, this, &Notebook::notesCount, &Notebook::noteAt);
+}
+
+void Notebook::addNote(Note *note)
+{
+    m_notes.append(note);
+    emit notesChanged();
+}
+
+QString Notebook::name() const
+{
+    return m_name;
+}
+
+void Notebook::setName(const QString &newName)
+{
+    if (m_name == newName)
+        return;
+    m_name = newName;
+    emit nameChanged();
+}
+
+qsizetype Notebook::notesCount(QQmlListProperty<Note> *list)
+{
+    return static_cast<Notebook *>(list->data)->m_notes.count();
+}
+
+Note *Notebook::noteAt(QQmlListProperty<Note> *list, qsizetype index)
+{
+    return static_cast<Notebook *>(list->data)->m_notes.at(index);
 }

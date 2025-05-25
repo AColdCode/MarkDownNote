@@ -21,7 +21,7 @@ public:
                                            const QString &desc,
                                            const QString &path,
                                            QObject *hint_area = nullptr,
-                                           const int &maxId = 0);
+                                           const int &maxId = 1);
     Q_INVOKABLE void addNotebookFromPath(const QString &rootPath);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void save();
@@ -29,11 +29,24 @@ public:
     Q_INVOKABLE bool updateNotebook(int row, Notebook *notebook);
     Q_INVOKABLE bool removeRow(int row);
     Q_INVOKABLE void isExistNotebook(const QString &rootPath, QObject *dialog);
+    Q_INVOKABLE Notebook *getNotebookByIndex(int index);
+    Q_INVOKABLE void createNewNote(const QString &name);
+
+    Notebook *currentNotebook() const;
+    void setCurrentNotebook(Notebook *newCurrentNotebook);
 
 signals:
     void countChanged(int newCount);
 
+    void currentNotebookChanged();
+
+    void updateNoteModel();
+
 private:
     QList<Notebook *> m_notebooks;
     QString m_storageFile;
+
+    Notebook *m_currentNotebook = nullptr;
+    Q_PROPERTY(Notebook *currentNotebook READ currentNotebook WRITE setCurrentNotebook NOTIFY
+                   currentNotebookChanged FINAL)
 };

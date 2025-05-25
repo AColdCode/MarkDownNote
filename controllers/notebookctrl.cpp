@@ -48,3 +48,16 @@ void NoteBookCtrl::isLegalPath(const QString &rootPath, QObject *dialog)
         dialog->setProperty("hintText", QVariant(tr("The root folder specified does not exist.")));
     }
 }
+
+QString NoteBookCtrl::currentNotebookName() const
+{
+    return m_currentNotebookName;
+}
+
+void NoteBookCtrl::setCurrentNotebookName(const QString &newCurrentNotebookName)
+{
+    if (m_currentNotebookName == newCurrentNotebookName)
+        return;
+    m_currentNotebookName = newCurrentNotebookName;
+    emit currentNotebookNameChanged();
+}

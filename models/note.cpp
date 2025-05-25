@@ -8,7 +8,7 @@
 Note::Note(const int &id, const QString &name, QObject *parent)
     : QObject{parent}
     , id{id}
-    , name{name}
+    , m_name{name}
 {
     createdTime = QDateTime::currentDateTimeUtc();
     modifiedTime = createdTime;
@@ -21,7 +21,7 @@ QJsonObject Note::toJson() const
 {
     QJsonObject obj;
     obj["id"] = id;
-    obj["name"] = name;
+    obj["name"] = m_name;
     obj["created_time"] = createdTime.toString(Qt::ISODate);
     obj["modified_time"] = modifiedTime.toString(Qt::ISODate);
     obj["attachment_folder"] = attachmentFolder;
@@ -38,4 +38,17 @@ Note *Note::fromJson(const QJsonObject &obj, QObject *parent)
     note->attachmentFolder = obj["attachment_folder"].toString();
     note->signature = obj["signature"].toString();
     return note;
+}
+
+QString Note::name() const
+{
+    return m_name;
+}
+
+void Note::setName(const QString &newName)
+{
+    if (m_name == newName)
+        return;
+    m_name = newName;
+    emit nameChanged();
 }

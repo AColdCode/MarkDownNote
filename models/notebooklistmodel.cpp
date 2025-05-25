@@ -29,7 +29,7 @@ QVariant NotebookListModel::data(const QModelIndex &index, int role) const
     const Notebook *notebook = m_notebooks[index.row()];
     switch (role) {
     case NameRole:
-        return notebook->name;
+        return notebook->m_name;
     case DescriptionRole:
         return notebook->description;
     case PathRole:
@@ -140,6 +140,8 @@ void NotebookListModel::load()
         if (notebook != nullptr)
             addNotebook(notebook);
     }
+    if (!m_notebooks.isEmpty())
+        setCurrentNotebook(m_notebooks.at(0));
 }
 
 bool NotebookListModel::updateNotebook(int row, Notebook *notebook)
@@ -173,9 +175,37 @@ void NotebookListModel::isExistNotebook(const QString &rootPath, QObject *dialog
     });
     if (it != m_notebooks.end()) {
         dialog->setProperty("hintText",
-                            tr("There already exists a notebook (") + (*it)->name
+                            tr("There already exists a notebook (") + (*it)->m_name
                                 + tr(") with the same root folder."));
     } else {
         dialog->setProperty("okEnable", QVariant(true));
     }
+}
+
+Notebook *NotebookListModel::getNotebookByIndex(int index)
+{
+    return m_notebooks.at(index);
+}
+
+void NotebookListModel::createNewNote(const QString &name)
+{
+    if (m_currentNotebook == nullptr)
+        return;
+    Note *note = m_currentNotebook->createNote(name);
+    if (note != nullptr) {
+        emit updateNoteModel();
+    }
+}
+
+Notebook *NotebookListModel::currentNotebook() const
+{
+    return m_currentNotebook;
+}
+
+void NotebookListModel::setCurrentNotebook(Notebook *newCurrentNotebook)
+{
+    if (m_currentNotebook == newCurrentNotebook)
+        return;
+    m_currentNotebook = newCurrentNotebook;
+    emit currentNotebookChanged();
 }
