@@ -8,8 +8,8 @@ import MarkDownNote 1.0
 Window {
     id: notebookWindow
     width: 450
-    height: 200
-    minimumHeight: 200
+    height: 300
+    minimumHeight: 300
     minimumWidth: 300
     title: qsTr("New Notebook")
     visible: false
@@ -24,11 +24,13 @@ Window {
 
         ColumnLayout {
             width: parent.width
-            spacing: 10
+            height: parent.height
+            spacing: 0
 
             GroupBox {
                 title: qsTr("Basic Information")
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.margins: 5
 
                 ColumnLayout {
@@ -51,6 +53,10 @@ Window {
                             placeholderText: qsTr("Name of notebook")
                             placeholderTextColor: "grey"
                             Layout.horizontalStretchFactor: 1
+
+                            onAccepted: {
+                                ok_btn.clicked()
+                            }
                         }
                     }
 
@@ -71,6 +77,10 @@ Window {
                             placeholderTextColor: "grey"
                             placeholderText: qsTr("Description of notebook")
                             Layout.horizontalStretchFactor: 1
+
+                            onAccepted: {
+                                ok_btn.clicked()
+                            }
                         }
                     }
 
@@ -91,6 +101,10 @@ Window {
                             placeholderTextColor: "grey"
                             placeholderText: qsTr("Path of notebook root folder")
                             Layout.horizontalStretchFactor: 1
+
+                            onAccepted: {
+                                ok_btn.clicked()
+                            }
                         }
 
                         Button {
@@ -104,26 +118,49 @@ Window {
                     }
                 }
             }
-        }
 
-        // 确定 / 取消按钮
-        RowLayout {
-            y: parent.height - height - 5
-            x: parent.width - width - 5
-            spacing: 10
-            Button {
-                text: qsTr("Ok")
-                icon.source: "qrc:/icons/Ok.svg"
-                onClicked: {
-                    MarkDownCtrl.noteBookmodel.addNotebookByinfo(name_field.text, desc_field.text, rootFolder_field.text)
-                    notebookWindow.close()
+            // hint Area
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.margins: 5
+                height: 90
+                border.color: "green"
+                visible: hint_area.text !== ""
+
+                TextArea {
+                    id: hint_area
+                    anchors.fill: parent
+                    wrapMode: TextArea.Wrap
+                    readOnly: true
                 }
             }
-            Button {
-                text: qsTr("Cancel")
-                icon.source: "qrc:/icons/forbid.svg"
-                onClicked: {
-                    notebookWindow.close()
+
+            // 确定 / 取消按钮
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.margins: 5
+                spacing: 10
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                Button {
+                    id: ok_btn
+                    text: qsTr("Ok")
+                    icon.source: "qrc:/icons/Ok.svg"
+                    onClicked: {
+                        var flag = MarkDownCtrl.noteBookmodel.addNotebookByinfo(name_field.text, desc_field.text, rootFolder_field.text, hint_area)
+                        if(flag)
+                            notebookWindow.close()
+                    }
+                }
+                Button {
+                    text: qsTr("Cancel")
+                    icon.source: "qrc:/icons/forbid.svg"
+                    onClicked: {
+                        notebookWindow.close()
+                    }
                 }
             }
         }

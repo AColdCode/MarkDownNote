@@ -17,16 +17,18 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void addNotebook(Notebook *notebook);
-    Q_INVOKABLE void addNotebookByinfo(const QString &name,
-                                       const QString &desc,
-                                       const QString &path,
-                                       const int &maxId = 0);
+    Q_INVOKABLE QVariant addNotebookByinfo(const QString &name,
+                                           const QString &desc,
+                                           const QString &path,
+                                           QObject *hint_area = nullptr,
+                                           const int &maxId = 0);
     Q_INVOKABLE void addNotebookFromPath(const QString &rootPath);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void save();
     Q_INVOKABLE void load();
     Q_INVOKABLE bool updateNotebook(int row, Notebook *notebook);
     Q_INVOKABLE bool removeRow(int row);
+    Q_INVOKABLE void isExistNotebook(const QString &rootPath, QObject *dialog);
 
 signals:
     void countChanged(int newCount);

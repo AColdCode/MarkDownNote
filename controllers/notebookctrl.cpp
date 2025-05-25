@@ -35,16 +35,16 @@ void NoteBookCtrl::isLegalPath(const QString &rootPath, QObject *dialog)
             if (file.open(QIODevice::ReadOnly)) {
                 QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
                 QJsonObject obj = doc.object();
-                dialog->setProperty("nameText", obj["name"].toVariant());
+                dialog->setProperty("hintText", QVariant(""));
                 dialog->setProperty("descText", obj["description"].toVariant());
-                dialog->setProperty("okEnable", QVariant(true));
+                dialog->setProperty("nameText", obj["name"].toVariant());
             } else {
-                qDebug() << "not notebook's root path";
+                dialog->setProperty("hintText", QVariant(tr("Not a valid root folder.")));
             }
         } else {
-            qDebug() << "not notebook's root path";
+            dialog->setProperty("hintText", QVariant(tr("Not a valid root folder.")));
         }
     } else {
-        qDebug() << "not root path";
+        dialog->setProperty("hintText", QVariant(tr("The root folder specified does not exist.")));
     }
 }

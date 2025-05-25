@@ -8,16 +8,17 @@ import MarkDownNote  1.0
 Window {
     id: openNotebookWindow
     width: 450
-    height: 200
-    minimumHeight: 200
+    height: 300
+    minimumHeight: 300
     minimumWidth: 300
     title: qsTr("Open Notebook")
     flags: Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     visible: false
     modality: Qt.ApplicationModal
-    property alias nameText: name_field.text
-    property alias descText: desc_field.text
-    property alias okEnable: ok_btn.enabled
+    property string nameText: ""
+    property string descText: ""
+    property bool okEnable: false
+    property string hintText: ""
 
     Rectangle {
         anchors.fill: parent
@@ -27,12 +28,14 @@ Window {
         radius: 4
 
         ColumnLayout {
+            height: parent.height
             width: parent.width
-            spacing: 10
+            spacing: 0
 
             GroupBox {
                 title: qsTr("Basic Information")
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 Layout.margins: 5
 
                 ColumnLayout {
@@ -56,6 +59,11 @@ Window {
                             placeholderTextColor: "lightgray"
                             Layout.horizontalStretchFactor: 1
                             enabled: false
+                            text: nameText
+
+                            onTextChanged: {
+                                MarkDownCtrl.noteBookmodel.isExistNotebook(rootFolder_field.text, openNotebookWindow);
+                            }
                         }
                     }
 
@@ -77,6 +85,7 @@ Window {
                             placeholderText: qsTr("Description of notebook")
                             Layout.horizontalStretchFactor: 1
                             enabled: false
+                            text: descText
                         }
                     }
 
@@ -99,7 +108,12 @@ Window {
                             Layout.horizontalStretchFactor: 1
 
                             onTextChanged: {
+                                okEnable = false
                                 MarkDownCtrl.noteBookCtrl.isLegalPath(rootFolder_field.text, openNotebookWindow)
+                            }
+
+                            onAccepted: {
+                                ok_btn.clicked()
                             }
                         }
 
@@ -112,28 +126,50 @@ Window {
                     }
                 }
             }
-        }
 
-        // 确定 / 取消按钮
-        RowLayout {
-            y: parent.height - height - 5
-            x: parent.width - width - 5
-            spacing: 10
-            Button {
-                id: ok_btn
-                text: qsTr("Ok")
-                icon.source: "qrc:/icons/Ok.svg"
-                enabled: false
-                onClicked: {
-                    MarkDownCtrl.noteBookmodel.addNotebookByinfo(name_field.text, desc_field.text, rootFolder_field.text)
-                    openNotebookWindow.close()
+            // hint Area
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.margins: 5
+                height: 90
+                border.color: "green"
+                visible: hint_area.text !== ""
+
+                TextArea {
+                    id: hint_area
+                    anchors.fill: parent
+                    wrapMode: TextArea.Wrap
+                    readOnly: true
+                    text: hintText
                 }
             }
-            Button {
-                text: qsTr("Cancel")
-                icon.source: "qrc:/icons/forbid.svg"
-                onClicked: {
-                    openNotebookWindow.close()
+
+            // 确定 / 取消按钮
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.margins: 5
+                spacing: 10
+
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                Button {
+                    id: ok_btn
+                    text: qsTr("Ok")
+                    icon.source: "qrc:/icons/Ok.svg"
+                    enabled: okEnable
+                    onClicked: {
+                        MarkDownCtrl.noteBookmodel.addNotebookByinfo(name_field.text, desc_field.text, rootFolder_field.text)
+                        openNotebookWindow.close()
+                    }
+                }
+                Button {
+                    text: qsTr("Cancel")
+                    icon.source: "qrc:/icons/forbid.svg"
+                    onClicked: {
+                        openNotebookWindow.close()
+                    }
                 }
             }
         }
@@ -144,6 +180,7 @@ Window {
             name_field.clear()
             desc_field.clear()
             rootFolder_field.clear()
+            hint_area.clear()
         }
     }
 

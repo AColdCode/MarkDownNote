@@ -2,6 +2,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QDir>
+#include <QQmlProperty>
 #include <QStandardPaths>
 
 #include "notebooklistmodel.h"
@@ -57,14 +58,38 @@ void NotebookListModel::addNotebook(Notebook *notebook)
     emit countChanged(m_notebooks.count());
 }
 
-void NotebookListModel::addNotebookByinfo(const QString &name,
-                                          const QString &desc,
-                                          const QString &path,
-                                          const int &maxId)
+QVariant NotebookListModel::addNotebookByinfo(const QString &name,
+                                              const QString &desc,
+                                              const QString &path,
+                                              QObject *hint_area,
+                                              const int &maxId)
 {
-    if (name == "" || path == "")
-        return;
+    if (name == "") {
+        if (hint_area != nullptr)
+            hint_area->setProperty("text", tr("Please specify a name for the notebook."));
+        return false;
+    }
+
+    if (path == "") {
+        if (hint_area != nullptr)
+            hint_area->setProperty("text",
+                                   tr("Please specify a valid root folder for the notebook."));
+        return false;
+    } else {
+        QDir dir(path);
+        if (dir.exists()) {
+            if (!dir.isEmpty()) {
+                hint_area->setProperty(
+                    "text",
+                    tr("Root folder of the notebook must be empty. If you want " "to import " "exi" "s" "ting" " dat" "a, " "please try other " "operations."));
+                return false;
+            }
+        } else
+            dir.mkpath(path);
+    }
     addNotebook(new Notebook(name, desc, path, maxId, this));
+
+    return true;
 }
 
 void NotebookListModel::addNotebookFromPath(const QString &rootPath)
@@ -139,4 +164,18 @@ bool NotebookListModel::NotebookListModel::removeRow(int row)
     endRemoveRows();
     save();
     return true;
+}
+
+void NotebookListModel::isExistNotebook(const QString &rootPath, QObject *dialog)
+{
+    auto it = std::find_if(m_notebooks.begin(), m_notebooks.end(), [&rootPath](Notebook *nb) {
+        return nb->rootPath == rootPath;
+    });
+    if (it != m_notebooks.end()) {
+        dialog->setProperty("hintText",
+                            tr("There already exists a notebook (") + (*it)->name
+                                + tr(") with the same root folder."));
+    } else {
+        dialog->setProperty("okEnable", QVariant(true));
+    }
 }
