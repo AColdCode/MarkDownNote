@@ -119,15 +119,61 @@ Rectangle {
                         height: contentHeight
 
                         onCursorPositionChanged: {
+                            oldposition = newposition;
+                            newposition = editor.cursorPosition;
                             Qt.callLater(() => {
                                 const cursorPos = editor.cursorPosition;
                                 const textBeforeCursor = editor.text.slice(0, cursorPos);
                                 editorBackGround.currentLine = textBeforeCursor.split("\n").length - 1;
+
                             })
                         }
 
                         Component.onCompleted: {
                             MarkDownCtrl.topbarCtrl.textArea = editor
+                        }
+
+                        onSelectedTextChanged: {
+                            oldselection_End = selection_End;
+                            oldselection_Start = selection_Start
+                            selection_Start = editor.selectionStart;
+                            selection_End = editor.selectionEnd;
+                            oldstart = start;
+                            start = getCurrentLineStart();
+                        }
+
+
+
+
+
+                        property int selection_Start: 0
+                        property int selection_End: 0
+                        property int oldselection_Start:0
+                        property int oldselection_End: 0
+                        property int oldstart: 0
+                        property int start: 0
+                        property int oldposition:0
+                        property int newposition:0
+
+                        function getCurrentLineStart() {
+                            const cursorPos =oldposition
+                            const fullText = editor.text;
+
+                            // 找到光标前最近的换行符
+                            const start = fullText.lastIndexOf('\n', cursorPos - 1) + 1;
+
+                            return start;
+                        }
+
+
+                        function getCurrentLineEnd() {
+                            const cursorPos = editor.cursorPosition;
+                            const fullText = editor.text;
+                            // 找到光标后最近的换行符
+                            let end = fullText.indexOf('\n', cursorPos);
+                            if (end === -1) end = fullText.length;
+
+                            return end;
                         }
                     }
 

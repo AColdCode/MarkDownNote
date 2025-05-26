@@ -16,17 +16,87 @@ void TopbarCtrl::setTextArea(QObject *newTextArea)
         return;
     m_textArea = newTextArea;
     emit textAreaChanged();
+}
 
-    html.replace(QRegularExpression(R"(^###### (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h6>\1</h6>)");
-    html.replace(QRegularExpression(R"(^##### (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h5>\1</h5>)");
-    html.replace(QRegularExpression(R"(^#### (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h4>\1</h4>)");
-    html.replace(QRegularExpression(R"(^### (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h3>\1</h3>)");
-    html.replace(QRegularExpression(R"(^## (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h2>\1</h2>)");
-    html.replace(QRegularExpression(R"(^# (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h1>\1</h1>)");
+void TopbarCtrl::onBoldClicked()
+{
+    if (!m_textArea)
+        return;
+    int position = m_textArea->property("cursorPosition").toInt();
+    int end = m_textArea->property("oldselection_End").toInt();
+    int start = m_textArea->property("oldselection_Start").toInt();
+    qDebug() << end;
+    qDebug() << start;
+
+    //QMetaObject::invokeMethod(m_textArea, "insert", Q_ARG(int, position), Q_ARG(QString, "****"));
+    QMetaObject::invokeMethod(m_textArea, "insert", Q_ARG(int, start), Q_ARG(QString, "**"));
+    QMetaObject::invokeMethod(m_textArea, "insert", Q_ARG(int, end + 2), Q_ARG(QString, "**"));
+}
+
+void TopbarCtrl::menuItemSelected(int type)
+{
+    if (!m_textArea)
+        return;
+
+    QVariant pos;
+    QMetaObject::invokeMethod(m_textArea, "getCurrentLineStart", Q_RETURN_ARG(QVariant, pos));
+    int position = pos.toInt();
+
+    switch (type) {
+    case 1:
+        QMetaObject::invokeMethod(m_textArea, "insert", Q_ARG(int, position), Q_ARG(QString, "# "));
+        oldtype = type;
+        oldposition = position;
+        break;
+    case 2:
+        QMetaObject::invokeMethod(m_textArea, "insert", Q_ARG(int, position), Q_ARG(QString, "## "));
+        oldtype = type;
+        oldposition = position;
+        break;
+    case 3:
+        QMetaObject::invokeMethod(m_textArea,
+                                  "insert",
+                                  Q_ARG(int, position),
+                                  Q_ARG(QString, "### "));
+        oldtype = type;
+        oldposition = position;
+        break;
+    case 4:
+        QMetaObject::invokeMethod(m_textArea,
+                                  "insert",
+                                  Q_ARG(int, position),
+                                  Q_ARG(QString, "#### "));
+        oldtype = type;
+        oldposition = position;
+        break;
+    case 5:
+        QMetaObject::invokeMethod(m_textArea,
+                                  "insert",
+                                  Q_ARG(int, position),
+                                  Q_ARG(QString, "##### "));
+        oldtype = type;
+        oldposition = position;
+        break;
+    case 6:
+        QMetaObject::invokeMethod(m_textArea,
+                                  "insert",
+                                  Q_ARG(int, position),
+                                  Q_ARG(QString, "###### "));
+        oldtype = type;
+        oldposition = position;
+        break;
+    case 7:
+        if (oldtype == 0) {
+            break;
+        }
+
+        // 调用 QML 的 remove 方法：remove(start, count)
+        QMetaObject::invokeMethod(m_textArea,
+                                  "remove",
+                                  Q_ARG(int, oldposition),
+                                  Q_ARG(int, oldposition + oldtype + 1));
+
+        oldtype = 0;
+        break;
+    }
 }

@@ -10,6 +10,8 @@ public:
 
     QObject *textArea() const;
     void setTextArea(QObject *newTextArea);
+    Q_INVOKABLE void onBoldClicked();
+    Q_INVOKABLE void menuItemSelected(int type);
 
 signals:
 
@@ -18,4 +20,6 @@ signals:
 private:
     QObject *m_textArea = nullptr;
     Q_PROPERTY(QObject *textArea READ textArea WRITE setTextArea NOTIFY textAreaChanged FINAL)
+    int oldtype = 0;
+    int oldposition = 0;
 };

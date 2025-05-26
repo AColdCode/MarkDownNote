@@ -2,10 +2,13 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes 1.15
+import MarkDownNote
 
 Rectangle{
     width: 400
     height: 25
+
+
     RowLayout {
         anchors.fill: parent
         spacing: 0 // 可以调整间距
@@ -123,7 +126,42 @@ Rectangle{
                 color: "transparent"
             }
             icon.source: "qrc:/icons/type_heading_editor.svg"
-            onClicked: console.log("type_heading_editor Icon Clicked")
+            onClicked: {
+                        myMenu.popup()  // 弹出菜单
+                    }
+
+
+                Menu {
+                    id: myMenu
+                    MenuItem {
+                        text: "标题 1"
+                        onTriggered: MarkDownCtrl.topbarCtrl.menuItemSelected(1)
+                    }
+                    MenuItem {
+                        text: "标题 2"
+                        onTriggered: MarkDownCtrl.topbarCtrl.menuItemSelected(2)
+                    }
+                    MenuItem {
+                        text: "标题 3"
+                        onTriggered: MarkDownCtrl.topbarCtrl.menuItemSelected(3)
+                    }
+                    MenuItem {
+                        text: "标题 4"
+                        onTriggered: MarkDownCtrl.topbarCtrl.menuItemSelected(4)
+                    }
+                    MenuItem {
+                        text: "标题 5"
+                        onTriggered: MarkDownCtrl.topbarCtrl.menuItemSelected(5)
+                    }
+                    MenuItem {
+                        text: "标题 6"
+                        onTriggered: MarkDownCtrl.topbarCtrl.menuItemSelected(6)
+                    }
+                    MenuItem {
+                        text: "标题 7"
+                        onTriggered: MarkDownCtrl.topbarCtrl.menuItemSelected(7)
+                    }
+                }
         }
         Button {
             height: parent.height // 高度与父级相同
@@ -131,7 +169,12 @@ Rectangle{
                 color: "transparent"
             }
             icon.source: "qrc:/icons/type_bold_editor.svg"
-            onClicked: console.log("type_bold_editor Icon Clicked")
+            onClicked: {
+                MarkDownCtrl.topbarCtrl.onBoldClicked()
+
+            }
+
+
         }
         Button {
             height: parent.height // 高度与父级相同
