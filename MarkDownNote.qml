@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtWebEngine
 
 import MarkDownNote 1.0
+import "sidebar/sidebarToggle"
 
 ApplicationWindow {
     id: mainWindow
@@ -21,6 +22,11 @@ ApplicationWindow {
 
     NoteContent {
         id: note_content
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+    }
+    SearchLocationList{
+        id:searchLocationList
         Layout.fillWidth: true
         Layout.fillHeight: true
     }

@@ -7,7 +7,6 @@ import "../../dialogs"
 Rectangle{
     id:navigationPage
     width: parent.width
-    height: parent.height-bottonarea1.height
     color:"transparent"
 
     Column{

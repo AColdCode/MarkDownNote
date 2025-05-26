@@ -7,7 +7,7 @@ project(
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick WebEngineQuick Widgets)
 
-qt_standard_project_setup(REQUIRES 6.5)
+qt_standard_project_setup(REQUIRES 6.7)
 
 qt_add_executable(appMarkDownNote)
 
@@ -123,7 +123,12 @@ qt_add_qml_module(
   controllers/importmenuctrl.cpp
   SOURCES
   controllers/exportmenuctrl.h
-  controllers/exportmenuctrl.cpp)
+  controllers/exportmenuctrl.cpp
+  QML_FILES sidebar/sidebarToggle/HistoryPage.qml
+  QML_FILES sidebar/sidebarToggle/SearchPage.qml
+  SOURCES
+  SOURCES controllers/sidebarctrl.h controllers/sidebarctrl.cpp
+  QML_FILES sidebar/sidebarToggle/SearchLocationList.qml  )
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 

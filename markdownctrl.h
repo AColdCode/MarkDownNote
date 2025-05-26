@@ -11,6 +11,7 @@ class NoteBookCtrl;
 class NewNotesCtrl;
 class ImportMenuCtrl;
 class ExportMenuCtrl;
+class SidebarCtrl;
 
 class MarkDownCtrl : public QObject
 {
@@ -45,6 +46,9 @@ public:
     ExportMenuCtrl *exportMenuCtrl() const;
     void setExportMenuCtrl(ExportMenuCtrl *newExportMenuCtrl);
 
+    SidebarCtrl *sidebarCtrl() const;
+    void setSidebarCtrl(SidebarCtrl *newSidebarCtrl);
+
 signals:
     void editorCtrlChanged();
 
@@ -61,6 +65,8 @@ signals:
     void importMenuCtrlChanged();
 
     void exportMenuCtrlChanged();
+
+    void sidebarCtrlChanged();
 
 private:
     ExpandCtrl *m_expandCtrl = nullptr;
@@ -93,4 +99,8 @@ private:
     ExportMenuCtrl *m_exportMenuCtrl = nullptr;
     Q_PROPERTY(ExportMenuCtrl *exportMenuCtrl READ exportMenuCtrl WRITE setExportMenuCtrl NOTIFY
                    exportMenuCtrlChanged FINAL)
+
+    SidebarCtrl *m_sidebarCtrl = nullptr;
+    Q_PROPERTY(SidebarCtrl *sidebarCtrl READ sidebarCtrl WRITE setSidebarCtrl NOTIFY
+                   sidebarCtrlChanged FINAL)
 };
