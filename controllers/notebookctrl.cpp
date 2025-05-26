@@ -1,15 +1,22 @@
 #include <QQmlProperty>
 #include <QFileDialog>
-#include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QStringList>
 
 #include "notebookctrl.h"
 #include "./models/notebook.h"
 
-NoteBookCtrl::NoteBookCtrl(QObject *parent) : QObject{parent} {}
+NoteBookCtrl::NoteBookCtrl(QObject *parent) : QObject{parent}
+{
+    m_suffixListModel = new SuffixListModel(this);
+    QObject::connect(m_suffixListModel,
+                     &QAbstractItemModel::dataChanged,
+                     this,
+                     &NoteBookCtrl::suffixListModelChanged);
+}
 
-void NoteBookCtrl::selectRoot(QObject *textField)
+void NoteBookCtrl::selectRoot(QObject *textField, bool isNewfromFolder)
 {
     if (textField == nullptr)
         return;
@@ -20,6 +27,9 @@ void NoteBookCtrl::selectRoot(QObject *textField)
                                                            | QFileDialog::DontResolveSymlinks);
 
     textField->setProperty("text", folder);
+
+    if (isNewfromFolder)
+        QMetaObject::invokeMethod(textField, "accepted", Qt::AutoConnection);
 }
 
 void NoteBookCtrl::isLegalPath(const QString &rootPath, QObject *dialog)
@@ -49,6 +59,38 @@ void NoteBookCtrl::isLegalPath(const QString &rootPath, QObject *dialog)
     }
 }
 
+void NoteBookCtrl::newFromFolder(const QString &rootPath, QObject *dialog)
+{
+    if (dialog == nullptr)
+        return;
+    QDir dir(rootPath);
+    if (dir.exists()) {
+        QString notebookInfoPath = rootPath + Notebook::notebookInfoDir
+                                   + Notebook::notebookInfoFile;
+        if (QFile::exists(notebookInfoPath)) {
+            dialog->setProperty(
+                "hintText",
+                tr("The folder is likely to be the root folder of a valid bundle notebook. You may "
+                   "want to use \"Open Other Notebooks\" to open it. If continue, all existing "
+                   "information of the notebook may be lost."));
+        } else {
+            dialog->setProperty("hintText", "");
+        }
+        QFileInfo fileInfo(rootPath);
+        dialog->setProperty("nameText", fileInfo.baseName());
+        dialog->setProperty("pathText", rootPath);
+        QSet<QString> suffixSet;
+        collectSuffixesRecursively(dir, suffixSet);
+        m_suffixListModel->clear();
+        for (const QString &suffix : std::as_const(suffixSet)) {
+            m_suffixListModel->addSuffix(suffix);
+        }
+        emit suffixListModelChanged();
+    } else {
+        dialog->setProperty("hintText", tr("Please specify a valid folder for the new notebook."));
+    }
+}
+
 QString NoteBookCtrl::currentNotebookName() const
 {
     return m_currentNotebookName;
@@ -60,4 +102,36 @@ void NoteBookCtrl::setCurrentNotebookName(const QString &newCurrentNotebookName)
         return;
     m_currentNotebookName = newCurrentNotebookName;
     emit currentNotebookNameChanged();
+}
+
+SuffixListModel *NoteBookCtrl::suffixListModel() const
+{
+    return m_suffixListModel;
+}
+
+void NoteBookCtrl::setSuffixListModel(SuffixListModel *newSuffixListModel)
+{
+    if (m_suffixListModel == newSuffixListModel)
+        return;
+    m_suffixListModel = newSuffixListModel;
+    emit suffixListModelChanged();
+}
+
+void NoteBookCtrl::collectSuffixesRecursively(const QDir &dir, QSet<QString> &suffixSet)
+{
+    // 获取目录中所有文件
+    QFileInfoList files = dir.entryInfoList(QDir::Files | QDir::NoSymLinks);
+    for (const QFileInfo &fileInfo : files) {
+        QString suffix = fileInfo.suffix().toLower();
+        if (!suffix.isEmpty()) {
+            suffixSet.insert(suffix);
+        }
+    }
+
+    // 获取子目录并递归
+    QFileInfoList dirs = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QFileInfo &subDirInfo : dirs) {
+        QDir subDir(subDirInfo.absoluteFilePath());
+        collectSuffixesRecursively(subDir, suffixSet);
+    }
 }

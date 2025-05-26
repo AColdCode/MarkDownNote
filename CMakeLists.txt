@@ -128,7 +128,9 @@ qt_add_qml_module(
   QML_FILES RightContent.qml
   SOURCES models/notebook.h models/notebook.cpp
   SOURCES models/notebooklistmodel.h models/notebooklistmodel.cpp
-  SOURCES models/note.h models/note.cpp)
+  SOURCES models/note.h models/note.cpp
+  SOURCES models/suffixitem.h models/suffixitem.cpp
+  SOURCES models/suffixlistmodel.h models/suffixlistmodel.cpp)
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 
