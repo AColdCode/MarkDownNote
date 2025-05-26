@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QQmlProperty>
 #include <QStandardPaths>
+#include <QFileInfoList>
 
 #include "notebooklistmodel.h"
 
@@ -34,8 +35,6 @@ QVariant NotebookListModel::data(const QModelIndex &index, int role) const
         return notebook->description;
     case PathRole:
         return notebook->rootPath;
-    case MaxIdRole:
-        return notebook->maxId;
     default:
         return {};
     }
@@ -43,10 +42,7 @@ QVariant NotebookListModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> NotebookListModel::roleNames() const
 {
-    return {{NameRole, "name"},
-            {DescriptionRole, "description"},
-            {PathRole, "rootPath"},
-            {MaxIdRole, "maxId"}};
+    return {{NameRole, "name"}, {DescriptionRole, "description"}, {PathRole, "rootPath"}};
 }
 
 void NotebookListModel::addNotebook(Notebook *notebook)
@@ -61,8 +57,7 @@ void NotebookListModel::addNotebook(Notebook *notebook)
 QVariant NotebookListModel::addNotebookByinfo(const QString &name,
                                               const QString &desc,
                                               const QString &path,
-                                              QObject *hint_area,
-                                              const int &maxId)
+                                              QObject *hint_area)
 {
     if (name == "") {
         if (hint_area != nullptr)
@@ -87,7 +82,7 @@ QVariant NotebookListModel::addNotebookByinfo(const QString &name,
         } else
             dir.mkpath(path);
     }
-    addNotebook(new Notebook(name, desc, path, maxId, this));
+    addNotebook(new Notebook(name, desc, path, this));
 
     return true;
 }
@@ -151,7 +146,7 @@ bool NotebookListModel::updateNotebook(int row, Notebook *notebook)
 
     m_notebooks[row] = notebook;
     QModelIndex idx = createIndex(row, 0);
-    emit dataChanged(idx, idx, {NameRole, DescriptionRole, PathRole, MaxIdRole});
+    emit dataChanged(idx, idx, {NameRole, DescriptionRole, PathRole});
     save();
     return true;
 }
@@ -192,9 +187,32 @@ void NotebookListModel::createNewNote(const QString &name)
     if (m_currentNotebook == nullptr)
         return;
     Note *note = m_currentNotebook->createNote(name);
+    m_currentNotebook->saveNotebookInfo();
     if (note != nullptr) {
         emit updateNoteModel();
     }
+}
+
+void NotebookListModel::newNoteBookFromFolder(const QString &name,
+                                              const QString &desc,
+                                              const QString &rootPath,
+                                              const QStringList &suffixes)
+{
+    if (name == "" || rootPath == "")
+        return;
+
+    QFile file(rootPath + Notebook::noteInfoFile);
+    if (file.exists())
+        file.remove();
+    QDir dir(rootPath + Notebook::notebookInfoDir);
+    if (dir.exists())
+        QDir(rootPath + Notebook::notebookInfoDir).removeRecursively();
+
+    Notebook *notebook = new Notebook(name, desc, rootPath, this);
+    addNotebook(notebook);
+    notebook->importNotesRecursively(rootPath, suffixes);
+    notebook->saveNotebookInfo();
+    emit updateNoteModel();
 }
 
 Notebook *NotebookListModel::currentNotebook() const

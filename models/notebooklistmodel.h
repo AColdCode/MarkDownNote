@@ -2,13 +2,14 @@
 
 #include <QAbstractListModel>
 #include "notebook.h"
+#include "suffixitem.h"
 
 class NotebookListModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
-    enum Roles { NameRole = Qt::UserRole + 1, DescriptionRole, PathRole, MaxIdRole };
+    enum Roles { NameRole = Qt::UserRole + 1, DescriptionRole, PathRole };
 
     explicit NotebookListModel(QObject *parent = nullptr);
 
@@ -20,8 +21,7 @@ public:
     Q_INVOKABLE QVariant addNotebookByinfo(const QString &name,
                                            const QString &desc,
                                            const QString &path,
-                                           QObject *hint_area = nullptr,
-                                           const int &maxId = 1);
+                                           QObject *hint_area = nullptr);
     Q_INVOKABLE void addNotebookFromPath(const QString &rootPath);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void save();
@@ -31,6 +31,10 @@ public:
     Q_INVOKABLE void isExistNotebook(const QString &rootPath, QObject *dialog);
     Q_INVOKABLE Notebook *getNotebookByIndex(int index);
     Q_INVOKABLE void createNewNote(const QString &name);
+    Q_INVOKABLE void newNoteBookFromFolder(const QString &name,
+                                           const QString &desc,
+                                           const QString &rootPath,
+                                           const QStringList &suffixes);
 
     Notebook *currentNotebook() const;
     void setCurrentNotebook(Notebook *newCurrentNotebook);
