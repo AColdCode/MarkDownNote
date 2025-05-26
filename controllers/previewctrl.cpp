@@ -2,48 +2,60 @@
 
 #include "previewctrl.h"
 
-PreviewCtrl::PreviewCtrl(QObject *parent) : QObject{parent} {}
+PreviewCtrl::PreviewCtrl(QObject *parent)
+    : QObject(parent)
+{}
 
 QString PreviewCtrl::convertToHtml(const QString &markdown)
 {
     QString html = markdown;
-    html.replace(QRegularExpression(R"(\*\*(.*?)\*\*)"), R"(<b>\1</b>)"); // **加粗**
-    html.replace(QRegularExpression(R"(\*(.*?)\*)"), R"(<i>\1</i>)");     // *斜体*
+
+    // ✅ 先进行 HTML 特殊字符转义，跳过Markdown语法块
+    // 这部分转义要小心，只对文本内容进行转义，排除部分Markdown元素
+    html.replace("&", "&amp;");
+    html.replace("<", "&lt;");
+    html.replace(">", "&gt;");
+    html.replace("\"", "&quot;");
+    html.replace("'", "&#39;");
+
+    // ✅ Markdown 语法替换
+    html.replace(QRegularExpression(R"(\*\*(.*?)\*\*)"), R"(<b>\1</b>)");
+    html.replace(QRegularExpression(R"(\*(.*?)\*)"), R"(<i>\1</i>)");
     html.replace(QRegularExpression(R"(^###### (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h6>\1</h6>)"); //######6级标题
+                 R"(<h6>\1</h6>)");
     html.replace(QRegularExpression(R"(^##### (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h5>\1</h5>)"); //#####5级标题
+                 R"(<h5>\1</h5>)");
     html.replace(QRegularExpression(R"(^#### (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h4>\1</h4>)"); //####4级标题
+                 R"(<h4>\1</h4>)");
     html.replace(QRegularExpression(R"(^### (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h3>\1</h3>)"); //###3级标题
+                 R"(<h3>\1</h3>)");
     html.replace(QRegularExpression(R"(^## (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h2>\1</h2>)"); //##2级标题
+                 R"(<h2>\1</h2>)");
     html.replace(QRegularExpression(R"(^# (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<h1>\1</h1>)");                                                      //#标题
-    html.replace(QRegularExpression(R"(\[(.*?)\]\((.*?)\))"), R"(<a href="\2">\1</a>)"); //链接
-    html.replace(QRegularExpression(R"(!\[(.*?)\]\((.*?)\))"),
-                 R"(<img alt="\1" src="\2" />)"); //图片
-    html.replace(QRegularExpression(R"(`(.*?)`)"),
-                 R"(<span style="color:blue">\1</span>)"); // 行内代码
+                 R"(<h1>\1</h1>)");
+
+    html.replace(QRegularExpression(R"(\[(.*?)\]\((.*?)\))"), R"(<a href="\2">\1</a>)");
+    html.replace(QRegularExpression(R"(!\[(.*?)\]\((.*?)\))"), R"(<img alt="\1" src="\2" />)");
+    html.replace(QRegularExpression(R"(`(.*?)`)"), R"(<span style="color:blue">\1</span>)");
 
     html.replace(QRegularExpression(R"(^> (.+)$)", QRegularExpression::MultilineOption),
-                 R"(<blockquote>\1</blockquote>)"); //引用块
+                 R"(<blockquote>\1</blockquote>)");
     html.replace(QRegularExpression(R"(^(-{3,}|[*]{3,})$)", QRegularExpression::MultilineOption),
-                 R"(<hr />)");                                              //分割线
-    html.replace(QRegularExpression(R"(~~(.*?)~~)"), R"(<del>\1</del>)");   //删除线
-    html.replace(QRegularExpression(R"(==(.*?)==)"), R"(<mark>\1</mark>)"); //高亮
-    // 列表处理（按行处理更准确）
+                 R"(<hr />)");
+    html.replace(QRegularExpression(R"(~~(.*?)~~)"), R"(<del>\1</del>)");
+    html.replace(QRegularExpression(R"(==(.*?)==)"), R"(<mark>\1</mark>)");
+
+    // ✅ 列表处理（按行处理更准确）
     QStringList lines = html.split('\n');
     QStringList result;
     bool inUnordered = false;
     bool inOrdered = false;
 
     for (const QString &line : lines) {
-        QRegularExpression todoRe(R"(^\s*-\s+\[ \]\s+(.*))");    // 代办
-        QRegularExpression doneRe(R"(^\s*-\s+\[[xX]\]\s+(.*))"); // 已完成
-        QRegularExpression unorderedRe(R"(^\s*[\-\*]\s+(.*))");  // 无序
-        QRegularExpression orderedRe(R"(^\s*\d+\.\s+(.*))");     // 有序
+        QRegularExpression todoRe(R"(^\s*-\s+\[ \]\s+(.*))");
+        QRegularExpression doneRe(R"(^\s*-\s+\[[xX]\]\s+(.*))");
+        QRegularExpression unorderedRe(R"(^\s*[\-\*]\s+(.*))");
+        QRegularExpression orderedRe(R"(^\s*\d+\.\s+(.*))");
 
         QRegularExpressionMatch match;
 
@@ -79,32 +91,42 @@ QString PreviewCtrl::convertToHtml(const QString &markdown)
 
     html = result.join("\n");
 
+    // ✅ 代码块
     html.replace(QRegularExpression(R"(```(.*?)```)",
                                     QRegularExpression::DotMatchesEverythingOption),
-                 R"(<pre><code>\1</code></pre>)"); //代码块
+                 R"(<pre><code>\1</code></pre>)");
 
-    html.replace(QRegularExpression(R"(\$(.*?)\$)"),
-                 R"(<span class="math">\1</span>)"); //数学公式
-
+    // ✅ 数学公式和数学块
     html.replace(QRegularExpression(R"(\$\$(.*?)\$\$)",
                                     QRegularExpression::DotMatchesEverythingOption),
-                 R"(<div class="math-block">\1</div>)"); //数学公式块
+                 R"(<div class="math-block">\1</div>)");
+    html.replace(QRegularExpression(R"(\$(.*?)\$)"), R"(<span class="math">\1</span>)");
 
-    // 表格标题行
+    // ✅ 表格（非常基础的支持）
     html.replace(QRegularExpression(R"(^\|(.+)\|\n\|[-:\| ]+\|)",
                                     QRegularExpression::MultilineOption),
                  R"(<table><thead><tr><th>\1</th></tr></thead><tbody>)");
-
-    // 表格行
     html.replace(QRegularExpression(R"(^\|(.+)\|)", QRegularExpression::MultilineOption),
                  R"(<tr><td>\1</td></tr>)");
-
-    // 表格末尾闭合（你可以查找最后一个 <td> 之后加 </tbody></table>，或者用更精细的方法判断）
     if (html.contains("<table>")) {
         html += "</tbody></table>";
     }
 
-    html.replace(QRegularExpression(R"(\n)"), "<br>"); //回车
+    // ✅ 换行处理
+    html.replace(QRegularExpression(R"(\n)"), "<br>");
 
-    return "<html><body>" + html + "</body></html>";
+    // ✅ 返回完整 HTML 结构，设置字体
+    return R"(
+<html>
+<head>
+<style>
+    body {
+        font-family: "AR PL UKai CN", "Noto Serif SC", "KaiTi", "SimSun", "serif";
+        font-size: 16px;
+        line-height: 1.6;
+    }
+</style>
+</head>
+<body>
+)" + html + "</body></html>";
 }

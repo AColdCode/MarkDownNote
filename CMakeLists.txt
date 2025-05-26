@@ -124,11 +124,19 @@ qt_add_qml_module(
   SOURCES
   controllers/exportmenuctrl.h
   controllers/exportmenuctrl.cpp
-  QML_FILES sidebar/sidebarToggle/HistoryPage.qml
-  QML_FILES sidebar/sidebarToggle/SearchPage.qml
+  QML_FILES
+  sidebar/sidebarToggle/HistoryPage.qml
+  QML_FILES
+  sidebar/sidebarToggle/SearchPage.qml
   SOURCES
-  SOURCES controllers/sidebarctrl.h controllers/sidebarctrl.cpp
-  QML_FILES sidebar/sidebarToggle/SearchLocationList.qml  )
+  SOURCES
+  controllers/sidebarctrl.h
+  controllers/sidebarctrl.cpp
+  QML_FILES
+  sidebar/sidebarToggle/SearchLocationList.qml
+  SOURCES
+  controllers/topbarctrl.h
+  controllers/topbarctrl.cpp)
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 

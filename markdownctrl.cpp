@@ -8,6 +8,7 @@
 #include "controllers/notebookctrl.h"
 #include "controllers/previewctrl.h"
 #include "controllers/sidebarctrl.h"
+#include "controllers/topbarctrl.h"
 
 MarkDownCtrl::MarkDownCtrl(QObject *parent)
     : QObject{parent}
@@ -20,6 +21,9 @@ MarkDownCtrl::MarkDownCtrl(QObject *parent)
     , m_importMenuCtrl{new ImportMenuCtrl(this)}
     , m_exportMenuCtrl{new ExportMenuCtrl(this)}
     , m_sidebarCtrl{new SidebarCtrl(this)}
+
+    , m_topbarCtrl{new TopbarCtrl(this)}
+
 {}
 
 EditorCtrl *MarkDownCtrl::editorCtrl() const
@@ -137,4 +141,16 @@ void MarkDownCtrl::setSidebarCtrl(SidebarCtrl *newSidebarCtrl)
         return;
     m_sidebarCtrl = newSidebarCtrl;
     emit sidebarCtrlChanged();
+}
+TopbarCtrl *MarkDownCtrl::topbarCtrl() const
+{
+    return m_topbarCtrl;
+}
+
+void MarkDownCtrl::setTopbarCtrl(TopbarCtrl *newTopbarCtrl)
+{
+    if (m_topbarCtrl == newTopbarCtrl)
+        return;
+    m_topbarCtrl = newTopbarCtrl;
+    emit topbarCtrlChanged();
 }
