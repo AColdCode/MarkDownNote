@@ -1,13 +1,15 @@
 #include "markdownctrl.h"
 #include "controllers/editorctrl.h"
 #include "controllers/expandctrl.h"
-#include "controllers/menuctrl.h"
-#include "controllers/previewctrl.h"
-#include "controllers/notebookctrl.h"
-#include "controllers/newnotesctrl.h"
-#include "controllers/importmenuctrl.h"
 #include "controllers/exportmenuctrl.h"
 #include "models/notebooklistmodel.h"
+#include "controllers/importmenuctrl.h"
+#include "controllers/menuctrl.h"
+#include "controllers/newnotesctrl.h"
+#include "controllers/notebookctrl.h"
+#include "controllers/previewctrl.h"
+#include "controllers/sidebarctrl.h"
+#include "controllers/topbarctrl.h"
 
 MarkDownCtrl::MarkDownCtrl(QObject *parent)
     : QObject{parent}
@@ -20,6 +22,8 @@ MarkDownCtrl::MarkDownCtrl(QObject *parent)
     , m_importMenuCtrl{new ImportMenuCtrl(this)}
     , m_exportMenuCtrl{new ExportMenuCtrl(this)}
     , m_noteBookmodel{new NotebookListModel(this)}
+    , m_sidebarCtrl{new SidebarCtrl(this)}
+    , m_topbarCtrl{new TopbarCtrl(this)}
 {}
 
 EditorCtrl *MarkDownCtrl::editorCtrl() const
@@ -137,4 +141,30 @@ void MarkDownCtrl::setNoteBookmodel(NotebookListModel *newNoteBookmodel)
         return;
     m_noteBookmodel = newNoteBookmodel;
     emit noteBookmodelChanged();
+}
+
+SidebarCtrl *MarkDownCtrl::sidebarCtrl() const
+{
+    return m_sidebarCtrl;
+}
+
+void MarkDownCtrl::setSidebarCtrl(SidebarCtrl *newSidebarCtrl)
+{
+    if (m_sidebarCtrl == newSidebarCtrl)
+        return;
+    m_sidebarCtrl = newSidebarCtrl;
+    emit sidebarCtrlChanged();
+}
+
+TopbarCtrl *MarkDownCtrl::topbarCtrl() const
+{
+    return m_topbarCtrl;
+}
+
+void MarkDownCtrl::setTopbarCtrl(TopbarCtrl *newTopbarCtrl)
+{
+    if (m_topbarCtrl == newTopbarCtrl)
+        return;
+    m_topbarCtrl = newTopbarCtrl;
+    emit topbarCtrlChanged();
 }

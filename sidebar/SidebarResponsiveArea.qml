@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-
+import MarkDownNote
 import "sidebarToggle"
 
 Rectangle {
@@ -9,51 +9,54 @@ Rectangle {
     width: 200
     height: parent.height
     color: "#efeded"
+    property int  currentIndex: 0
 
     ColumnLayout {
         anchors.fill: parent
 
-
         Rectangle{
-                id:bottonarea1
+            id:bottonarea1
             width: parent.width
             height: 20
             color: "#e0e0e0"
-            Row {
-                width: parent.width
-                spacing: 0
-                Rectangle{
-                    width: parent.width* 0.78
-                    height: 20
-                    color: "transparent"
+            Button {
+                id:button
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                icon.source: "qrc:/icons/close.svg"
+                icon.width:12
+                icon.height:12
+                icon.color:"black"
+                background: Rectangle {
+                    color: button.hovered ? "lightgray" : "transparent"
                 }
-                Button {
-                    onClicked: console.log("功能待实现")
-                    icon.source: "qrc:/icons/float.svg"
-                    icon.width:13
-                    icon.color:"black"
-
-                    background: Rectangle {
-                        color: "transparent"
-                    }
-                }
-                Button {
-                    onClicked: console.log("功能待实现")
-                    icon.source: "qrc:/icons/close.svg"
-                    icon.width:13
-                    background: Rectangle {
-                        color: "transparent"
-
-                    }
-
-                }
+                onClicked:fileTreeView.visible=false
             }
         }
-        NavigationPage{
+
+        SearchPage{
+            id:searchPage
             Layout.fillWidth: true
             Layout.fillHeight: true
+            visible: currentIndex===2
         }
 
+        HistoryPage{
+            id:historyPage
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: currentIndex===1
+        }
 
+        NavigationPage{
+            id:navigationPage
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: currentIndex===0
+        }
+    }
+    Component.onCompleted: {
+        MarkDownCtrl.sidebarCtrl.fileTreeView=fileTreeView;
     }
 }
+

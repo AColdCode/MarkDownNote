@@ -317,6 +317,7 @@ ApplicationWindow {
             spacing: 10
 
             Button {
+                icon.source: "qrc:/icons/reset.svg"
                 text: "重置"
             }
 
@@ -325,18 +326,22 @@ ApplicationWindow {
             }
 
             Button {
+                icon.source: "qrc:/icons/Ok.svg"
                 id:surebutton
                 text: "确定"
 
             }
 
             Button {
+                icon.source: "qrc:/icons/Ok.svg"
                 id:applybotton
                 text: "应用"
 
             }
             Button {
                 id:cancelbutton
+                icon.source: "qrc:/icons/forbid.svg"
+                icon.color:"black"
                 text: "取消"
                 onClicked: manageNotebookDialog.close()
 

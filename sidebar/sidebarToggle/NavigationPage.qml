@@ -9,7 +9,6 @@ import MarkDownNote 1.0
 Rectangle{
     id:navigationPage
     width: parent.width
-    height: parent.height-bottonarea1.height
     color:"transparent"
 
     Column{

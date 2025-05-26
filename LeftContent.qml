@@ -19,7 +19,6 @@ ColumnLayout {
 
             // 中间空白区域
             Rectangle {
-
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: "transparent"
