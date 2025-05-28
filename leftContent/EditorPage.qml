@@ -10,6 +10,7 @@ Rectangle {
     color: "#eeeeee"
     property alias text: editor.text
     property alias font: editor.font
+    property alias textArea: editor
     property int currentLine: 0
 
     RowLayout {
@@ -66,10 +67,17 @@ Rectangle {
                 id: editor
                 wrapMode: TextEdit.NoWrap
                 selectByMouse: true
-                text: "## MarkDownNote"
+                text: model.content
                 font.pixelSize: 14
                 width: Math.max(implicitWidth, editorScrollView.width)
                 height: contentHeight
+
+                Shortcut {
+                    sequence: StandardKey.Save
+                    onActivated: {
+                        // MarkDownCtrl.editorModel.saveCurrentEditor()
+                    }
+                }
 
                 onCursorPositionChanged: {
                     oldposition = newposition;
@@ -79,10 +87,6 @@ Rectangle {
                         const textBeforeCursor = editor.text.slice(0, cursorPos);
                         editorBackGround.currentLine = textBeforeCursor.split("\n").length - 1;
                     })
-                }
-
-                Component.onCompleted: {
-                    MarkDownCtrl.topbarCtrl.textArea = editor
                 }
 
                 onSelectedTextChanged: {
@@ -143,8 +147,5 @@ Rectangle {
                 }
             }
         }
-    }
-    Component.onCompleted: {
-        editor.forceActiveFocus()
     }
 }

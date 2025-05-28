@@ -3,7 +3,8 @@
 #include <QObject>
 #include <QQmlEngine>
 
-#include <models/notebooklistmodel.h>
+#include "models/notebooklistmodel.h"
+#include "models/editormodel.h"
 
 class ExpandCtrl;
 class EditorCtrl;
@@ -13,9 +14,7 @@ class NoteBookCtrl;
 class NewNotesCtrl;
 class ImportMenuCtrl;
 class ExportMenuCtrl;
-
 class SidebarCtrl;
-
 class TopbarCtrl;
 
 class MarkDownCtrl : public QObject
@@ -26,6 +25,8 @@ class MarkDownCtrl : public QObject
 
 public:
     explicit MarkDownCtrl(QObject *parent = nullptr);
+
+    Q_INVOKABLE void openFile(const QString &filename);
 
     EditorCtrl *editorCtrl() const;
     void setEditorCtrl(EditorCtrl *newEditorCtrl);
@@ -60,6 +61,12 @@ public:
     TopbarCtrl *topbarCtrl() const;
     void setTopbarCtrl(TopbarCtrl *newTopbarCtrl);
 
+    EditorModel *editorModel() const;
+    void setEditorModel(EditorModel *newEditorModel);
+
+    QObject *tabBarNames() const;
+    void setTabBarNames(QObject *newTabBarNames);
+
 signals:
     void editorCtrlChanged();
 
@@ -82,6 +89,12 @@ signals:
     void sidebarCtrlChanged();
 
     void topbarCtrlChanged();
+
+    void editorModelChanged();
+
+    void tabBarChanged();
+
+    void tabBarNamesChanged();
 
 private:
     ExpandCtrl *m_expandCtrl = nullptr;
@@ -126,4 +139,12 @@ private:
     TopbarCtrl *m_topbarCtrl = nullptr;
     Q_PROPERTY(
         TopbarCtrl *topbarCtrl READ topbarCtrl WRITE setTopbarCtrl NOTIFY topbarCtrlChanged FINAL)
+
+    EditorModel *m_editorModel = nullptr;
+    Q_PROPERTY(EditorModel *editorModel READ editorModel WRITE setEditorModel NOTIFY
+                   editorModelChanged FINAL)
+
+    QObject *m_tabBarNames = nullptr;
+    Q_PROPERTY(
+        QObject *tabBarNames READ tabBarNames WRITE setTabBarNames NOTIFY tabBarNamesChanged FINAL)
 };

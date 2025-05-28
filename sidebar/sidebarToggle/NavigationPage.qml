@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import "../../buttons"
 import "../../dialogs"
@@ -127,19 +128,27 @@ Rectangle{
 
                 delegate: ItemDelegate {
                     spacing: 5
-                    width: notesshow.width-20
+                    width: notesshow.width - 20
                     height: 25
+                    clip: true
 
-                    Row {
+                    RowLayout {
+                        anchors.fill: parent
                         anchors.centerIn: parent
+                        spacing: 0
                         Image {
                             source: "qrc:/icons/file_node.svg"
                             width: 15
                             height: 15
+                            Layout.maximumHeight: 15
+                            Layout.maximumWidth: 15
                             fillMode: Image.PreserveAspectFit
                         }
                         Text {
                             id:textword
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            verticalAlignment: Text.AlignVCenter
                             font.pointSize: 9
                             text: model.name
                         }
@@ -148,12 +157,22 @@ Rectangle{
                     TapHandler {
                         onTapped: {
                             note_listView.currentIndex = index
+                            MarkDownCtrl.openFile(textword.text)
                         }
                     }
 
                     // 鼠标悬停时的背景色
                     background: Rectangle {
                         color: parent.hovered ? "#e0e0e0" : (index === note_listView.currentIndex ?  "lightgray" : "transparent")
+                    }
+
+                    ToolTip {
+                        text: model.name
+                        font.pointSize: 8
+                        y:22
+                        visible: parent.hovered
+                        delay: 300
+                        padding: 4
                     }
                 }
             }
