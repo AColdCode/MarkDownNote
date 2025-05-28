@@ -23,12 +23,15 @@ Item {
             spacing: 1
 
             Repeater {
+                id: tabName_repeater
                 model:MarkDownCtrl.editorModel
 
                 Item {
+                    id: tabName
                     height: 26
                     Layout.maximumWidth: 100
                     Layout.minimumWidth: 100
+                    property bool modified: false
 
                     RowLayout {
                         anchors.fill: parent
@@ -38,6 +41,8 @@ Item {
                             Layout.fillWidth: true
                             Layout.horizontalStretchFactor: 1
                             text: model.fileName
+                            icon.source: "qrc:/icons/buffer.svg"
+                            icon.color: tabName.modified ? "red" : "black"
                             onClicked: tabBarNames.currentIndex = index
                             background: Rectangle {
                                 color: "transparent"
@@ -90,6 +95,14 @@ Item {
                         delay: 300
                         padding: 4
                     }
+                }
+
+                Component.onCompleted: {
+                    MarkDownCtrl.editorModel.tabName_repeater = tabName_repeater
+                }
+
+                function editorModified(index, modified){
+                    tabName_repeater.itemAt(index).modified = modified
                 }
             }
 

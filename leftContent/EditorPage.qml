@@ -72,11 +72,40 @@ Rectangle {
                 width: Math.max(implicitWidth, editorScrollView.width)
                 height: contentHeight
 
+                property bool textDirty: false  // 标记是否内容修改
+                property bool firstLoad: true
+
+                // 自动保存定时器
+                Timer {
+                    id: autoSaveTimer
+                    interval: 3000    // 3秒后自动保存
+                    repeat: false
+                    onTriggered: {
+                        if (editor.textDirty) {
+                            MarkDownCtrl.editorModel.saveCurrentEditor(index, editor.text)
+                            editor.textDirty = false
+                        }
+                    }
+                }
+
                 Shortcut {
                     sequence: StandardKey.Save
                     onActivated: {
-                        // MarkDownCtrl.editorModel.saveCurrentEditor()
+                        MarkDownCtrl.editorModel.saveCurrentEditor(index, editor.text)
                     }
+                }
+
+                onTextChanged: {
+                    if (firstLoad) {
+                        firstLoad = false
+                    }else{
+                        textDirty = true
+                        autoSaveTimer.restart()
+                    }
+                }
+
+                onTextDirtyChanged: {
+                    MarkDownCtrl.editorModel.editorModified(index, textDirty)
                 }
 
                 onCursorPositionChanged: {

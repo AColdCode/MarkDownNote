@@ -36,6 +36,8 @@ public:
     Notebook *createfolder(const QString &name);
     QList<Notebook *> childNotebooks() const;
     void importNotesRecursively(const QString &path, const QStringList &suffixes);
+    Note *findNoteByname(const QString &name);
+    void updateModifiedTime();
 
     QString m_name;
     QString description;

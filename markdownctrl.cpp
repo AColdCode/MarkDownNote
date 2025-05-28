@@ -34,8 +34,13 @@ void MarkDownCtrl::openFile(const QString &filename)
     if (m_editorModel == nullptr || m_noteBookmodel == nullptr
         || m_noteBookmodel->currentNotebook() == nullptr)
         return;
-    QString filePath = m_noteBookmodel->currentNotebook()->rootPath + "/" + filename;
-    int index = m_editorModel->openFile(filePath);
+    Note *note = m_noteBookmodel->currentNotebook()->findNoteByname(filename);
+
+    if (note == nullptr)
+        return;
+    note->filePath = m_noteBookmodel->currentNotebook()->rootPath + "/" + filename;
+
+    int index = m_editorModel->openFile(note);
 
     if (index != -1) {
         m_tabBarNames->setProperty("currentIndex", index);

@@ -278,3 +278,20 @@ void Notebook::importNotesRecursively(const QString &path, const QStringList &su
     }
     save();
 }
+
+Note *Notebook::findNoteByname(const QString &name)
+{
+    for (Note *note : m_notes) {
+        if (note->m_name == name)
+            return note;
+    }
+
+    return nullptr;
+}
+
+void Notebook::updateModifiedTime()
+{
+    save();
+    modifiedTime = QDateTime::currentDateTimeUtc();
+    saveNotebookInfo();
+}

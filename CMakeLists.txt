@@ -144,7 +144,6 @@ qt_add_qml_module(
   SOURCES
   controllers/topbarctrl.h
   controllers/topbarctrl.cpp
-  SOURCES models/editorentry.h models/editorentry.cpp
   SOURCES models/editormodel.h models/editormodel.cpp
   QML_FILES leftContent/FileNameTabs.qml)
 

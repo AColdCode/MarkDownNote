@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QDateTime>
 
 class Note : public QObject
 {
@@ -10,9 +11,12 @@ public:
 
     QJsonObject toJson() const;
     static Note *fromJson(const QJsonObject &obj, QObject *parent = nullptr);
+    bool save(const QString &content);
 
     int id;
     QString m_name;
+    QString filePath;
+    QString content;
     QDateTime createdTime;
     QDateTime modifiedTime;
     QString attachmentFolder;

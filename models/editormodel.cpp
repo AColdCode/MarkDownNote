@@ -1,4 +1,3 @@
-// editormodel.cpp
 #include "editormodel.h"
 #include <QFileInfo>
 
@@ -14,14 +13,14 @@ QVariant EditorModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || index.row() >= m_entries.count())
         return {};
 
-    const EditorEntry &entry = m_entries[index.row()];
+    const Note *entry = m_entries[index.row()];
     switch (role) {
     case FileNameRole:
-        return entry.fileName;
+        return entry->m_name;
     case FilePathRole:
-        return entry.filePath;
+        return entry->filePath;
     case ContentRole:
-        return entry.content;
+        return entry->content;
     }
     return {};
 }
@@ -31,11 +30,10 @@ QHash<int, QByteArray> EditorModel::roleNames() const
     return {{FileNameRole, "fileName"}, {FilePathRole, "filePath"}, {ContentRole, "content"}};
 }
 
-void EditorModel::addEditor(const QString &path, const QString &content)
+void EditorModel::addEditor(Note *entry)
 {
-    QFileInfo info(path);
     beginInsertRows(QModelIndex(), m_entries.size(), m_entries.size());
-    m_entries.append(EditorEntry(info.fileName(), path, content));
+    m_entries.append(entry);
     endInsertRows();
     emit countChanged(m_entries.count());
 }
@@ -53,11 +51,14 @@ QString EditorModel::getContent(int index) const
 {
     if (index < 0 || index >= m_entries.size())
         return {};
-    return m_entries[index].content;
+    return m_entries[index]->content;
 }
 
-int EditorModel::openFile(const QString &path)
+int EditorModel::openFile(Note *entry)
 {
+    if (entry == nullptr)
+        return -1;
+    QString path = entry->filePath;
     int index = checkFileOpened(path);
     if (index != -1)
         return index;
@@ -66,18 +67,50 @@ int EditorModel::openFile(const QString &path)
         return index;
     QTextStream in(&file);
     QString content = in.readAll();
+    entry->content = content;
     file.close();
-    addEditor(path, content);
+    addEditor(entry);
 
     return index;
+}
+
+void EditorModel::saveCurrentEditor(const int index, const QString &content)
+{
+    if (index < 0 || index >= m_entries.size())
+        return;
+    Note *entry = m_entries[index];
+    entry->save(content);
+}
+
+void EditorModel::editorModified(int index, bool modified)
+{
+    if (m_tabName_repeater == nullptr)
+        return;
+    QMetaObject::invokeMethod(m_tabName_repeater,
+                              "editorModified",
+                              Q_ARG(QVariant, QVariant(index)),
+                              Q_ARG(QVariant, QVariant(modified)));
 }
 
 int EditorModel::checkFileOpened(const QString &filePath)
 {
     for (int i = 0; i < m_entries.size(); ++i) {
-        if (m_entries[i].filePath == filePath) {
+        if (m_entries[i]->filePath == filePath) {
             return i;
         }
     }
     return -1;
+}
+
+QObject *EditorModel::tabName_repeater() const
+{
+    return m_tabName_repeater;
+}
+
+void EditorModel::setTabName_repeater(QObject *newTabName_repeater)
+{
+    if (m_tabName_repeater == newTabName_repeater)
+        return;
+    m_tabName_repeater = newTabName_repeater;
+    emit tabName_repeaterChanged();
 }

@@ -1,7 +1,6 @@
-// editormodel.h
 #pragma once
 #include <QAbstractListModel>
-#include "editorentry.h"
+#include "note.h"
 
 class EditorModel : public QAbstractListModel
 {
@@ -15,17 +14,28 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void addEditor(const QString &path, const QString &content);
+    Q_INVOKABLE void addEditor(Note *entry);
     Q_INVOKABLE void closeEditor(int index);
     Q_INVOKABLE QString getContent(int index) const;
-    Q_INVOKABLE int openFile(const QString &path);
+    Q_INVOKABLE int openFile(Note *entry);
+    Q_INVOKABLE void saveCurrentEditor(const int index, const QString &content);
+    Q_INVOKABLE void editorModified(int index, bool modified);
+
+    QObject *tabName_repeater() const;
+    void setTabName_repeater(QObject *newTabName_repeater);
 
 signals:
 
     void countChanged(int newCount);
 
+    void tabName_repeaterChanged();
+
 private:
-    QList<EditorEntry> m_entries;
+    QList<Note *> m_entries;
 
     int checkFileOpened(const QString &filePath);
+
+    QObject *m_tabName_repeater = nullptr;
+    Q_PROPERTY(QObject *tabName_repeater READ tabName_repeater WRITE setTabName_repeater NOTIFY
+                   tabName_repeaterChanged FINAL)
 };

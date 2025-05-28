@@ -2,8 +2,10 @@
 #include <QJsonObject>
 #include <QRandomGenerator>
 #include <QJsonArray>
+#include <QFile>
 
 #include "note.h"
+#include "notebook.h"
 
 Note::Note(const int &id, const QString &name, QObject *parent)
     : QObject{parent}
@@ -38,6 +40,27 @@ Note *Note::fromJson(const QJsonObject &obj, QObject *parent)
     note->attachmentFolder = obj["attachment_folder"].toString();
     note->signature = obj["signature"].toString();
     return note;
+}
+
+bool Note::save(const QString &content)
+{
+    if (filePath == "")
+        return false;
+
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << content;
+        modifiedTime = QDateTime::currentDateTimeUtc();
+        file.close();
+        Notebook *notebook = qobject_cast<Notebook *>(parent());
+        if (notebook) {
+            notebook->updateModifiedTime();
+        }
+        return true;
+    }
+
+    return false;
 }
 
 QString Note::name() const
