@@ -25,11 +25,11 @@ ApplicationWindow {
         Layout.fillWidth: true
         Layout.fillHeight: true
     }
-    SearchLocationList{
-        id:searchLocationList
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
+    // SearchLocationList{
+    //     id:searchLocationList
+    //     Layout.fillWidth: true
+    //     Layout.fillHeight: true
+    // }
 
     Component.onCompleted: {
         MarkDownCtrl.expandCtrl.mainWindow = mainWindow

@@ -7,31 +7,17 @@ import "sidebarToggle"
 Rectangle {
     id: fileTreeView
     width: 200
-    height: parent.height
+    height: Math.max(implicitHeight, parent.height)
     color: "#efeded"
     property int  currentIndex: 0
 
     ColumnLayout {
         anchors.fill: parent
-
-        Rectangle{
-            id:bottonarea1
-            width: parent.width
-            height: 20
-            color: "#e0e0e0"
-            Button {
-                id:button
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                icon.source: "qrc:/icons/close.svg"
-                icon.width:12
-                icon.height:12
-                icon.color:"black"
-                background: Rectangle {
-                    color: button.hovered ? "lightgray" : "transparent"
-                }
-                onClicked:fileTreeView.visible=false
-            }
+        SnippetPage{
+            id:snippetPage
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: currentIndex===3
         }
 
         SearchPage{
@@ -54,6 +40,7 @@ Rectangle {
             Layout.fillHeight: true
             visible: currentIndex===0
         }
+
     }
     Component.onCompleted: {
         MarkDownCtrl.sidebarCtrl.fileTreeView=fileTreeView;
