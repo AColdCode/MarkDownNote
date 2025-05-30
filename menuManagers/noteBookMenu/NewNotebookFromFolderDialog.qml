@@ -175,6 +175,12 @@ Window {
                             placeholderText: qsTr("Name of notebook")
                             placeholderTextColor: "grey"
                             Layout.horizontalStretchFactor: 1
+
+                            onTextChanged: {
+                                if(text === ""){
+                                    hintText = qsTr("Please specify a name for the notebook.")
+                                }
+                            }
                         }
                     }
 
@@ -190,6 +196,7 @@ Window {
                         }
 
                         TextField {
+                            id: desc_field
                             Layout.fillWidth: true
                             placeholderTextColor: "grey"
                             placeholderText: qsTr("Description of notebook")
@@ -257,7 +264,7 @@ Window {
                     icon.source: "qrc:/icons/Ok.svg"
                     enabled: okEnable
                     onClicked: {
-                        MarkDownCtrl.noteBookmodel.newNoteBookFromFolder()
+                        MarkDownCtrl.noteBookmodel.newNoteBookFromFolder(nameText, desc_field.text, pathText, MarkDownCtrl.noteBookCtrl.suffixListModel.selectedSuffixes())
                         notebookWindow_folder.close()
                     }
                 }

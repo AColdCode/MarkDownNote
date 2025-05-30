@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import "../../buttons"
 import "../../dialogs"
@@ -115,17 +116,44 @@ Rectangle{
             model: MarkDownCtrl.noteBookmodel
             textRole: "name"
 
+            TapHandler {
+                onTapped: {
+                    if(MarkDownCtrl.noteBookmodel.count() === 0){
+                        MarkDownCtrl.noteBookCtrl.openNewNotebookDialog()
+                    }
+                }
+            }
+
             Connections {
                 target: MarkDownCtrl.noteBookmodel
-                function onCountChanged(newCount) {
+                function onAddCountChanged(newCount) {
                     notebookComboBox.currentIndex = newCount - 1
+                }
+            }
+
+            Connections {
+                target: MarkDownCtrl.noteBookmodel
+                function onLostCountChanged(newCount) {
+                    var lastIndex = notebookComboBox.currentIndex
+                    Qt.callLater(() => {
+                        if(lastIndex >= newCount){
+                            notebookComboBox.currentIndex = newCount - 1
+                        }else{
+                            notebookComboBox.currentIndex = lastIndex
+                        }
+                    })
                 }
             }
 
             onCurrentIndexChanged: {
                 MarkDownCtrl.noteBookmodel.currentNotebook = MarkDownCtrl.noteBookmodel.getNotebookByIndex(currentIndex)
-                note_listView.model = MarkDownCtrl.noteBookmodel.currentNotebook.notes
-                MarkDownCtrl.noteBookCtrl.currentNotebookName = MarkDownCtrl.noteBookmodel.currentNotebook.name
+                if(MarkDownCtrl.noteBookmodel.currentNotebook){
+                    note_listView.model = MarkDownCtrl.noteBookmodel.currentNotebook.notes
+                    MarkDownCtrl.noteBookCtrl.currentNotebookName = MarkDownCtrl.noteBookmodel.currentNotebook.name
+                }else{
+                    note_listView.model = null
+                    MarkDownCtrl.noteBookCtrl.currentNotebookName = null
+                }
             }
         }
 
@@ -143,25 +171,31 @@ Rectangle{
                 anchors.margins: 10
                 model: ListModel {
                     id: notemodel
-                    ListElement { name: "笔记1.md" }
-                    ListElement { name: "笔记2.md" }
                 }
 
                 delegate: ItemDelegate {
                     spacing: 5
-                    width: notesshow.width-20
+                    width: notesshow.width - 20
                     height: 25
+                    clip: true
 
-                    Row {
+                    RowLayout {
+                        anchors.fill: parent
                         anchors.centerIn: parent
+                        spacing: 0
                         Image {
                             source: "qrc:/icons/file_node.svg"
                             width: 15
                             height: 15
+                            Layout.maximumHeight: 15
+                            Layout.maximumWidth: 15
                             fillMode: Image.PreserveAspectFit
                         }
                         Text {
                             id:textword
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            verticalAlignment: Text.AlignVCenter
                             font.pointSize: 9
                             text: model.name
                         }
@@ -170,12 +204,22 @@ Rectangle{
                     TapHandler {
                         onTapped: {
                             note_listView.currentIndex = index
+                            MarkDownCtrl.openFile(textword.text)
                         }
                     }
 
                     // 鼠标悬停时的背景色
                     background: Rectangle {
                         color: parent.hovered ? "#e0e0e0" : (index === note_listView.currentIndex ?  "lightgray" : "transparent")
+                    }
+
+                    ToolTip {
+                        text: model.name
+                        font.pointSize: 8
+                        y:22
+                        visible: parent.hovered
+                        delay: 300
+                        padding: 4
                     }
                 }
             }

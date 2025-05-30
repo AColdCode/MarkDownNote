@@ -24,7 +24,40 @@ MarkDownCtrl::MarkDownCtrl(QObject *parent)
     , m_noteBookmodel{new NotebookListModel(this)}
     , m_sidebarCtrl{new SidebarCtrl(this)}
     , m_topbarCtrl{new TopbarCtrl(this)}
+    , m_editorModel{new EditorModel(this)}
 {}
+
+void MarkDownCtrl::openFile(const QString &filename)
+{
+    if (m_tabBarNames == nullptr)
+        return;
+    if (m_editorModel == nullptr || m_noteBookmodel == nullptr
+        || m_noteBookmodel->currentNotebook() == nullptr)
+        return;
+    Note *note = m_noteBookmodel->currentNotebook()->findNoteByname(filename);
+
+    if (note == nullptr)
+        return;
+    note->filePath = m_noteBookmodel->currentNotebook()->rootPath + "/" + filename;
+
+    int index = m_editorModel->openFile(note);
+
+    if (index != -1) {
+        m_tabBarNames->setProperty("currentIndex", index);
+    }
+}
+
+void MarkDownCtrl::editorModelAddNote(Note *note)
+{
+    if (note == nullptr)
+        return;
+
+    int index = m_editorModel->openFile(note);
+
+    if (index != -1) {
+        m_tabBarNames->setProperty("currentIndex", index);
+    }
+}
 
 EditorCtrl *MarkDownCtrl::editorCtrl() const
 {
@@ -167,4 +200,30 @@ void MarkDownCtrl::setTopbarCtrl(TopbarCtrl *newTopbarCtrl)
         return;
     m_topbarCtrl = newTopbarCtrl;
     emit topbarCtrlChanged();
+}
+
+EditorModel *MarkDownCtrl::editorModel() const
+{
+    return m_editorModel;
+}
+
+void MarkDownCtrl::setEditorModel(EditorModel *newEditorModel)
+{
+    if (m_editorModel == newEditorModel)
+        return;
+    m_editorModel = newEditorModel;
+    emit editorModelChanged();
+}
+
+QObject *MarkDownCtrl::tabBarNames() const
+{
+    return m_tabBarNames;
+}
+
+void MarkDownCtrl::setTabBarNames(QObject *newTabBarNames)
+{
+    if (m_tabBarNames == newTabBarNames)
+        return;
+    m_tabBarNames = newTabBarNames;
+    emit tabBarNamesChanged();
 }

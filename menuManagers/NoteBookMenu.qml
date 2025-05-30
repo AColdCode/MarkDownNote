@@ -6,6 +6,8 @@ import QtQuick.Dialogs
 import "../buttons"
 import "noteBookMenu"
 
+import MarkDownNote 1.0
+
 MenuButton {
     text: qsTr("Notebook")
     hoverText: qsTr("Notebook")
@@ -22,6 +24,10 @@ MenuButton {
             NewNotebookDialog{
                 id: noteBook_new
                 visible: false
+
+                Component.onCompleted: {
+                    MarkDownCtrl.noteBookCtrl.noteBook_new = noteBook_new
+                }
             }
         }
         MenuItem{

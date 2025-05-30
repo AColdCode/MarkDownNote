@@ -25,6 +25,8 @@ public:
 
     Q_INVOKABLE bool setChecked(int row, bool checked);
 
+    Q_INVOKABLE QStringList selectedSuffixes();
+
 private:
     QList<SuffixItem *> m_items;
 };

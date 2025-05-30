@@ -19,7 +19,6 @@ public:
     Notebook(const QString &name,
              const QString &description,
              const QString &rootPath,
-             const int &maxId,
              QObject *parent = nullptr,
              const int id = 1);
 
@@ -36,6 +35,10 @@ public:
     Note *createNote(const QString &name);
     Notebook *createfolder(const QString &name);
     QList<Notebook *> childNotebooks() const;
+    void importNotesRecursively(const QString &path, const QStringList &suffixes);
+    Note *findNoteByname(const QString &name);
+    void updateModifiedTime();
+    Note *addNoteWithContent(const QString &name, const QString &content);
 
     QString m_name;
     QString description;
@@ -44,6 +47,8 @@ public:
 
     QQmlListProperty<Note> notes();
     Q_INVOKABLE void addNote(Note *note);
+
+    Q_INVOKABLE void addChild(Notebook *child);
 
     QString name() const;
     void setName(const QString &newName);

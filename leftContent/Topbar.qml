@@ -1,14 +1,12 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Shapes 1.15
+import QtQuick.Shapes
 
 import MarkDownNote 1.0
 
 Rectangle{
     id: toolbar
-    Layout.minimumWidth:100
-    height: 40
     color: "#f5f5f5"
 
 

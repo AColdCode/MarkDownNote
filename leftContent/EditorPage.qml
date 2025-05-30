@@ -10,6 +10,7 @@ Rectangle {
     color: "#eeeeee"
     property alias text: editor.text
     property alias font: editor.font
+    property alias textArea: editor
     property int currentLine: 0
 
     RowLayout {
@@ -66,10 +67,46 @@ Rectangle {
                 id: editor
                 wrapMode: TextEdit.NoWrap
                 selectByMouse: true
-                text: "## MarkDownNote"
+                text: model.content
                 font.pixelSize: 14
                 width: Math.max(implicitWidth, editorScrollView.width)
                 height: contentHeight
+
+                property bool textDirty: false  // 标记是否内容修改
+                property bool firstLoad: true
+
+                // 自动保存定时器
+                Timer {
+                    id: autoSaveTimer
+                    interval: 3000    // 3秒后自动保存
+                    repeat: false
+                    onTriggered: {
+                        if (editor.textDirty) {
+                            MarkDownCtrl.editorModel.saveCurrentEditor(index, editor.text)
+                            editor.textDirty = false
+                        }
+                    }
+                }
+
+                Shortcut {
+                    sequence: StandardKey.Save
+                    onActivated: {
+                        editor.textDirty = !MarkDownCtrl.editorModel.saveCurrentEditor(index, editor.text)
+                    }
+                }
+
+                onTextChanged: {
+                    if (firstLoad) {
+                        firstLoad = false
+                    }else{
+                        textDirty = true
+                        autoSaveTimer.restart()
+                    }
+                }
+
+                onTextDirtyChanged: {
+                    MarkDownCtrl.editorModel.editorModified(index, textDirty)
+                }
 
                 onCursorPositionChanged: {
                     oldposition = newposition;
@@ -79,10 +116,6 @@ Rectangle {
                         const textBeforeCursor = editor.text.slice(0, cursorPos);
                         editorBackGround.currentLine = textBeforeCursor.split("\n").length - 1;
                     })
-                }
-
-                Component.onCompleted: {
-                    MarkDownCtrl.topbarCtrl.textArea = editor
                 }
 
                 onSelectedTextChanged: {
@@ -143,8 +176,5 @@ Rectangle {
                 }
             }
         }
-    }
-    Component.onCompleted: {
-        editor.forceActiveFocus()
     }
 }

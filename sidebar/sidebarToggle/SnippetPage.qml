@@ -86,7 +86,7 @@ Rectangle{
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.margins: 5
-            clip: true  // 重要：确保内容不会溢出
+            clip: true
 
             // 内容区域
             Rectangle {

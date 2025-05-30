@@ -70,3 +70,14 @@ bool SuffixListModel::setChecked(int row, bool checked)
     QModelIndex idx = index(row, 0);
     return setData(idx, checked, CheckedRole);
 }
+
+QStringList SuffixListModel::selectedSuffixes()
+{
+    QStringList result;
+    for (const auto &item : m_items) {
+        if (item->checked()) {
+            result.append(item->suffix());
+        }
+    }
+    return result;
+}

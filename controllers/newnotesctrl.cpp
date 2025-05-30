@@ -4,8 +4,8 @@
 
 NewNotesCtrl::NewNotesCtrl(QObject *parent) : QObject{parent} {}
 
-void NewNotesCtrl::selectFile()
+QString NewNotesCtrl::selectFile()
 {
     QString file = QFileDialog::getOpenFileName(nullptr, tr("Open File"), "", "All files (*.*)");
-    qDebug() << file;
+    return file;
 }

@@ -117,16 +117,17 @@ QString PreviewCtrl::convertToHtml(const QString &markdown)
 
     // ✅ 返回完整 HTML 结构，设置字体
     return R"(
-<html>
-<head>
-<style>
-    body {
-        font-family: "AR PL UKai CN", "Noto Serif SC", "KaiTi", "SimSun", "serif";
-        font-size: 16px;
-        line-height: 1.6;
-    }
-</style>
-</head>
-<body>
-)" + html + "</body></html>";
+    <html>
+    <head>
+    <style>
+        body {
+            font-family: "AR PL UKai CN", "Noto Serif SC", "KaiTi", "SimSun", "serif";
+            font-size: 16px;
+            line-height: 1.6;
+        }
+    </style>
+    </head>
+    <body>
+    )" + html
+           + "</body></html>";
 }
