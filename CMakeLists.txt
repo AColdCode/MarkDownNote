@@ -124,13 +124,25 @@ qt_add_qml_module(
   SOURCES
   controllers/exportmenuctrl.h
   controllers/exportmenuctrl.cpp
-  QML_FILES LeftContent.qml
-  QML_FILES RightContent.qml
-  SOURCES models/notebook.h models/notebook.cpp
-  SOURCES models/notebooklistmodel.h models/notebooklistmodel.cpp
-  SOURCES models/note.h models/note.cpp
-  SOURCES models/suffixitem.h models/suffixitem.cpp
-  SOURCES models/suffixlistmodel.h models/suffixlistmodel.cpp
+  QML_FILES
+  LeftContent.qml
+  QML_FILES
+  RightContent.qml
+  SOURCES
+  models/notebook.h
+  models/notebook.cpp
+  SOURCES
+  models/notebooklistmodel.h
+  models/notebooklistmodel.cpp
+  SOURCES
+  models/note.h
+  models/note.cpp
+  SOURCES
+  models/suffixitem.h
+  models/suffixitem.cpp
+  SOURCES
+  models/suffixlistmodel.h
+  models/suffixlistmodel.cpp
   QML_FILES
   sidebar/sidebarToggle/HistoryPage.qml
   QML_FILES
@@ -144,8 +156,13 @@ qt_add_qml_module(
   SOURCES
   controllers/topbarctrl.h
   controllers/topbarctrl.cpp
-  SOURCES models/editormodel.h models/editormodel.cpp
-  QML_FILES leftContent/FileNameTabs.qml)
+  QML_FILES
+  sidebar/sidebarToggle/SnippetPage.qml
+  SOURCES
+  models/editormodel.h
+  models/editormodel.cpp
+  QML_FILES
+  leftContent/FileNameTabs.qml)
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 

@@ -53,8 +53,8 @@ ColumnLayout {
             model: MarkDownCtrl.editorModel
 
             ColumnLayout {
-                height: parent.height
                 width: parent.width
+                height: parent.height
                 spacing: 0
                 property alias textArea: editor.textArea
 

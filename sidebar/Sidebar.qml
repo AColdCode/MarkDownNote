@@ -4,11 +4,17 @@ import QtQuick.Layouts
 import MarkDownNote
 
 Rectangle {
-    id: root
+    id: sidebar
     width: 40
     height: parent.height
     color: "#354259"
-    property int selectedButtonIndex: -1
+    property int selectedButtonIndex: 0
+    property var buttonVisibility: ({
+            "Notebook": true,
+            "History": true,
+            "Search": true,
+            "Snippet": true
+        })
 
     Rectangle{
         width: 40
@@ -21,10 +27,10 @@ Rectangle {
 
             Repeater {
                 model: ListModel {
-                    ListElement { icon: "qrc:/icons/notebook_menu.svg"; label: "Notebook Menu" }
-                    ListElement { icon: "qrc:/icons/history_dock.svg";  label: "History Dock" }
-                    ListElement { icon: "qrc:/icons/search_dock.svg";   label: "Search Dock" }
-                    ListElement { icon: "qrc:/icons/snippet_dock.svg";  label: "Snippet Dock" }
+                    ListElement { icon: "qrc:/icons/notebook_menu.svg"; label: "Notebook" }
+                    ListElement { icon: "qrc:/icons/history_dock.svg";  label: "History" }
+                    ListElement { icon: "qrc:/icons/search_dock.svg";   label: "Search" }
+                    ListElement { icon: "qrc:/icons/snippet_dock.svg";  label: "Snippet" }
                 }
                 delegate: Button {
                     id: buttonDelegate
@@ -33,10 +39,11 @@ Rectangle {
                     icon.height: 20
                     icon.width: 20
                     icon.color: "#f6f3f3"
+                    visible: sidebar.buttonVisibility[model.label]
 
                     background: Rectangle {
                         implicitHeight: 40
-                        color: parent.hovered ? "#e0e0e0" : (index === root.selectedButtonIndex ?  "#1c2128" : "#354259")
+                        color: parent.hovered ? "#e0e0e0" : (index === sidebar.selectedButtonIndex ?  "#1c2128" : "#354259")
                     }
 
                     ToolTip {
@@ -50,12 +57,15 @@ Rectangle {
                     }
 
                     onClicked: {
-                        root.selectedButtonIndex = index
+                        sidebar.selectedButtonIndex = index
                         MarkDownCtrl.sidebarCtrl.openlabel(index)
-                        console.log(model.label)
                     }
                 }
             }
         }
+    }
+
+    Component.onCompleted: {
+        MarkDownCtrl.sidebarCtrl.sidebar=sidebar
     }
 }

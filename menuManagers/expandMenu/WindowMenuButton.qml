@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls
 
 import "../../buttons"
+import MarkDownNote
 
 SubMenuButton {
     id: helpButton
@@ -55,9 +56,11 @@ SubMenuButton {
         x: -width
 
         SubMenuButton {
+            id:notebookButton
             label: qsTr("Navigation")
             icon.color: "black"
-            property bool selected: false
+            icon.source: selected?"qrc:/icons/Ok.svg":""
+            property bool selected: true
             HoverHandler {
                 onHoveredChanged: {
                     if (!hovered) {
@@ -69,22 +72,23 @@ SubMenuButton {
                     }
                 }
             }
-
             onClicked: {
                 if(selected){
                     selected = false
-                    icon.source = ""
+
                 }else{
                     selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
                 }
+                 MarkDownCtrl.sidebarCtrl.showLabelChanged("Notebook")
             }
         }
 
         SubMenuButton {
+            id:historyButton
             label: qsTr("History")
             icon.color: "black"
-            property bool selected: false
+            icon.source: selected?"qrc:/icons/Ok.svg":""
+            property bool selected: true
             HoverHandler {
                 onHoveredChanged: {
                     if (!hovered) {
@@ -99,42 +103,18 @@ SubMenuButton {
             onClicked: {
                 if(selected){
                     selected = false
-                    icon.source = ""
                 }else{
                     selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
                 }
+                MarkDownCtrl.sidebarCtrl.showLabelChanged("History")
             }
         }
         SubMenuButton {
-            label: qsTr("Tags")
-            icon.color: "black"
-            property bool selected: false
-            HoverHandler {
-                onHoveredChanged: {
-                    if (!hovered) {
-                        helpButton.mouseOverMenu &= ~1 << 2
-                        closeMenuTimer.start()
-                    } else {
-                        helpButton.mouseOverMenu |= 1 << 2
-                        closeMenuTimer.stop()
-                    }
-                }
-            }
-            onClicked: {
-                if(selected){
-                    selected = false
-                    icon.source = ""
-                }else{
-                    selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
-                }
-            }
-        }
-        SubMenuButton {
+            id:searchButton
             label: qsTr("Search")
             icon.color: "black"
-            property bool selected: false
+            icon.source: selected?"qrc:/icons/Ok.svg":""
+            property bool selected: true
             HoverHandler {
                 onHoveredChanged: {
                     if (!hovered) {
@@ -149,17 +129,18 @@ SubMenuButton {
             onClicked: {
                 if(selected){
                     selected = false
-                    icon.source = ""
                 }else{
                     selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
                 }
+                MarkDownCtrl.sidebarCtrl.showLabelChanged("Search")
             }
         }
         SubMenuButton {
+            id:snippetButton
             label: qsTr("Snippets")
             icon.color: "black"
-            property bool selected: false
+            icon.source: selected?"qrc:/icons/Ok.svg":""
+            property bool selected: true
             HoverHandler {
                 onHoveredChanged: {
                     if (!hovered) {
@@ -174,91 +155,17 @@ SubMenuButton {
             onClicked: {
                 if(selected){
                     selected = false
-                    icon.source = ""
                 }else{
                     selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
                 }
+                MarkDownCtrl.sidebarCtrl.showLabelChanged("Snippet")
             }
         }
         SubMenuButton {
-            label: qsTr("Outline")
-            icon.color: "black"
-            property bool selected: false
-            HoverHandler {
-                onHoveredChanged: {
-                    if (!hovered) {
-                        helpButton.mouseOverMenu &= ~1 << 5
-                        closeMenuTimer.start()
-                    } else {
-                        helpButton.mouseOverMenu |= 1 << 5
-                        closeMenuTimer.stop()
-                    }
-                }
-            }
-            onClicked: {
-                if(selected){
-                    selected = false
-                    icon.source = ""
-                }else{
-                    selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
-                }
-            }
-        }
-        SubMenuButton {
-            label: qsTr("Open Windows")
-            icon.color: "black"
-            property bool selected: false
-            HoverHandler {
-                onHoveredChanged: {
-                    if (!hovered) {
-                        helpButton.mouseOverMenu &= ~1 << 6
-                        closeMenuTimer.start()
-                    } else {
-                        helpButton.mouseOverMenu |= 1 << 6
-                        closeMenuTimer.stop()
-                    }
-                }
-            }
-            onClicked: {
-                if(selected){
-                    selected = false
-                    icon.source = ""
-                }else{
-                    selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
-                }
-            }
-        }
-        SubMenuButton {
-            label: qsTr("Console")
-            icon.color: "black"
-            property bool selected: false
-            HoverHandler {
-                onHoveredChanged: {
-                    if (!hovered) {
-                        helpButton.mouseOverMenu &= ~1 << 7
-                        closeMenuTimer.start()
-                    } else {
-                        helpButton.mouseOverMenu |= 1 << 7
-                        closeMenuTimer.stop()
-                    }
-                }
-            }
-            onClicked: {
-                if(selected){
-                    selected = false
-                    icon.source = ""
-                }else{
-                    selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
-                }
-            }
-        }
-        SubMenuButton {
+            id:locationListButton
             label: qsTr("Location List")
             icon.color: "black"
+            icon.source: selected?"qrc:/icons/Ok.svg":""
             property bool selected: false
             HoverHandler {
                 onHoveredChanged: {
@@ -274,12 +181,29 @@ SubMenuButton {
             onClicked: {
                 if(selected){
                     selected = false
-                    icon.source = ""
                 }else{
                     selected = true
-                    icon.source = "qrc:/icons/drop_down.svg"
                 }
+                MarkDownCtrl.sidebarCtrl.openlocationlist()
             }
+        }
+    }
+    Connections {
+        target: MarkDownCtrl.sidebarCtrl
+
+        function onLabelVisibilityChanged(label, visible) {
+            if (label === "Notebook") {
+                notebookButton.selected = visible;
+            } else if (label === "History") {
+                historyButton.selected = visible;
+            }else if(label==="Search"){
+                searchButton.selected=visible;
+            }else if(label==="Snippet"){
+                snippetButton.selected=visible;
+            }
+        }
+        function onLocationlistVisibilityChanged(visible){
+            locationListButton.selected=visible;
         }
     }
 }

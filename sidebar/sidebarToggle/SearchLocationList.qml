@@ -1,19 +1,18 @@
 import QtQuick
 import QtQuick.Controls
-// import Qt.labs.qmlmodels
+import MarkDownNote
 import QtQuick.Layouts
 
 Rectangle {
     id: resizableBox
     width: parent.width
     height: 150
-    // color: "#ededed"
     radius: 4
-    anchors.bottom: parent.bottom
+
 
     property int windowHeight: parent.height
-    property int minHeight: 100
-    property int maxHeight: 300
+    property int minHeight: windowHeight*0.2
+    property int maxHeight: windowHeight*0.7
     property real initialHeight
     property real dragStartY
     property int selectedRow: -1  // 当前选中行索引
@@ -113,6 +112,9 @@ Rectangle {
                                     delay: 300
                                     padding: 4
                                 }
+                            onClicked: {
+                                resizableBox.visible=false
+                            }
                         }
                     }
                 }
@@ -125,7 +127,7 @@ Rectangle {
 
                     RowLayout {
                         anchors.fill: parent
-                        spacing: 0
+                        spacing: 10
 
                         Item { Layout.fillWidth: true } // 占位
 
@@ -135,7 +137,6 @@ Rectangle {
                             icon.source: "qrc:/icons/clear.svg"
                             icon.width:15
                             Layout.alignment: Qt.AlignRight
-                            // anchors.verticalCenter: parent.verticalCenter
 
                             background: Rectangle {
                                 color: parent.hovered ? "#e0e0e0": "transparent"
@@ -154,8 +155,8 @@ Rectangle {
                         }
 
                         Text {
-                            text: "7项"
-                            font.pixelSize: 15
+                            text: noteModel.count+" 项"
+                            font.pixelSize: 12
                             Layout.rightMargin: 10
                         }
                     }
@@ -478,7 +479,10 @@ Rectangle {
                         }
                     }
                 }
+            }
         }
-        }
+    }
+    Component.onCompleted: {
+        MarkDownCtrl.sidebarCtrl.resizableBox=resizableBox;
     }
 }
