@@ -91,6 +91,14 @@ void NoteBookCtrl::newFromFolder(const QString &rootPath, QObject *dialog)
     }
 }
 
+void NoteBookCtrl::openNewNotebookDialog()
+{
+    if (m_noteBook_new == nullptr)
+        return;
+
+    m_noteBook_new->setProperty("visible", true);
+}
+
 QString NoteBookCtrl::currentNotebookName() const
 {
     return m_currentNotebookName;
@@ -115,6 +123,19 @@ void NoteBookCtrl::setSuffixListModel(SuffixListModel *newSuffixListModel)
         return;
     m_suffixListModel = newSuffixListModel;
     emit suffixListModelChanged();
+}
+
+QObject *NoteBookCtrl::noteBook_new() const
+{
+    return m_noteBook_new;
+}
+
+void NoteBookCtrl::setNoteBook_new(QObject *newNoteBook_new)
+{
+    if (m_noteBook_new == newNoteBook_new)
+        return;
+    m_noteBook_new = newNoteBook_new;
+    emit noteBook_newChanged();
 }
 
 void NoteBookCtrl::collectSuffixesRecursively(const QDir &dir, QSet<QString> &suffixSet)

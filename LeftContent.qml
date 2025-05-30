@@ -102,8 +102,22 @@ ColumnLayout {
             }
         }
 
+        Connections {
+            target: MarkDownCtrl.editorModel
+
+            function onFrontEditorClosed() {
+                Qt.callLater(() => {
+                    tabBarNames.currentIndex = tabBarNames.currentIndex - 1
+                })
+            }
+        }
+
         onCurrentIndexChanged: {
-            MarkDownCtrl.topbarCtrl.textArea = editor_repeater.itemAt(currentIndex).textArea
+            if(currentIndex >= 0) {
+                MarkDownCtrl.topbarCtrl.textArea = editor_repeater.itemAt(currentIndex).textArea
+            }else {
+                MarkDownCtrl.topbarCtrl.textArea = null
+            }
         }
     }
 

@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE void save();
     Q_INVOKABLE void load();
     Q_INVOKABLE bool updateNotebook(int row, Notebook *notebook);
+    Q_INVOKABLE bool updateNotebook(const int row, const QString &name, const QString &desc);
     Q_INVOKABLE bool removeRow(int row);
     Q_INVOKABLE void isExistNotebook(const QString &rootPath, QObject *dialog);
     Q_INVOKABLE Notebook *getNotebookByIndex(int index);
@@ -35,12 +36,17 @@ public:
                                            const QString &desc,
                                            const QString &rootPath,
                                            const QStringList &suffixes);
+    Q_INVOKABLE void openFile(const QString &filePath);
+    Q_INVOKABLE void openFolder(const QString &path);
+    Q_INVOKABLE int count();
 
     Notebook *currentNotebook() const;
     void setCurrentNotebook(Notebook *newCurrentNotebook);
 
 signals:
-    void countChanged(int newCount);
+    void addCountChanged(int newCount);
+
+    void lostCountChanged(int newCount);
 
     void currentNotebookChanged();
 

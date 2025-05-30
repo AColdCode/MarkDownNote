@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
+import QtQuick.Dialogs
 
 import MarkDownNote 1.0
 
@@ -16,6 +17,8 @@ Window {
     visible: false
     modality: Qt.ApplicationModal
     color: "#f5f5f5"
+
+    property bool modified: false
 
 
     ColumnLayout {
@@ -47,12 +50,42 @@ Window {
 
                         Label {
                             anchors.fill: parent
+                            anchors.centerIn: parent
+                            anchors.margins: 5
                             text: name
                         }
 
                         TapHandler {
-                            onTapped: notebooks_list.currentIndex = index
+                            onTapped: {
+                                if (modified){
+                                    unsavedDialog.open()
+                                }else {
+                                    notebooks_list.currentIndex = index
+                                }
+                            }
                         }
+                    }
+
+                    onCurrentItemChanged: {
+                        if(currentIndex === -1)
+                        {
+                            name_field.clear()
+                            decs_field.clear()
+                            pathField.clear()
+                            closeAndDelete.enabled = false
+                        }else
+                        {
+                            if(currentItem){
+                                name_field.text = currentItem.name
+                                decs_field.text = currentItem.decs
+                                pathField.text = currentItem.rootPath
+                                closeAndDelete.enabled = true
+                            }
+                        }
+
+                        Qt.callLater(() => {
+                            modified = false
+                        })
                     }
                 }
             }
@@ -89,10 +122,13 @@ Window {
                                 }
 
                                 TextField {
+                                    id: name_field
                                     Layout.fillWidth: true
                                     placeholderText: qsTr("Name of notebook")
                                     placeholderTextColor: "grey"
                                     Layout.horizontalStretchFactor: 1
+
+                                    onTextChanged: modified = true
                                 }
                             }
 
@@ -108,10 +144,13 @@ Window {
                                 }
 
                                 TextField {
+                                    id: decs_field
                                     Layout.fillWidth: true
                                     placeholderTextColor: "grey"
                                     placeholderText: qsTr("Description of notebook")
                                     Layout.horizontalStretchFactor: 1
+
+                                    onTextChanged: modified = true
                                 }
                             }
 
@@ -129,16 +168,10 @@ Window {
                                 TextField {
                                     id: pathField
                                     Layout.fillWidth: true
+                                    readOnly: true
                                     placeholderTextColor: "grey"
                                     placeholderText: qsTr("Path of notebook root folder")
                                     Layout.horizontalStretchFactor: 1
-                                }
-
-                                Button {
-                                    text: qsTr("Browse")
-                                    Layout.fillWidth: true
-                                    Layout.horizontalStretchFactor: 0
-                                    onClicked: MarkDownCtrl.noteBookCtrl.selectRoot(pathField)
                                 }
                             }
                         }
@@ -147,23 +180,47 @@ Window {
 
                 // 关闭/删除按钮
                 RowLayout {
+                    id: closeAndDelete
                     y: parent.height - height - 5
                     x: parent.width - width - 5
                     spacing: 10
                     Button {
                         text: qsTr("Close Notebook")
                         onClicked: {
-                            // 处理输入内容
-                            notebookWindow.close()
+                            if(modified){
+                                unsavedDialog.open()
+                            }else{
+                                closeNotebookDialog.open()
+                            }
                         }
                     }
                     Button {
                         text: qsTr("Delete")
                         onClicked: {
-                            notebookWindow.close()
+                            if(modified){
+                                unsavedDialog.open()
+                            }else{
+                                deleteDialog.open()
+                            }
                         }
                     }
                 }
+            }
+        }
+
+        // hint Area
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.margins: 5
+            height: 90
+            border.color: "red"
+            visible: hint_area.text !== ""
+
+            TextArea {
+                id: hint_area
+                anchors.fill: parent
+                wrapMode: TextArea.Wrap
+                readOnly: true
             }
         }
 
@@ -176,6 +233,16 @@ Window {
             Button {
                 text: qsTr("Reset")
                 icon.source: "qrc:/icons/reset.svg"
+
+                onClicked: {
+                    name_field.text = notebooks_list.currentItem.name
+                    decs_field.text = notebooks_list.currentItem.decs
+                    pathField.text = notebooks_list.currentItem.rootPath
+
+                    Qt.callLater(() => {
+                        modified = false
+                    })
+                }
             }
 
             Item {
@@ -186,19 +253,92 @@ Window {
             Button {
                 text: qsTr("OK")
                 icon.source: "qrc:/icons/Ok.svg"
+
+                onClicked: {
+                    if(modified){
+                        if(name_field.text === ""){
+                            hint_area.text = qsTr("Please specify a name for the notebook.")
+                        }else{
+                            hint_area.text = ""
+                            modified = !MarkDownCtrl.noteBookmodel.updateNotebook(notebooks_list.currentIndex ,name_field.text, decs_field.text)
+                        }
+                    }
+                    if(!modified){
+                        notebookWindow.close()
+                    }
+                }
             }
 
             Button {
                 text: qsTr("Apply")
+                enabled: modified
                 icon.source: "qrc:/icons/Ok.svg"
+
+                onClicked: {
+                    if(name_field.text === ""){
+                        hint_area.text = qsTr("Please specify a name for the notebook.")
+                    }else{
+                        hint_area.text = ""
+                        modified = !MarkDownCtrl.noteBookmodel.updateNotebook(notebooks_list.currentIndex ,name_field.text, decs_field.text)
+                    }
+                }
             }
 
             Button {
                 text: qsTr("Cancel")
                 icon.source: "qrc:/icons/forbid.svg"
+
+                onClicked: notebookWindow.close()
             }
         }
     }
+
+    MessageDialog {
+        id: unsavedDialog
+        title: qsTr("Warning")
+        text: qsTr("There are unsaved changes to current notebook.")
+        buttons: MessageDialog.Ok
+    }
+
+    MessageDialog {
+        id: closeNotebookDialog
+        title: qsTr("Question")
+        text: qsTr("Close notebook (" + name_field.text + ")?\n\nThe notebook could be opened by MarkDownNote again via \"Open Other Notebooks\" operation.")
+        buttons: MessageDialog.Ok | MessageDialog.Cancel
+
+        onButtonClicked: function (button, role) {
+             switch (button) {
+             case MessageDialog.Ok:
+                 if(MarkDownCtrl.noteBookmodel.removeRow(notebooks_list.currentIndex)){
+                     notebooks_list.currentIndex = MarkDownCtrl.noteBookmodel.rowCount - 1
+                 }
+
+                 if(deleteDialog.clickOk){
+                    MarkDownCtrl.noteBookmodel.openFolder(pathField.text)
+                    deleteDialog.clickOk = false
+                 }
+                 break;
+             }
+         }
+    }
+
+    MessageDialog {
+        id: deleteDialog
+        title: qsTr("Warning")
+        text: qsTr("Please close the notebook in VNote first and delete the notebook root folder files manually.\n\nPress \"Ok\" to close the notebook and open the location of the notebook root folder.")
+        buttons: MessageDialog.Ok | MessageDialog.Cancel
+        property bool clickOk: false
+
+        onButtonClicked: function (button, role) {
+             switch (button) {
+             case MessageDialog.Ok:
+                 deleteDialog.clickOk = true
+                 closeNotebookDialog.open()
+                 break;
+             }
+         }
+    }
+
 
     onClosing: {
         notebookWindow.visible = false

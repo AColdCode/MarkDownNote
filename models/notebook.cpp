@@ -182,10 +182,7 @@ Note *Notebook::createNote(const QString &name)
         if (info.suffix() == "md")
             QTextStream(&file) << "# " + info.completeBaseName();
         note = new Note(newId, name, this);
-        m_notes.append(note);
-        emit notesChanged();
-        modifiedTime = QDateTime::currentDateTimeUtc();
-        save();
+        addNote(note);
         file.close();
     } else {
         qDebug() << "创建笔记失败";
@@ -221,6 +218,8 @@ void Notebook::addNote(Note *note)
 {
     m_notes.append(note);
     emit notesChanged();
+    modifiedTime = QDateTime::currentDateTimeUtc();
+    save();
 }
 
 void Notebook::addChild(Notebook *child)
@@ -294,4 +293,13 @@ void Notebook::updateModifiedTime()
     save();
     modifiedTime = QDateTime::currentDateTimeUtc();
     saveNotebookInfo();
+}
+
+Note *Notebook::addNoteWithContent(const QString &name, const QString &content)
+{
+    Note *note = new Note(++maxId, name, this);
+    note->content = content;
+    addNote(note);
+    saveNotebookInfo();
+    return note;
 }

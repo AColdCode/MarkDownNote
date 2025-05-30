@@ -38,6 +38,7 @@ public:
     void importNotesRecursively(const QString &path, const QStringList &suffixes);
     Note *findNoteByname(const QString &name);
     void updateModifiedTime();
+    Note *addNoteWithContent(const QString &name, const QString &content);
 
     QString m_name;
     QString description;

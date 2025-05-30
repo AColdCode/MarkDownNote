@@ -91,7 +91,7 @@ Rectangle {
                 Shortcut {
                     sequence: StandardKey.Save
                     onActivated: {
-                        MarkDownCtrl.editorModel.saveCurrentEditor(index, editor.text)
+                        editor.textDirty = !MarkDownCtrl.editorModel.saveCurrentEditor(index, editor.text)
                     }
                 }
 

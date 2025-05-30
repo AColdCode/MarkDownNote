@@ -63,6 +63,13 @@ bool Note::save(const QString &content)
     return false;
 }
 
+void Note::bacomeNewNote(const QString &content)
+{
+    createdTime = QDateTime::currentDateTimeUtc();
+    modifiedTime = createdTime;
+    this->content = content;
+}
+
 QString Note::name() const
 {
     return m_name;

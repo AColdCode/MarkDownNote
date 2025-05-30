@@ -27,6 +27,7 @@ public:
     explicit MarkDownCtrl(QObject *parent = nullptr);
 
     Q_INVOKABLE void openFile(const QString &filename);
+    void editorModelAddNote(Note *note);
 
     EditorCtrl *editorCtrl() const;
     void setEditorCtrl(EditorCtrl *newEditorCtrl);

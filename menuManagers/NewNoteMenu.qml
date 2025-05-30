@@ -60,7 +60,8 @@ SplitButton{
         SubMenuButton{
             label: qsTr("Open File")
             onClicked: {
-                MarkDownCtrl.newNotesCtrl.selectFile()
+                var filePath = MarkDownCtrl.newNotesCtrl.selectFile()
+                MarkDownCtrl.noteBookmodel.openFile(filePath)
             }
         }
     }

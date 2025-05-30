@@ -12,6 +12,7 @@ public:
     QJsonObject toJson() const;
     static Note *fromJson(const QJsonObject &obj, QObject *parent = nullptr);
     bool save(const QString &content);
+    void bacomeNewNote(const QString &content);
 
     int id;
     QString m_name;

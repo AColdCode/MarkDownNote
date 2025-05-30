@@ -38,13 +38,17 @@ void EditorModel::addEditor(Note *entry)
     emit countChanged(m_entries.count());
 }
 
-void EditorModel::closeEditor(int index)
+void EditorModel::closeEditor(int index, bool isSmallerCurrentIndex)
 {
     if (index < 0 || index >= m_entries.size())
         return;
     beginRemoveRows(QModelIndex(), index, index);
     m_entries.removeAt(index);
     endRemoveRows();
+
+    if (isSmallerCurrentIndex) {
+        emit frontEditorClosed();
+    }
 }
 
 QString EditorModel::getContent(int index) const
@@ -74,12 +78,12 @@ int EditorModel::openFile(Note *entry)
     return index;
 }
 
-void EditorModel::saveCurrentEditor(const int index, const QString &content)
+bool EditorModel::saveCurrentEditor(const int index, const QString &content)
 {
     if (index < 0 || index >= m_entries.size())
-        return;
+        return false;
     Note *entry = m_entries[index];
-    entry->save(content);
+    return entry->save(content);
 }
 
 void EditorModel::editorModified(int index, bool modified)
@@ -90,6 +94,11 @@ void EditorModel::editorModified(int index, bool modified)
                               "editorModified",
                               Q_ARG(QVariant, QVariant(index)),
                               Q_ARG(QVariant, QVariant(modified)));
+}
+
+int EditorModel::count()
+{
+    return m_entries.count();
 }
 
 int EditorModel::checkFileOpened(const QString &filePath)

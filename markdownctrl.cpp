@@ -47,6 +47,18 @@ void MarkDownCtrl::openFile(const QString &filename)
     }
 }
 
+void MarkDownCtrl::editorModelAddNote(Note *note)
+{
+    if (note == nullptr)
+        return;
+
+    int index = m_editorModel->openFile(note);
+
+    if (index != -1) {
+        m_tabBarNames->setProperty("currentIndex", index);
+    }
+}
+
 EditorCtrl *MarkDownCtrl::editorCtrl() const
 {
     return m_editorCtrl;

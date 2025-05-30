@@ -8,7 +8,7 @@ class NewNotesCtrl : public QObject
 public:
     explicit NewNotesCtrl(QObject *parent = nullptr);
 
-    Q_INVOKABLE void selectFile();
+    Q_INVOKABLE QString selectFile();
 
 signals:
 };

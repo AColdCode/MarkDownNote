@@ -15,11 +15,12 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void addEditor(Note *entry);
-    Q_INVOKABLE void closeEditor(int index);
+    Q_INVOKABLE void closeEditor(int index, bool isSmallerCurrentIndex);
     Q_INVOKABLE QString getContent(int index) const;
     Q_INVOKABLE int openFile(Note *entry);
-    Q_INVOKABLE void saveCurrentEditor(const int index, const QString &content);
+    Q_INVOKABLE bool saveCurrentEditor(const int index, const QString &content);
     Q_INVOKABLE void editorModified(int index, bool modified);
+    Q_INVOKABLE int count();
 
     QObject *tabName_repeater() const;
     void setTabName_repeater(QObject *newTabName_repeater);
@@ -27,6 +28,8 @@ public:
 signals:
 
     void countChanged(int newCount);
+
+    void frontEditorClosed();
 
     void tabName_repeaterChanged();
 

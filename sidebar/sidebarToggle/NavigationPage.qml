@@ -94,17 +94,44 @@ Rectangle{
             model: MarkDownCtrl.noteBookmodel
             textRole: "name"
 
+            TapHandler {
+                onTapped: {
+                    if(MarkDownCtrl.noteBookmodel.count() === 0){
+                        MarkDownCtrl.noteBookCtrl.openNewNotebookDialog()
+                    }
+                }
+            }
+
             Connections {
                 target: MarkDownCtrl.noteBookmodel
-                function onCountChanged(newCount) {
+                function onAddCountChanged(newCount) {
                     notebookComboBox.currentIndex = newCount - 1
+                }
+            }
+
+            Connections {
+                target: MarkDownCtrl.noteBookmodel
+                function onLostCountChanged(newCount) {
+                    var lastIndex = notebookComboBox.currentIndex
+                    Qt.callLater(() => {
+                        if(lastIndex >= newCount){
+                            notebookComboBox.currentIndex = newCount - 1
+                        }else{
+                            notebookComboBox.currentIndex = lastIndex
+                        }
+                    })
                 }
             }
 
             onCurrentIndexChanged: {
                 MarkDownCtrl.noteBookmodel.currentNotebook = MarkDownCtrl.noteBookmodel.getNotebookByIndex(currentIndex)
-                note_listView.model = MarkDownCtrl.noteBookmodel.currentNotebook.notes
-                MarkDownCtrl.noteBookCtrl.currentNotebookName = MarkDownCtrl.noteBookmodel.currentNotebook.name
+                if(MarkDownCtrl.noteBookmodel.currentNotebook){
+                    note_listView.model = MarkDownCtrl.noteBookmodel.currentNotebook.notes
+                    MarkDownCtrl.noteBookCtrl.currentNotebookName = MarkDownCtrl.noteBookmodel.currentNotebook.name
+                }else{
+                    note_listView.model = null
+                    MarkDownCtrl.noteBookCtrl.currentNotebookName = null
+                }
             }
         }
 
@@ -122,8 +149,6 @@ Rectangle{
                 anchors.margins: 10
                 model: ListModel {
                     id: notemodel
-                    ListElement { name: "笔记1.md" }
-                    ListElement { name: "笔记2.md" }
                 }
 
                 delegate: ItemDelegate {
