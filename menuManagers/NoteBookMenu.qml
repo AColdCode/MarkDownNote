@@ -9,6 +9,7 @@ import "noteBookMenu"
 import MarkDownNote 1.0
 
 MenuButton {
+    id: noteBook_menu
     text: qsTr("Notebook")
     hoverText: qsTr("Notebook")
     onClicked: popMenu.open()
@@ -60,6 +61,14 @@ MenuButton {
                 id: managementNotebook
                 visible: false
             }
+
+            Component.onCompleted: {
+                MarkDownCtrl.noteBookCtrl.managementNotebook = managementNotebook
+            }
         }
+    }
+
+    Component.onCompleted: {
+        MarkDownCtrl.noteBookCtrl.noteBookMenu = noteBook_menu
     }
 }

@@ -91,12 +91,20 @@ void NoteBookCtrl::newFromFolder(const QString &rootPath, QObject *dialog)
     }
 }
 
-void NoteBookCtrl::openNewNotebookDialog()
+void NoteBookCtrl::openNewNoteDialog()
 {
-    if (m_noteBook_new == nullptr)
+    if (m_noteBook_new == nullptr || m_noteBookMenu == nullptr)
         return;
-
+    QMetaObject::invokeMethod(m_noteBookMenu, "open", Qt::AutoConnection);
     m_noteBook_new->setProperty("visible", true);
+}
+
+void NoteBookCtrl::openManageDialog()
+{
+    if (m_managementNotebook == nullptr || m_noteBookMenu == nullptr)
+        return;
+    QMetaObject::invokeMethod(m_noteBookMenu, "open", Qt::AutoConnection);
+    m_managementNotebook->setProperty("visible", true);
 }
 
 QString NoteBookCtrl::currentNotebookName() const
@@ -125,6 +133,19 @@ void NoteBookCtrl::setSuffixListModel(SuffixListModel *newSuffixListModel)
     emit suffixListModelChanged();
 }
 
+QObject *NoteBookCtrl::managementNotebook() const
+{
+    return m_managementNotebook;
+}
+
+void NoteBookCtrl::setManagementNotebook(QObject *newManagementNotebook)
+{
+    if (m_managementNotebook == newManagementNotebook)
+        return;
+    m_managementNotebook = newManagementNotebook;
+    emit managementNotebookChanged();
+}
+
 QObject *NoteBookCtrl::noteBook_new() const
 {
     return m_noteBook_new;
@@ -136,6 +157,19 @@ void NoteBookCtrl::setNoteBook_new(QObject *newNoteBook_new)
         return;
     m_noteBook_new = newNoteBook_new;
     emit noteBook_newChanged();
+}
+
+QObject *NoteBookCtrl::noteBookMenu() const
+{
+    return m_noteBookMenu;
+}
+
+void NoteBookCtrl::setNoteBookMenu(QObject *newNoteBookMenu)
+{
+    if (m_noteBookMenu == newNoteBookMenu)
+        return;
+    m_noteBookMenu = newNoteBookMenu;
+    emit noteBookMenuChanged();
 }
 
 void NoteBookCtrl::collectSuffixesRecursively(const QDir &dir, QSet<QString> &suffixSet)

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 import "../../buttons"
 import "../../dialogs"
@@ -56,12 +57,8 @@ Rectangle{
                     }
                 }
 
-                ManageNotebookDialog {
-                    id: notebookDialog
-                }
-
                 Manage_notebooksButton {
-                    notebookDialog: notebookDialog
+                    id: manage_notebooksbutton
                 }
 
                 Button {
@@ -97,10 +94,18 @@ Rectangle{
             TapHandler {
                 onTapped: {
                     if(MarkDownCtrl.noteBookmodel.count() === 0){
-                        MarkDownCtrl.noteBookCtrl.openNewNotebookDialog()
+                        MarkDownCtrl.noteBookCtrl.openNewNoteDialog()
                     }
                 }
             }
+
+            // MessageDialog {
+            //     id: emptyNotebookDialog
+            //     modality: Qt.WindowModal
+            //     title: qsTr("Hinting")
+            //     text: qsTr("Please create a new notebook or open a notebook in the notebook menu.")
+            //     buttons: MessageDialog.Ok
+            // }
 
             Connections {
                 target: MarkDownCtrl.noteBookmodel

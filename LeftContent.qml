@@ -53,8 +53,8 @@ ColumnLayout {
             model: MarkDownCtrl.editorModel
 
             ColumnLayout {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+                height: parent.height
+                width: parent.width
                 spacing: 0
                 property alias textArea: editor.textArea
 
@@ -69,8 +69,6 @@ ColumnLayout {
                 RowLayout {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.minimumHeight: parent.height - topbar.height
-                    Layout.minimumWidth: parent.width
                     Layout.verticalStretchFactor: 1
 
                     EditorPage {
@@ -108,6 +106,16 @@ ColumnLayout {
             function onFrontEditorClosed() {
                 Qt.callLater(() => {
                     tabBarNames.currentIndex = tabBarNames.currentIndex - 1
+                })
+            }
+        }
+
+        Connections {
+            target: MarkDownCtrl.editorModel
+
+            function onFirstEditorClose() {
+                Qt.callLater(() => {
+                    tabBarNames.currentIndex = 0
                 })
             }
         }
