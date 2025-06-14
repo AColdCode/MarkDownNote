@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import "../../buttons"
-import "../../dialogs"
 
 import MarkDownNote 1.0
 
@@ -121,14 +120,6 @@ Rectangle{
                 }
             }
 
-            // MessageDialog {
-            //     id: emptyNotebookDialog
-            //     modality: Qt.WindowModal
-            //     title: qsTr("Hinting")
-            //     text: qsTr("Please create a new notebook or open a notebook in the notebook menu.")
-            //     buttons: MessageDialog.Ok
-            // }
-
             Connections {
                 target: MarkDownCtrl.noteBookmodel
                 function onAddCountChanged(newCount) {
@@ -235,6 +226,9 @@ Rectangle{
         target: MarkDownCtrl.noteBookmodel
         function onUpdateNoteModel() {
             note_listView.model = MarkDownCtrl.noteBookmodel.currentNotebook.notes
+            Qt.callLater(()=>{
+                note_listView.currentIndex = note_listView.count - 1
+            })
         }
     }
 }

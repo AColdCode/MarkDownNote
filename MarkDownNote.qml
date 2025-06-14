@@ -10,6 +10,8 @@ ApplicationWindow {
     id: mainWindow
     width: 800
     height: 600
+    minimumHeight: 300
+    minimumWidth: 400
     visible: true
     title: qsTr("Markdown Note")
     flags: Qt.Window | Qt.BypassWindowManagerHint
@@ -25,11 +27,6 @@ ApplicationWindow {
         Layout.fillWidth: true
         Layout.fillHeight: true
     }
-    // SearchLocationList{
-    //     id:searchLocationList
-    //     Layout.fillWidth: true
-    //     Layout.fillHeight: true
-    // }
 
     Component.onCompleted: {
         MarkDownCtrl.expandCtrl.mainWindow = mainWindow

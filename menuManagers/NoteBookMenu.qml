@@ -20,15 +20,15 @@ MenuButton {
         y: parent.y + parent.height
 
         MenuItem{
+            id: newNotebookMenu
             text: qsTr("New Notebook")
             onClicked: noteBook_new.visible = true
             NewNotebookDialog{
                 id: noteBook_new
                 visible: false
-
-                Component.onCompleted: {
-                    MarkDownCtrl.noteBookCtrl.noteBook_new = noteBook_new
-                }
+            }
+            Component.onCompleted: {
+                MarkDownCtrl.noteBookCtrl.newNotebookMenu = newNotebookMenu
             }
         }
         MenuItem{
@@ -54,6 +54,7 @@ MenuButton {
         MenuSeparator {}
 
         MenuItem {
+            id: managementNotebook_
             Layout.fillWidth: true
             text: qsTr("Management Notebook")
             onClicked: managementNotebook.visible = true
@@ -63,12 +64,12 @@ MenuButton {
             }
 
             Component.onCompleted: {
-                MarkDownCtrl.noteBookCtrl.managementNotebook = managementNotebook
+                MarkDownCtrl.noteBookCtrl.managementNotebook = managementNotebook_
             }
         }
     }
 
     Component.onCompleted: {
-        MarkDownCtrl.noteBookCtrl.noteBookMenu = noteBook_menu
+        MarkDownCtrl.noteBookCtrl.noteBookMenu = popMenu
     }
 }

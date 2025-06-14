@@ -43,7 +43,7 @@ Window {
             text: qsTr("Ok")
             icon.source: "qrc:/icons/Ok.svg"
             onClicked: {
-                MarkDownCtrl.menuCtrl.addNewQuickNoteScheme(newSchemeName.text)
+                MarkDownCtrl.quickNoteListModel.addScheme(MarkDownCtrl.noteBookmodel.currentNotebookPath(), newSchemeName.text, "quick_note_%da%.md")
                 newSchemeName.clear()
                 newSchemeWindow.close()
             }
@@ -52,6 +52,7 @@ Window {
             text: qsTr("Cancel")
             icon.source: "qrc:/icons/forbid.svg"
             onClicked: {
+                newSchemeName.clear()
                 newSchemeWindow.close()
             }
         }

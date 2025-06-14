@@ -5,6 +5,7 @@ import QtQuick.Layouts
 Rectangle {
     color: "#f5f5f5"
     border.color: "gray"
+    property bool modified: false
 
     ColumnLayout {
         width: parent.width
@@ -41,5 +42,13 @@ Rectangle {
             text: qsTr("Recover last session on start")
             checked: true
         }
+    }
+
+    function reset() {
+        modified = false
+    }
+
+    function apply() {
+        modified = true
     }
 }

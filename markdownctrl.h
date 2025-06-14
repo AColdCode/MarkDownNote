@@ -5,6 +5,7 @@
 
 #include "models/notebooklistmodel.h"
 #include "models/editormodel.h"
+#include "models/quicknotelistmodel.h"
 
 class ExpandCtrl;
 class EditorCtrl;
@@ -68,6 +69,9 @@ public:
     QObject *tabBarNames() const;
     void setTabBarNames(QObject *newTabBarNames);
 
+    QuickNoteListModel *quickNoteListModel() const;
+    void setQuickNoteListModel(QuickNoteListModel *newQuickNoteListModel);
+
 signals:
     void editorCtrlChanged();
 
@@ -96,6 +100,8 @@ signals:
     void tabBarChanged();
 
     void tabBarNamesChanged();
+
+    void quickNoteListModelChanged();
 
 private:
     ExpandCtrl *m_expandCtrl = nullptr;
@@ -148,4 +154,8 @@ private:
     QObject *m_tabBarNames = nullptr;
     Q_PROPERTY(
         QObject *tabBarNames READ tabBarNames WRITE setTabBarNames NOTIFY tabBarNamesChanged FINAL)
+
+    QuickNoteListModel *m_quickNoteListModel = nullptr;
+    Q_PROPERTY(QuickNoteListModel *quickNoteListModel READ quickNoteListModel WRITE
+                   setQuickNoteListModel NOTIFY quickNoteListModelChanged FINAL)
 };

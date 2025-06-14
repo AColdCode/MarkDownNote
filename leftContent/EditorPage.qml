@@ -1,9 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Window
 
 import MarkDownNote 1.0
-
 
 Rectangle {
     id: editorBackGround
@@ -12,6 +12,13 @@ Rectangle {
     property alias font: editor.font
     property alias textArea: editor
     property int currentLine: 0
+
+    // 添加TextMetrics用于计算单行高度
+    TextMetrics {
+        id: textMetrics
+        font: editor.font
+        text: "X"
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -23,7 +30,6 @@ Rectangle {
             Layout.fillHeight: true
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
             clip: true
-            Layout.topMargin: 5
 
             ListView {
                 id: lineNumberView
@@ -40,7 +46,7 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     color: lineNumberView.currentIndex === index ? "black" : "lightgrey"
-                    height: editor.contentHeight / editor.lineCount
+                    height: textMetrics.height
                     width: lineNumberView.width
                 }
             }
@@ -72,13 +78,18 @@ Rectangle {
                 width: Math.max(implicitWidth, editorScrollView.width)
                 height: contentHeight
 
-                property bool textDirty: false  // 标记是否内容修改
+                // 确保编辑器行高与行号区域一致
+                topPadding: 0
+                bottomPadding: 0
+                leftPadding: 5
+                rightPadding: 5
+
+                property bool textDirty: false
                 property bool firstLoad: true
 
-                // 自动保存定时器
                 Timer {
                     id: autoSaveTimer
-                    interval: 3000    // 3秒后自动保存
+                    interval: 3000
                     repeat: false
                     onTriggered: {
                         if (editor.textDirty) {
@@ -127,7 +138,6 @@ Rectangle {
                     start = getCurrentLineStart();
                 }
 
-
                 property int selection_Start: 0
                 property int selection_End: 0
                 property int oldselection_Start:0
@@ -137,25 +147,18 @@ Rectangle {
                 property int oldposition:0
                 property int newposition:0
 
-
                 function getCurrentLineStart() {
                     const cursorPos =oldposition
                     const fullText = editor.text;
-
-                    // 找到光标前最近的换行符
                     const start = fullText.lastIndexOf('\n', cursorPos - 1) + 1;
-
                     return start;
                 }
-
 
                 function getCurrentLineEnd() {
                     const cursorPos = editor.cursorPosition;
                     const fullText = editor.text;
-                    // 找到光标后最近的换行符
                     let end = fullText.indexOf('\n', cursorPos);
                     if (end === -1) end = fullText.length;
-
                     return end;
                 }
 

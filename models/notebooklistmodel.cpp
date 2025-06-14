@@ -218,6 +218,9 @@ void NotebookListModel::createNewNote(const QString &name)
     if (note != nullptr) {
         emit updateNoteModel();
     }
+
+    MarkDownCtrl *markDownCtrl = qobject_cast<MarkDownCtrl *>(parent());
+    markDownCtrl->openFile(name);
 }
 
 void NotebookListModel::newNoteBookFromFolder(const QString &name,
@@ -307,6 +310,38 @@ void NotebookListModel::openFolder(const QString &path)
 int NotebookListModel::count()
 {
     return m_notebooks.count();
+}
+
+QString NotebookListModel::currentNotebookPath()
+{
+    if (m_currentNotebook == nullptr)
+        return "/root";
+    return m_currentNotebook->rootPath;
+}
+
+void NotebookListModel::createQuickNote(const QString &noteName)
+{
+    if (m_currentNotebook == nullptr) {
+        QMessageBox::information(nullptr,
+                                 tr("information"),
+                                 tr("The quick note should be created within a notebook."),
+                                 QMessageBox::Ok);
+        return;
+    }
+
+    QString newNoteName = noteName;
+    QDateTime now = QDateTime::currentDateTime();
+
+    // 替换常见的标记
+    newNoteName.replace("%da%", now.toString("yyyyMMdd_hhmmss"));
+    newNoteName.replace("%d%", now.toString("dd"));
+    newNoteName.replace("%m%", now.toString("MM"));
+    newNoteName.replace("%y%", now.toString("yyyy"));
+    newNoteName.replace("%h%", now.toString("hh"));
+    newNoteName.replace("%min%", now.toString("mm"));
+    newNoteName.replace("%s%", now.toString("ss"));
+
+    createNewNote(newNoteName);
 }
 
 Notebook *NotebookListModel::currentNotebook() const

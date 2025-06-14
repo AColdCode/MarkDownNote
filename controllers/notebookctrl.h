@@ -28,11 +28,11 @@ public:
     QObject *managementNotebook() const;
     void setManagementNotebook(QObject *newManagementNotebook);
 
-    QObject *noteBook_new() const;
-    void setNoteBook_new(QObject *newNoteBook_new);
-
     QObject *noteBookMenu() const;
     void setNoteBookMenu(QObject *newNoteBookMenu);
+
+    QObject *newNotebookMenu() const;
+    void setNewNotebookMenu(QObject *newNewNotebookMenu);
 
 signals:
 
@@ -42,9 +42,9 @@ signals:
 
     void managementNotebookChanged();
 
-    void noteBook_newChanged();
-
     void noteBookMenuChanged();
+
+    void newNotebookMenuChanged();
 
 private:
     QString m_currentNotebookName;
@@ -59,9 +59,9 @@ private:
     Q_PROPERTY(QObject *managementNotebook READ managementNotebook WRITE setManagementNotebook
                    NOTIFY managementNotebookChanged FINAL)
 
-    QObject *m_noteBook_new = nullptr;
-    Q_PROPERTY(QObject *noteBook_new READ noteBook_new WRITE setNoteBook_new NOTIFY
-                   noteBook_newChanged FINAL)
+    QObject *m_newNotebookMenu = nullptr;
+    Q_PROPERTY(QObject *newNotebookMenu READ newNotebookMenu WRITE setNewNotebookMenu NOTIFY
+                   newNotebookMenuChanged FINAL)
 
     QObject *m_noteBookMenu = nullptr;
     Q_PROPERTY(QObject *noteBookMenu READ noteBookMenu WRITE setNoteBookMenu NOTIFY

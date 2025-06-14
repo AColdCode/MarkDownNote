@@ -4,37 +4,38 @@ import QtQuick.Layouts
 import QtQuick.Window
 import QtQuick.Dialogs
 
+import MarkDownNote 1.0
+
 Window {
     id: quickNoteWindow
     width: showlist ? 200 : 500
-    height: showlist ? quicknote_model.count * 32 + 50 : 100
+    height: showlist ? quick_list.count * 32 + 50 : 100
     // minimumHeight: 50
     minimumWidth: 200
     title: showlist ? qsTr("New Quick Note") : qsTr("Information")
     flags: Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
     visible: false
     modality: Qt.ApplicationModal
-    property bool showlist: quicknote_model.count !== 0
-
-    ListModel{
-       id: quicknote_model
-    }
+    property bool showlist: quick_list.count !== 0
 
     ListView {
         id: quick_list
         anchors.fill: parent
         spacing: 1
         visible: showlist
-        model: quicknote_model
+        model: MarkDownCtrl.quickNoteListModel
         currentIndex: 0
         clip: true
         orientation: ListView.Vertical
         property bool isfooter: false
 
         delegate: Rectangle {
+            id: quickItem
             width: parent.width
             height: 31
             color: delegat_hover.hovered ? "lightgrey" : "transparent"
+            property string noteName: model.noteName
+
             RowLayout {
                 width: parent.width
                 height: parent.height
@@ -72,6 +73,7 @@ Window {
                 onTapped: {
                     quick_list.currentIndex = index
                     quick_list.isfooter = false
+                    MarkDownCtrl.noteBookmodel.createQuickNote(quickItem.noteName)
                 }
             }
 

@@ -39,6 +39,8 @@ public:
     Q_INVOKABLE void openFile(const QString &filePath);
     Q_INVOKABLE void openFolder(const QString &path);
     Q_INVOKABLE int count();
+    Q_INVOKABLE QString currentNotebookPath();
+    Q_INVOKABLE void createQuickNote(const QString &noteName);
 
     Notebook *currentNotebook() const;
     void setCurrentNotebook(Notebook *newCurrentNotebook);

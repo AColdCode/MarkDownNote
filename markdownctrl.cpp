@@ -25,6 +25,7 @@ MarkDownCtrl::MarkDownCtrl(QObject *parent)
     , m_sidebarCtrl{new SidebarCtrl(this)}
     , m_topbarCtrl{new TopbarCtrl(this)}
     , m_editorModel{new EditorModel(this)}
+    , m_quickNoteListModel{new QuickNoteListModel(this)}
 {}
 
 void MarkDownCtrl::openFile(const QString &filename)
@@ -226,4 +227,17 @@ void MarkDownCtrl::setTabBarNames(QObject *newTabBarNames)
         return;
     m_tabBarNames = newTabBarNames;
     emit tabBarNamesChanged();
+}
+
+QuickNoteListModel *MarkDownCtrl::quickNoteListModel() const
+{
+    return m_quickNoteListModel;
+}
+
+void MarkDownCtrl::setQuickNoteListModel(QuickNoteListModel *newQuickNoteListModel)
+{
+    if (m_quickNoteListModel == newQuickNoteListModel)
+        return;
+    m_quickNoteListModel = newQuickNoteListModel;
+    emit quickNoteListModelChanged();
 }
