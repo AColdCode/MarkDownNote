@@ -8,6 +8,7 @@ import MarkDownNote 1.0
 Rectangle{
     id: toolbar
     color: "#f5f5f5"
+    property bool editorPageVisible: true
 
 
     property var toolbarItems: [
@@ -46,8 +47,11 @@ Rectangle{
             background: Rectangle {
                 color: "transparent"
             }
-            icon.source: "qrc:/icons/read_editor.svg"
-            onClicked: console.log("read_editor Clicked")
+            icon.source: editorPageVisible ? "qrc:/icons/read_editor.svg":"qrc:/icons/edit_editor.svg"
+            onClicked:{
+                editorPageVisible=!editorPageVisible
+                console.log("read_editor Clicked")
+            }
             ToolTip.text: `${"阅读"}${" (Ctrl+T)" }`
             ToolTip.visible: hovered
         }
@@ -146,10 +150,6 @@ Rectangle{
                         PathLine { x: 0.5; y: height } // 终点坐标
                     }
                 }
-                // Item {
-                //     width: (index === 19) ? 20 : 0
-                //     height: parent.height
-                // }
                 onClicked: {
                     switch(index){
                     case 1:
@@ -234,7 +234,6 @@ Rectangle{
                 ToolTip.visible: hovered
             }
         }
-
         // 溢出菜单按钮（右侧下拉）
         ToolButton {
             id: overflowMenu

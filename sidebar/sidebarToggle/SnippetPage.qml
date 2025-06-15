@@ -8,6 +8,8 @@ Rectangle{
     width: parent.width
     height:parent.height
     color:"transparent"
+    property string currentTabIndex: MarkDownCtrl.tabBarNames.tabBarName
+    property var theModel: MarkDownCtrl.editorModel
     ColumnLayout{
         anchors.fill: parent
         spacing: 5
@@ -102,30 +104,30 @@ Rectangle{
                     anchors.fill: parent
                     boundsBehavior: Flickable.StopAtBounds  // 边界行为控制
                     model: ListModel {
-                        ListElement { name: "d*"; checked: true ;describe:"没有前导零的日期数字（‘1’到‘31’）"}
-                        ListElement { name: "dd*"; checked: false;describe:"带前导零的日期数字（‘01’到‘31’）" }
-                        ListElement { name: "ddd*" ; checked: false;describe:"缩写的本地化日期名字（如‘一’到‘日’）" }
-                        ListElement { name: "dddd*" ; checked: false ;describe:"本地化日期名字（如‘星期一’到‘星期日’）"}
-                        ListElement { name: "M*" ; checked: false ;describe:"没有前导零的月份数字（‘1’到‘12’）"}
-                        ListElement { name: "MM*" ; checked: false ;describe:"带前导零的月份数字（‘01’到‘12’）"}
-                        ListElement { name: "MMM*" ; checked: false ;describe:"缩小的本地化月份名字（如‘一’到‘十二’）"}
-                        ListElement { name: "MMMM*" ; checked: false ;describe:"本地化月份名字（如‘一月’到‘十二月’）"}
-                        ListElement { name: "yy*" ; checked: false ;describe:"两位数的年份数字（‘00’到‘99’）"}
-                        ListElement { name: "yyyy*" ; checked: false ;describe:"四位数的年份数字"}
-                        ListElement { name: "w*"; checked: false ;describe:"没有前导零的星期数字（‘1’到‘53’）"}
-                        ListElement { name: "ww*"; checked: false ;describe:"带前导零的日期数字（‘01’到‘53’）"}
-                        ListElement { name: "H*"; checked: false ;describe:"没有前导零的小时（‘0’到‘23’）"}
-                        ListElement { name: "HH*"; checked: false ;describe:"带前导零的小时（‘00’到‘23’）"}
-                        ListElement { name: "m*"; checked: false ;describe:"没有前导零的分（‘0’到‘59’）"}
-                        ListElement { name: "mm*"; checked: false ;describe:"带前导零的分（‘00’到‘59’）"}
-                        ListElement { name: "s*"; checked: false ;describe:"没有前导零的秒（‘0’到‘59’）"}
-                        ListElement { name: "ss*"; checked: false ;describe:"带前导零的秒（‘00’到‘59’）"}
-                        ListElement { name: "date*"; checked: false ;describe:"日期（‘2021-02-24’）"}
-                        ListElement { name: "da*"; checked: false ;describe:"缩写的日期（‘20210224’）"}
-                        ListElement { name: "time*"; checked: false ;describe:"时间（‘16：51：02’）"}
-                        ListElement { name: "datetime*"; checked: false ;describe:"日期时间（‘2021-02-24_16：51：02’）"}
-                        ListElement { name: "note*"; checked: false ;describe:"当前笔记名字"}
-                        ListElement { name: "no*"; checked: false ;describe:"当前笔记的完整基本名字"}
+                        ListElement { name: "d"; checked: true ;describe:"没有前导零的日期数字（‘1’到‘31’）"}
+                        ListElement { name: "dd"; checked: false;describe:"带前导零的日期数字（‘01’到‘31’）" }
+                        ListElement { name: "ddd" ; checked: false;describe:"缩写的本地化日期名字（如‘一’到‘日’）" }
+                        ListElement { name: "dddd" ; checked: false ;describe:"本地化日期名字（如‘星期一’到‘星期日’）"}
+                        ListElement { name: "M" ; checked: false ;describe:"没有前导零的月份数字（‘1’到‘12’）"}
+                        ListElement { name: "MM" ; checked: false ;describe:"带前导零的月份数字（‘01’到‘12’）"}
+                        ListElement { name: "MMM" ; checked: false ;describe:"缩小的本地化月份名字（如‘一’到‘十二’）"}
+                        ListElement { name: "MMMM" ; checked: false ;describe:"本地化月份名字（如‘一月’到‘十二月’）"}
+                        ListElement { name: "yy" ; checked: false ;describe:"两位数的年份数字（‘00’到‘99’）"}
+                        ListElement { name: "yyyy" ; checked: false ;describe:"四位数的年份数字"}
+                        ListElement { name: "w"; checked: false ;describe:"没有前导零的星期数字（‘1’到‘53’）"}
+                        ListElement { name: "ww"; checked: false ;describe:"带前导零的日期数字（‘01’到‘53’）"}
+                        ListElement { name: "H"; checked: false ;describe:"没有前导零的小时（‘0’到‘23’）"}
+                        ListElement { name: "HH"; checked: false ;describe:"带前导零的小时（‘00’到‘23’）"}
+                        ListElement { name: "m"; checked: false ;describe:"没有前导零的分（‘0’到‘59’）"}
+                        ListElement { name: "mm"; checked: false ;describe:"带前导零的分（‘00’到‘59’）"}
+                        ListElement { name: "s"; checked: false ;describe:"没有前导零的秒（‘0’到‘59’）"}
+                        ListElement { name: "ss"; checked: false ;describe:"带前导零的秒（‘00’到‘59’）"}
+                        ListElement { name: "date"; checked: false ;describe:"日期（‘2021-02-24’）"}
+                        ListElement { name: "da"; checked: false ;describe:"缩写的日期（‘20210224’）"}
+                        ListElement { name: "time"; checked: false ;describe:"时间（‘16：51：02’）"}
+                        ListElement { name: "datetime"; checked: false ;describe:"日期时间（‘2021-02-24_16：51：02’）"}
+                        ListElement { name: "note"; checked: false ;describe:"当前笔记名字"}
+                        ListElement { name: "no"; checked: false ;describe:"当前笔记的完整基本名字"}
                         // ... 其他列表项 ...
                     }
                     property int selectedIndex: -1
@@ -143,7 +145,7 @@ Rectangle{
                         height: 20
                         Text {
                             id:textarea
-                            text: model.name
+                            text: model.name+"*"
                             font.pointSize: 10
                         }
                         // 背景效果
@@ -168,10 +170,58 @@ Rectangle{
                         MouseArea {
                             anchors.fill: parent
                             hoverEnabled: true
+
                             onClicked: {
                                 listView.selectedIndex = index;
+
+                                // 更新选中状态
                                 for (var i = 0; i < listView.model.count; ++i) {
                                     listView.model.setProperty(i, "checked", i === index);
+                                }
+                                // 生成格式文本
+                                var formatText = "";
+                                var dateText="";
+
+                                if (index <= 17) { // 0-17项统一处理
+                                    formatText = listView.model.get(index).name;
+                                    dateText = Qt.formatDateTime(new Date(), formatText);
+                                    } else { // 特殊格式单独处理
+                                switch(index) {
+                                case 18:{
+                                    formatText = "yyyy-MM-dd";
+                                    dateText = Qt.formatDateTime(new Date(), formatText);
+                                    break;
+                                }
+                                case 19:{
+                                    formatText = "yyyyMMdd";
+                                    dateText = Qt.formatDateTime(new Date(), formatText);
+                                    break;
+                                }
+                                case 20:{
+                                    formatText = "hh:mm:ss";
+                                    dateText = Qt.formatDateTime(new Date(), formatText);
+                                    break;  // 修正秒数显示
+                                }
+                                case 21:{
+                                    formatText = "yyyy-MM-dd_hh:mm:ss";
+                                    dateText = Qt.formatDateTime(new Date(), formatText);
+                                    break;
+                                }
+                                case 22:{
+
+                                    dateText =currentTabIndex;
+                                    break;
+                                }
+                                case 23:{
+                                    dateText =currentTabIndex.replace(/\.md$/, "");
+                                    break;
+                                }
+                                }
+                                }
+
+                                // 插入到编辑器（仅插入一次）
+                                if (dateText !== "") {
+                                    MarkDownCtrl.topbarCtrl.insertText(dateText);
                                 }
                             }
                         }

@@ -7,6 +7,7 @@ import MarkDownNote 1.0
 Item {
     id: tabBarNames
     property int currentIndex: -1
+    property string tabBarName: ""
 
     Flickable {
         id: tabFlick
@@ -43,7 +44,7 @@ Item {
                             text: model.fileName
                             icon.source: "qrc:/icons/buffer.svg"
                             icon.color: tabName.modified ? "red" : "black"
-                            onClicked: tabBarNames.currentIndex = index
+                            onClicked: {tabBarNames.currentIndex = index;tabBarNames.tabBarName=text;}
                             background: Rectangle {
                                 color: "transparent"
                             }
@@ -64,7 +65,8 @@ Item {
                             icon.source: "qrc:/icons/delete.svg"
                             icon.color: closeHover.hovered ? "white" : "grey"
                             onClicked: {
-                                MarkDownCtrl.editorModel.closeEditor(index, tabBarNames.currentIndex >= index)
+                                MarkDownCtrl.editorModel.closeEditor(index, tabBarNames.currentIndex >= index);
+
                             }
                             background: Rectangle {
                                 color: closeHover.hovered ? "#ff6666" : "transparent"

@@ -100,3 +100,13 @@ void TopbarCtrl::menuItemSelected(int type)
         break;
     }
 }
+
+void TopbarCtrl::insertText(const QString &content)
+{
+    if (!m_textArea)
+        return;
+    int position = m_textArea->property("cursorPosition").toInt();
+
+    // 方法1：直接调用QML方法（需QML对象有insert方法）
+    QMetaObject::invokeMethod(m_textArea, "insert", Q_ARG(int, position), Q_ARG(QString, content));
+}

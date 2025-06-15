@@ -12,6 +12,7 @@ public:
     void setTextArea(QObject *newTextArea);
     Q_INVOKABLE void onBoldClicked();
     Q_INVOKABLE void menuItemSelected(int type);
+    Q_INVOKABLE void insertText(const QString &content);
 
 signals:
 

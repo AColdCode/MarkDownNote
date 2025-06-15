@@ -73,6 +73,7 @@ ColumnLayout {
 
                     EditorPage {
                         id: editor
+                        visible: topbar.editorPageVisible
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         font.pixelSize: 18
