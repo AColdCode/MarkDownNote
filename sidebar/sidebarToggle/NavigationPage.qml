@@ -1,9 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 import "../../buttons"
-import "../../dialogs"
 
 import MarkDownNote 1.0
 
@@ -78,12 +78,8 @@ Rectangle{
                     }
                 }
 
-                ManageNotebookDialog {
-                    id: notebookDialog
-                }
-
                 Manage_notebooksButton {
-                    notebookDialog: notebookDialog
+                    id: manage_notebooksbutton
                 }
 
                 Button {
@@ -119,7 +115,7 @@ Rectangle{
             TapHandler {
                 onTapped: {
                     if(MarkDownCtrl.noteBookmodel.count() === 0){
-                        MarkDownCtrl.noteBookCtrl.openNewNotebookDialog()
+                        MarkDownCtrl.noteBookCtrl.openNewNoteDialog()
                     }
                 }
             }
@@ -230,6 +226,9 @@ Rectangle{
         target: MarkDownCtrl.noteBookmodel
         function onUpdateNoteModel() {
             note_listView.model = MarkDownCtrl.noteBookmodel.currentNotebook.notes
+            Qt.callLater(()=>{
+                note_listView.currentIndex = note_listView.count - 1
+            })
         }
     }
 }

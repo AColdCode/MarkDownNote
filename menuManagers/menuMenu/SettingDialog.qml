@@ -17,7 +17,7 @@ Window {
     visible: false
     modality: Qt.ApplicationModal
     color: "#f5f5f5"
-    property bool isChanged: false
+    property bool isChanged: quickAccess_content.modified || general_content.modified
 
 
     ColumnLayout {
@@ -100,11 +100,17 @@ Window {
             }
 
             Button {
+                id: reset_btn
                 text: qsTr("Reset")
                 icon.source: "qrc:/icons/reset.svg"
+                enabled: isChanged
 
                 onClicked: {
-                    isChanged = false
+                    if(selectSetting_list.currentIndex === 0) {
+                        general_content.reset()
+                    }else if (selectSetting_list.currentIndex === 1){
+                        quickAccess_content.reset()
+                    }
                 }
             }
 
@@ -118,18 +124,25 @@ Window {
                 icon.source: "qrc:/icons/Ok.svg"
 
                 onClicked: {
-                    isChanged = false
+                    if(isChanged) {
+                        apply_btn.clicked()
+                    }
                     settingWindow.close()
                 }
             }
 
             Button {
+                id: apply_btn
                 text: qsTr("Apply")
                 icon.source: "qrc:/icons/Ok.svg"
                 enabled: isChanged
 
                 onClicked: {
-                    settingWindow.close()
+                    if(selectSetting_list.currentIndex === 0) {
+                        general_content.apply()
+                    }else if (selectSetting_list.currentIndex === 1){
+                        quickAccess_content.apply()
+                    }
                 }
             }
 
@@ -138,6 +151,10 @@ Window {
                 icon.source: "qrc:/icons/forbid.svg"
 
                 onClicked: {
+                    if(isChanged) {
+                        reset_btn.clicked()
+                    }
+
                     settingWindow.close()
                 }
             }

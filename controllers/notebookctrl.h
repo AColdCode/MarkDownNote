@@ -16,7 +16,8 @@ public:
     Q_INVOKABLE void selectRoot(QObject *textField, bool isNewfromFolder = false);
     Q_INVOKABLE void isLegalPath(const QString &rootPath, QObject *dialog);
     Q_INVOKABLE void newFromFolder(const QString &rootPath, QObject *dialog);
-    Q_INVOKABLE void openNewNotebookDialog();
+    Q_INVOKABLE void openNewNoteDialog();
+    Q_INVOKABLE void openManageDialog();
 
     QString currentNotebookName() const;
     void setCurrentNotebookName(const QString &newCurrentNotebookName);
@@ -24,8 +25,14 @@ public:
     SuffixListModel *suffixListModel() const;
     void setSuffixListModel(SuffixListModel *newSuffixListModel);
 
-    QObject *noteBook_new() const;
-    void setNoteBook_new(QObject *newNoteBook_new);
+    QObject *managementNotebook() const;
+    void setManagementNotebook(QObject *newManagementNotebook);
+
+    QObject *noteBookMenu() const;
+    void setNoteBookMenu(QObject *newNoteBookMenu);
+
+    QObject *newNotebookMenu() const;
+    void setNewNotebookMenu(QObject *newNewNotebookMenu);
 
 signals:
 
@@ -33,7 +40,11 @@ signals:
 
     void suffixListModelChanged();
 
-    void noteBook_newChanged();
+    void managementNotebookChanged();
+
+    void noteBookMenuChanged();
+
+    void newNotebookMenuChanged();
 
 private:
     QString m_currentNotebookName;
@@ -44,9 +55,17 @@ private:
     Q_PROPERTY(SuffixListModel *suffixListModel READ suffixListModel WRITE setSuffixListModel NOTIFY
                    suffixListModelChanged FINAL)
 
-    QObject *m_noteBook_new = nullptr;
+    QObject *m_managementNotebook = nullptr;
+    Q_PROPERTY(QObject *managementNotebook READ managementNotebook WRITE setManagementNotebook
+                   NOTIFY managementNotebookChanged FINAL)
+
+    QObject *m_newNotebookMenu = nullptr;
+    Q_PROPERTY(QObject *newNotebookMenu READ newNotebookMenu WRITE setNewNotebookMenu NOTIFY
+                   newNotebookMenuChanged FINAL)
+
+    QObject *m_noteBookMenu = nullptr;
+    Q_PROPERTY(QObject *noteBookMenu READ noteBookMenu WRITE setNoteBookMenu NOTIFY
+                   noteBookMenuChanged FINAL)
 
     void collectSuffixesRecursively(const QDir &dir, QSet<QString> &suffixSet);
-    Q_PROPERTY(QObject *noteBook_new READ noteBook_new WRITE setNoteBook_new NOTIFY
-                   noteBook_newChanged FINAL)
 };

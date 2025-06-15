@@ -65,8 +65,7 @@ Item {
                             icon.source: "qrc:/icons/delete.svg"
                             icon.color: closeHover.hovered ? "white" : "grey"
                             onClicked: {
-                                MarkDownCtrl.editorModel.closeEditor(index, tabBarNames.currentIndex >= index);
-
+                                MarkDownCtrl.editorModel.closeEditor(index, tabBarNames.currentIndex)
                             }
                             background: Rectangle {
                                 color: closeHover.hovered ? "#ff6666" : "transparent"

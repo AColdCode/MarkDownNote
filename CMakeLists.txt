@@ -93,8 +93,6 @@ qt_add_qml_module(
   QML_FILES
   buttons/Manage_notebooksButton.qml
   QML_FILES
-  dialogs/ManageNotebookDialog.qml
-  QML_FILES
   sidebar/Sidebar.qml
   QML_FILES
   sidebar/SidebarResponsiveArea.qml
@@ -162,7 +160,9 @@ qt_add_qml_module(
   models/editormodel.h
   models/editormodel.cpp
   QML_FILES
-  leftContent/FileNameTabs.qml)
+  leftContent/FileNameTabs.qml
+  SOURCES models/quicknotescheme.h models/quicknotescheme.cpp
+  SOURCES models/quicknotelistmodel.h models/quicknotelistmodel.cpp)
 
 target_compile_features(appMarkDownNote PRIVATE cxx_std_20)
 

@@ -91,12 +91,20 @@ void NoteBookCtrl::newFromFolder(const QString &rootPath, QObject *dialog)
     }
 }
 
-void NoteBookCtrl::openNewNotebookDialog()
+void NoteBookCtrl::openNewNoteDialog()
 {
-    if (m_noteBook_new == nullptr)
+    if (m_newNotebookMenu == nullptr || m_noteBookMenu == nullptr)
         return;
+    QMetaObject::invokeMethod(m_noteBookMenu, "open", Qt::AutoConnection);
+    QMetaObject::invokeMethod(m_newNotebookMenu, "clicked", Qt::AutoConnection);
+}
 
-    m_noteBook_new->setProperty("visible", true);
+void NoteBookCtrl::openManageDialog()
+{
+    if (m_managementNotebook == nullptr || m_noteBookMenu == nullptr)
+        return;
+    QMetaObject::invokeMethod(m_noteBookMenu, "open", Qt::AutoConnection);
+    QMetaObject::invokeMethod(m_managementNotebook, "clicked", Qt::AutoConnection);
 }
 
 QString NoteBookCtrl::currentNotebookName() const
@@ -125,17 +133,43 @@ void NoteBookCtrl::setSuffixListModel(SuffixListModel *newSuffixListModel)
     emit suffixListModelChanged();
 }
 
-QObject *NoteBookCtrl::noteBook_new() const
+QObject *NoteBookCtrl::managementNotebook() const
 {
-    return m_noteBook_new;
+    return m_managementNotebook;
 }
 
-void NoteBookCtrl::setNoteBook_new(QObject *newNoteBook_new)
+void NoteBookCtrl::setManagementNotebook(QObject *newManagementNotebook)
 {
-    if (m_noteBook_new == newNoteBook_new)
+    if (m_managementNotebook == newManagementNotebook)
         return;
-    m_noteBook_new = newNoteBook_new;
-    emit noteBook_newChanged();
+    m_managementNotebook = newManagementNotebook;
+    emit managementNotebookChanged();
+}
+
+QObject *NoteBookCtrl::noteBookMenu() const
+{
+    return m_noteBookMenu;
+}
+
+void NoteBookCtrl::setNoteBookMenu(QObject *newNoteBookMenu)
+{
+    if (m_noteBookMenu == newNoteBookMenu)
+        return;
+    m_noteBookMenu = newNoteBookMenu;
+    emit noteBookMenuChanged();
+}
+
+QObject *NoteBookCtrl::newNotebookMenu() const
+{
+    return m_newNotebookMenu;
+}
+
+void NoteBookCtrl::setNewNotebookMenu(QObject *newNewNotebookMenu)
+{
+    if (m_newNotebookMenu == newNewNotebookMenu)
+        return;
+    m_newNotebookMenu = newNewNotebookMenu;
+    emit newNotebookMenuChanged();
 }
 
 void NoteBookCtrl::collectSuffixesRecursively(const QDir &dir, QSet<QString> &suffixSet)

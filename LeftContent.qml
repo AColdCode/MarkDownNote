@@ -111,6 +111,16 @@ ColumnLayout {
             }
         }
 
+        Connections {
+            target: MarkDownCtrl.editorModel
+
+            function onFirstEditorClose() {
+                Qt.callLater(() => {
+                    tabBarNames.currentIndex = 0
+                })
+            }
+        }
+
         onCurrentIndexChanged: {
             if(currentIndex >= 0) {
                 MarkDownCtrl.topbarCtrl.textArea = editor_repeater.itemAt(currentIndex).textArea

@@ -8,8 +8,7 @@ import MarkDownNote 1.0
 Rectangle {
     color: "#f5f5f5"
     border.color: "gray"
-
-    property alias quickNote_model: quickNote_model_
+    property bool modified: false
 
     ColumnLayout {
         width: parent.width
@@ -39,12 +38,13 @@ Rectangle {
                         id: combo
                         Layout.fillWidth: true
                         Layout.horizontalStretchFactor: 1
-                        model: ListModel {
-                            id: quickNote_model_
+                        model: MarkDownCtrl.quickNoteListModel
+                        textRole: "name"
 
-                            onCountChanged: {
-                                combo.currentIndex = count - 1
-                            }
+                        onCurrentIndexChanged: {
+                            quickFolder.text = MarkDownCtrl.quickNoteListModel.getFolder(currentIndex)
+                            noteName.text = MarkDownCtrl.quickNoteListModel.getNoteName(currentIndex)
+                            modified = false
                         }
                     }
 
@@ -65,16 +65,16 @@ Rectangle {
                         Layout.fillWidth: true
                         Layout.horizontalStretchFactor: 1
                         text: qsTr("Delete")
-                        enabled: quickNote_model.count !== 0
+                        enabled: combo.count !== 0
 
                         onClicked: {
-                            quickNote_model.remove(combo.currentIndex, 1)
+                            MarkDownCtrl.quickNoteListModel.removeAt(combo.currentIndex)
                         }
                     }
                 }
 
                 GroupBox {
-                    visible: quickNote_model.count !== 0
+                    visible: combo.count !== 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
 
@@ -93,8 +93,13 @@ Rectangle {
                             }
 
                             TextField {
+                                id: quickFolder
                                 Layout.fillWidth: true
                                 Layout.horizontalStretchFactor: 1
+
+                                onTextChanged: {
+                                    modified = true
+                                }
                             }
 
                             Button {
@@ -116,8 +121,13 @@ Rectangle {
                             }
 
                             TextField {
+                                id: noteName
                                 Layout.fillWidth: true
                                 Layout.horizontalStretchFactor: 1
+
+                                onTextChanged: {
+                                    modified = true
+                                }
                             }
                         }
                     }
@@ -126,11 +136,14 @@ Rectangle {
         }
     }
 
-    function addQuickNoteScheme(name) {
-        quickNote_model.append({text: name})
+    function reset(){
+        quickFolder.text = MarkDownCtrl.quickNoteListModel.getFolder(combo.currentIndex)
+        noteName.text = MarkDownCtrl.quickNoteListModel.getNoteName(combo.currentIndex)
+        modified = false
     }
 
-    Component.onCompleted: {
-        MarkDownCtrl.menuCtrl.quickAccess = this
+    function apply(){
+        MarkDownCtrl.quickNoteListModel.updateQuickNote(combo.currentIndex, quickFolder.text, noteName.text)
+        modified = false
     }
 }

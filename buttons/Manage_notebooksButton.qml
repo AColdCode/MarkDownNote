@@ -2,20 +2,15 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import MarkDownNote 1.0
+
 Button {
     id: manage_notebooksbutton
     icon.source: "qrc:/icons/manage_notebooks.svg"
     icon.width: 15
 
-
-    property var notebookDialog: null
-
     onClicked: {
-        if (notebookDialog) {
-             notebookDialog.visible = true
-        } else {
-            console.warn("notebookDialog 未设置")
-        }
+        MarkDownCtrl.noteBookCtrl.openManageDialog()
     }
 
     ToolTip {

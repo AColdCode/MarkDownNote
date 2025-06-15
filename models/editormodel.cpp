@@ -38,7 +38,7 @@ void EditorModel::addEditor(Note *entry)
     emit countChanged(m_entries.count());
 }
 
-void EditorModel::closeEditor(int index, bool isSmallerCurrentIndex)
+void EditorModel::closeEditor(int index, int currentIndex)
 {
     if (index < 0 || index >= m_entries.size())
         return;
@@ -46,9 +46,10 @@ void EditorModel::closeEditor(int index, bool isSmallerCurrentIndex)
     m_entries.removeAt(index);
     endRemoveRows();
 
-    if (isSmallerCurrentIndex) {
+    if (index == 0 && currentIndex == index && m_entries.count() != 0)
+        emit firstEditorClose();
+    else if (currentIndex >= index)
         emit frontEditorClosed();
-    }
 }
 
 QString EditorModel::getContent(int index) const

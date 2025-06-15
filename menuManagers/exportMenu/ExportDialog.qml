@@ -210,7 +210,7 @@ Window {
         valueModel.clear()
         valueModel.append({ text: qsTr("Current Note") + " (" + notebookWindow.currentFile + ")" })
         valueModel.append({ text: qsTr("Current Buffer") + " (" + notebookWindow.currentFile + ")" })
-        valueModel.append({ text: qsTr("Coconut Notebook") + " (" + notebookWindow.currentFolder + ")" })
+        valueModel.append({ text: qsTr("Current Notebook") + " (" + notebookWindow.currentFolder + ")" })
         source_combo.currentIndex = 0
     }
 

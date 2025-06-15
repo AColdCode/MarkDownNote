@@ -17,7 +17,7 @@ Rectangle {
     TextMetrics {
         id: textMetrics
         font: editor.font
-        text: "X" // 任意字符用于测量高度
+        text: "X"
     }
 
     RowLayout {
@@ -30,7 +30,6 @@ Rectangle {
             Layout.fillHeight: true
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
             clip: true
-            // Layout.topMargin: 5
 
             ListView {
                 id: lineNumberView
@@ -47,7 +46,6 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     color: lineNumberView.currentIndex === index ? "black" : "lightgrey"
-                    // 使用textMetrics.height + 2作为行高（2像素的额外间距）
                     height: textMetrics.height
                     width: lineNumberView.width
                 }
